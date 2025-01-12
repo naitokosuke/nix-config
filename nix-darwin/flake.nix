@@ -51,6 +51,7 @@
     darwinConfigurations."naito-naito" = nix-darwin.lib.darwinSystem {
       modules = [ 
         configuration
+        ./finder.nix
         home-manager.darwinModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
