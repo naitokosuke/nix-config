@@ -22,11 +22,13 @@
       # $ nix-env -qaP | grep wget
       environment.systemPackages =
         [ 
+          pkgs.alt-tab-macos
           pkgs.arc-browser
           pkgs.discord
           pkgs.ghostty
           pkgs.git
           pkgs.raycast
+          pkgs.rectangle
           pkgs.vim
           pkgs.vscode
         ];
