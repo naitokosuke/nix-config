@@ -12,7 +12,11 @@
   outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager, ... }:
   let
     configuration = { pkgs, ... }: {
-     nixpkgs.config.allowUnfree = true;
+      networking.hostName = "Mac-big";
+
+      nixpkgs.config.allowUnfree = true;
+
+      programs.zsh.enable = true;
 
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget

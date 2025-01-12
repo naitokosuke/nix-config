@@ -3,6 +3,7 @@
 {
   imports = [
     ./git.nix
+    ./zsh.nix
   ];
 
   # Home Manager needs a bit of information about you and the
