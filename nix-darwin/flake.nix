@@ -57,6 +57,7 @@
         configuration
         ./dock.nix
         ./finder.nix
+        ./scroll.nix
         home-manager.darwinModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
