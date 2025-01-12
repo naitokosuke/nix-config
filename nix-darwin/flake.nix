@@ -52,6 +52,7 @@
       modules = [ 
         configuration
         ./finder.nix
+        ./dock.nix
         home-manager.darwinModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
