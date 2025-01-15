@@ -24,6 +24,7 @@
           [
             pkgs.alt-tab-macos
             pkgs.arc-browser
+            pkgs.devbox
             pkgs.discord
             pkgs.ghostty
             pkgs.git
