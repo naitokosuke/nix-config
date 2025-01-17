@@ -28,6 +28,7 @@
             pkgs.discord
             pkgs.ghostty
             pkgs.git
+            pkgs.mise
             pkgs.raycast
             pkgs.rectangle
             pkgs.vim
