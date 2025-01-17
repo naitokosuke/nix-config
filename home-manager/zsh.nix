@@ -36,11 +36,8 @@
       }
 
       # Mise setup
-      if [ -x "$(command -v mise)" ]; then
-        eval "$(mise activate zsh)"
-      else
-        echo "Mise is not installed or not in PATH."
-      fi
+      eval "$(mise activate zsh)"
+      export PATH="$HOME/.mise/bin:$PATH"
     '';
   };
 }
