@@ -10,4 +10,10 @@
       init.defaultBranch = "main";
     };
   };
+
+  home.file = {
+    ".config/git/ignore".text = ''
+      .tour
+    '';
+  };
 }
