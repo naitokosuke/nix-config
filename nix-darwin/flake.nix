@@ -20,20 +20,20 @@
 
         # List packages installed in system profile. To search by name, run:
         # $ nix-env -qaP | grep wget
-        environment.systemPackages =
+        environment.systemPackages = with pkgs;
           [
-            pkgs.alt-tab-macos
-            pkgs.arc-browser
-            pkgs.devbox
-            pkgs.discord
-            pkgs.gh
-            pkgs.ghostty
-            pkgs.git
-            pkgs.mise
-            pkgs.raycast
-            pkgs.rectangle
-            pkgs.vim
-            pkgs.vscode
+            alt-tab-macos
+            arc-browser
+            devbox
+            discord
+            gh
+            ghostty
+            git
+            mise
+            raycast
+            rectangle
+            vim
+            vscode
           ];
 
         # Necessary for using flakes on this system.
