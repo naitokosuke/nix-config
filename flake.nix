@@ -49,16 +49,13 @@
       darwinConfigurations."naito-naito" = nix-darwin.lib.darwinSystem {
         modules = [
           configuration
-          ./nix-darwin/dock.nix
-          ./nix-darwin/finder.nix
-          ./nix-darwin/scroll.nix
           home-manager.darwinModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.naito = import ./home-manager/home.nix;
           }
-        ];
+        ] ++ (import ./nix-darwin);
       };
 
       formatter.aarch64-darwin = inputs.nixpkgs.legacyPackages.aarch64-darwin.nixpkgs-fmt;
