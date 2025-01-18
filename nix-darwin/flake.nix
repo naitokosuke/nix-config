@@ -26,6 +26,7 @@
             pkgs.arc-browser
             pkgs.devbox
             pkgs.discord
+            pkgs.gh
             pkgs.ghostty
             pkgs.git
             pkgs.mise
