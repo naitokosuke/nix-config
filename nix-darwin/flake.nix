@@ -32,6 +32,7 @@
             mise
             raycast
             rectangle
+            tree
             vim
             vscode
           ];
