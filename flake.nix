@@ -28,6 +28,7 @@
             ghostty
             git
             mise
+            pnpm
             raycast
             rectangle
             tree
