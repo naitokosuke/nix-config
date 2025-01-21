@@ -23,6 +23,7 @@
       setopt INC_APPEND_HISTORY SHARE_HISTORY
 
       # Aliases
+      alias cl='clear'
       alias ll='ls -lh'
       alias la='ls -lha'
       alias gs='git status'
