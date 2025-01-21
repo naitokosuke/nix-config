@@ -13,7 +13,7 @@
 
   home.file = {
     ".config/git/ignore".text = ''
-      .tour
+      .tours
     '';
   };
 }
