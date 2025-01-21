@@ -26,6 +26,7 @@
             discord
             gh
             ghostty
+            ghq
             git
             mise
             pnpm
