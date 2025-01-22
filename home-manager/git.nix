@@ -8,7 +8,7 @@
     extraConfig = {
       core.editor = "vim";
       init.defaultBranch = "main";
-      ghq.root = "/Users/username/dev";
+      ghq.root = "/Users/naito/src";
     };
   };
 
