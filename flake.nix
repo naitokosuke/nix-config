@@ -24,6 +24,7 @@
             arc-browser
             devbox
             discord
+            fzf
             gh
             ghostty
             ghq
@@ -32,6 +33,7 @@
             pnpm
             raycast
             rectangle
+            superfile
             tree
             vim
             vscode

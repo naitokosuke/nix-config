@@ -3,14 +3,21 @@
   programs.zsh = {
     enable = true;
 
+    # Define shell aliases
     shellAliases = {
-      ll = "ls -alF";
-      la = "ls -A";
       l = "ls -CF";
+      la = "ls -lha";
+      ll = "ls -lh";
+      cl = "clear";
+      gs = "git status";
+      gc = "git commit";
+      gp = "git push";
+      ".." = "cd ..";
+      sf = "superfile";
     };
 
     initExtra = ''
-      # Prompt
+      # Initialize prompt
       autoload -Uz promptinit
       promptinit
       PROMPT='%F{cyan}%n@%m %F{green}%~ %F{yellow}$%f '
@@ -21,15 +28,6 @@
       SAVEHIST=10000
       HISTFILE=~/.zsh_history
       setopt INC_APPEND_HISTORY SHARE_HISTORY
-
-      # Aliases
-      alias cl='clear'
-      alias ll='ls -lh'
-      alias la='ls -lha'
-      alias gs='git status'
-      alias gc='git commit'
-      alias gp='git push'
-      alias ..='cd ..'
 
       # Custom functions
       mkcd() {
