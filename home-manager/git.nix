@@ -15,6 +15,7 @@
   home.file = {
     ".config/git/ignore".text = ''
       .tours
+      .DS_Store
     '';
   };
 }
