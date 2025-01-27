@@ -16,6 +16,7 @@
     ".config/git/ignore".text = ''
       .tours
       .DS_Store
+      *.memo.local.md
     '';
   };
 }
