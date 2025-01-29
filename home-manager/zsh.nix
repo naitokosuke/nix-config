@@ -20,7 +20,7 @@
       # Initialize prompt
       autoload -Uz promptinit
       promptinit
-      PROMPT='%F{cyan}%n@%m %F{green}%~ %F{yellow}$%f '
+      PROMPT='%F{green}%B%n%f at %F{magenta}%m%f in %F{blue}%B%~%f %F{red}%B$%f '
       RPROMPT='%F{magenta}[%D{%H:%M:%S}]%f'
 
       # History settings
