@@ -26,11 +26,12 @@
           })
         ];
       };
-    in {
+    in
+    {
       darwinConfigurations."naito-naito" = nix-darwin.lib.darwinSystem {
         modules = (
           [
-            { 
+            {
               networking.hostName = "Mac-big";
 
               nixpkgs.config.allowUnfree = true;
