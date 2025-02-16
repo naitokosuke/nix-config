@@ -42,6 +42,22 @@
     },
     "nixpkgs": {
       "locked": {
+        "lastModified": 1739451785,
+        "narHash": "sha256-3ebRdThRic9bHMuNi2IAA/ek9b32bsy8F5R4SvGTIog=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "1128e89fd5e11bb25aedbfc287733c6502202ea9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-ghostty": {
+      "locked": {
         "lastModified": 1735475203,
         "narHash": "sha256-yEDjYGQ3qFXYSbtzUWZewH+d8IWakPROHrbTlkgXPiA=",
         "owner": "NixOS",
@@ -60,7 +76,8 @@
       "inputs": {
         "home-manager": "home-manager",
         "nix-darwin": "nix-darwin",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "nixpkgs-ghostty": "nixpkgs-ghostty"
       }
     }
   },

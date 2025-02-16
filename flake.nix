@@ -2,55 +2,68 @@
   description = "naito's nix-darwin system flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/3187271";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
+    # ghostty は nixpkgs-unstable で壊れているので過去バージョンを利用
+    nixpkgs-ghostty.url = "github:NixOS/nixpkgs/3187271";
+
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager, ... }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-ghostty, nix-darwin, home-manager, ... }:
     let
-      configuration = { pkgs, ... }: {
+      system = "aarch64-darwin";
+      pkgs = import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
+
+      pkgsGhostty = import nixpkgs-ghostty {
+        inherit system;
+        config.allowUnfree = true;
+      };
+
+      configuration = { ... }: {
         networking.hostName = "Mac-big";
 
         nixpkgs.config.allowUnfree = true;
+        nixpkgs.hostPlatform = system;
 
         programs.zsh.enable = true;
 
-        environment.systemPackages = with pkgs;
-          [
-            alt-tab-macos
-            arc-browser
-            devbox
-            discord
-            fzf
-            gh
-            ghostty
-            ghq
-            git
-            mise
-            pnpm
-            raycast
-            rectangle
-            superfile
-            tree
-            uv
-            vim
-            vscode
-          ];
+        environment.systemPackages = with pkgs; [
+          alt-tab-macos
+          arc-browser
+          devbox
+          discord
+          fzf
+          gh
+          ghq
+          git
+          mise
+          pnpm
+          raycast
+          rectangle
+          superfile
+          tree
+          uv
+          vim
+          vscode
+          pkgsGhostty.ghostty
+        ];
 
         nix.settings.experimental-features = "nix-command flakes";
 
         system.configurationRevision = self.rev or self.dirtyRev or null;
 
-        system.stateVersion = 5;
-
-        nixpkgs.hostPlatform = "aarch64-darwin";
+        system.stateVersion = 4;
       };
-
-    in
-    {
+    
+    in {
       darwinConfigurations."naito-naito" = nix-darwin.lib.darwinSystem {
         modules = [
           configuration
@@ -63,6 +76,6 @@
         ] ++ (import ./nix-darwin);
       };
 
-      formatter.aarch64-darwin = inputs.nixpkgs.legacyPackages.aarch64-darwin.nixpkgs-fmt;
+      formatter.${system} = pkgs.nixpkgs-fmt;
     };
 }
