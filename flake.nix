@@ -20,60 +20,60 @@
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
-      };
-
-      pkgsGhostty = import nixpkgs-ghostty {
-        inherit system;
-        config.allowUnfree = true;
-      };
-
-      configuration = { ... }: {
-        networking.hostName = "Mac-big";
-
-        nixpkgs.config.allowUnfree = true;
-        nixpkgs.hostPlatform = system;
-
-        programs.zsh.enable = true;
-
-        environment.systemPackages = with pkgs; [
-          alt-tab-macos
-          arc-browser
-          devbox
-          discord
-          fzf
-          gh
-          ghq
-          git
-          mise
-          pnpm
-          raycast
-          rectangle
-          superfile
-          tree
-          uv
-          vim
-          vscode
-          pkgsGhostty.ghostty
+        overlays = [
+          (final: prev: {
+            ghostty = (import nixpkgs-ghostty { inherit system; config.allowUnfree = true; }).ghostty;
+          })
         ];
-
-        nix.settings.experimental-features = "nix-command flakes";
-
-        system.configurationRevision = self.rev or self.dirtyRev or null;
-
-        system.stateVersion = 4;
       };
-    
     in {
       darwinConfigurations."naito-naito" = nix-darwin.lib.darwinSystem {
-        modules = [
-          configuration
-          home-manager.darwinModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.naito = import ./home-manager/home.nix;
-          }
-        ] ++ (import ./nix-darwin);
+        modules = (
+          [
+            { 
+              networking.hostName = "Mac-big";
+
+              nixpkgs.config.allowUnfree = true;
+              nixpkgs.hostPlatform = system;
+
+              programs.zsh.enable = true;
+
+              environment.systemPackages = with pkgs; [
+                alt-tab-macos
+                arc-browser
+                devbox
+                discord
+                fzf
+                gh
+                ghq
+                git
+                mise
+                pnpm
+                raycast
+                rectangle
+                superfile
+                tree
+                uv
+                vim
+                vscode
+                ghostty
+              ];
+
+              nix.settings.experimental-features = "nix-command flakes";
+
+              system.configurationRevision = self.rev or self.dirtyRev or null;
+
+              system.stateVersion = 4;
+            }
+            home-manager.darwinModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.naito = import ./home-manager/home.nix;
+            }
+          ]
+          ++ (import ./nix-darwin)
+        );
       };
 
       formatter.${system} = pkgs.nixpkgs-fmt;
