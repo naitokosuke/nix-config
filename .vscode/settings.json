@@ -1,0 +1,10 @@
+{
+  "cSpell.customDictionaries": {
+    "custom": {
+      "name": "custom dict",
+      "path": "./.vscode/custom_dict.txt",
+      "description": "Custom words for this project",
+      "addWords": true
+    }
+  }
+}
