@@ -1,0 +1,9 @@
+catppuccin
+devbox
+ghostty
+mkcd
+naito
+nixpkgs
+pkgs
+recents
+RPROMPT
