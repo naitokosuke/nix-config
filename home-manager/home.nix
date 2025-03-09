@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./gh.nix
     ./ghostty.nix
     ./git.nix
     ./zsh.nix
