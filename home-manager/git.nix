@@ -9,6 +9,7 @@
       core.editor = "vim";
       init.defaultBranch = "main";
       ghq.root = "/Users/naito/src";
+      push.autoSetupRemote = true;
     };
   };
 
