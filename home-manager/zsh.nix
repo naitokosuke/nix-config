@@ -9,10 +9,9 @@
       la = "ls -lha";
       ll = "ls -lh";
       cl = "clear";
-      gs = "git status";
-      gc = "git commit";
-      gp = "git push";
+      ":q" = "exit";
       ".." = "cd ..";
+      "..." = "cd ../..";
       sf = "superfile";
     };
 
