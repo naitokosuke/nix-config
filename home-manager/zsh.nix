@@ -36,6 +36,9 @@
       # Mise setup
       eval "$(mise activate zsh)"
       export PATH="$HOME/.mise/bin:$PATH"
+
+      # Default directory on terminal launch
+      cd /Users/naito/src/github.com/engineer-naito
     '';
   };
 }
