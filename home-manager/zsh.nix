@@ -42,7 +42,7 @@
 
       # Default directory on terminal launch
       if [[ -z "$VSCODE_GIT_IPC_HANDLE" && "$TERM_PROGRAM" != "vscode" ]]; then
-        cd /Users/naito/src/github.com/engineer-naito
+        cd /Users/naitokosuke/src/github.com/naitokosuke
       fi
     '';
   };

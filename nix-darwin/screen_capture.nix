@@ -2,6 +2,6 @@
 
 {
   system.defaults.screencapture = {
-    location = "Users/naito/Pictures/screen_shots/";
+    location = "Users/naitokosuke/Pictures/screen_shots/";
   };
 }
