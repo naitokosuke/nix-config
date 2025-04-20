@@ -41,7 +41,9 @@
       export PATH="$HOME/.mise/bin:$PATH"
 
       # Default directory on terminal launch
-      cd /Users/naito/src/github.com/engineer-naito
+      if [[ -z "$VSCODE_GIT_IPC_HANDLE" && "$TERM_PROGRAM" != "vscode" ]]; then
+        cd /Users/naito/src/github.com/engineer-naito
+      fi
     '';
   };
 }
