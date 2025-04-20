@@ -13,6 +13,9 @@
       ".." = "cd ..";
       "..." = "cd ../..";
       sf = "superfile";
+
+      # for antfu/ni
+      nid = "ni -D";
     };
 
     initExtra = ''
