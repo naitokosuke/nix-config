@@ -64,13 +64,13 @@
 
               system.configurationRevision = self.rev or self.dirtyRev or null;
 
-              system.stateVersion = 4;
+              system.stateVersion = 5;
             }
             home-manager.darwinModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.users.naito = import ./home-manager/home.nix;
+              home-manager.users.naitokosuke = import ./home-manager/home.nix;
             }
           ]
           ++ (import ./nix-darwin)

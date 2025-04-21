@@ -10,8 +10,8 @@
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
-  home.username = "naito";
-  home.homeDirectory = lib.mkForce "/Users/naito";
+  home.username = "naitokosuke";
+  home.homeDirectory = lib.mkForce "/Users/naitokosuke";
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -21,5 +21,5 @@
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "24.11";
+  home.stateVersion = "25.05";
 }

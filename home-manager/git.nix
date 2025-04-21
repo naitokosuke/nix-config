@@ -3,12 +3,12 @@
 {
   programs.git = {
     enable = true;
-    userName = "engineer-naito";
+    userName = "naitokosuke";
     userEmail = "kosuke.naito.engineer@gmail.com";
     extraConfig = {
       core.editor = "vim";
       init.defaultBranch = "main";
-      ghq.root = "/Users/naito/src";
+      ghq.root = "/Users/naitokosuke/src";
       push.autoSetupRemote = true;
     };
   };
