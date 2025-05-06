@@ -14,7 +14,11 @@
       "..." = "cd ../..";
       sf = "superfile";
 
+      # I frequently typo j 😇
+      j = "";
+
       # for antfu/ni
+      "に" = "ni";
       nid = "ni -D";
     };
 
