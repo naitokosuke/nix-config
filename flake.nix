@@ -4,8 +4,11 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-    # ghostty は nixpkgs-unstable で壊れているので過去バージョンを利用
+    # ghostty is broken in nixpkgs-unstable, so use a previous version
     nixpkgs-ghostty.url = "github:NixOS/nixpkgs/3187271";
+
+    # arc-browser is broken in nixpkgs-unstable, so use a previous version
+    nixpkgs-arc-browser.url = "github:NixOS/nixpkgs/bd18a43";
 
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
@@ -14,7 +17,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-ghostty, nix-darwin, home-manager, ... }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-ghostty, nixpkgs-arc-browser, nix-darwin, home-manager, ... }:
     let
       system = "aarch64-darwin";
       pkgs = import nixpkgs {
@@ -23,6 +26,7 @@
         overlays = [
           (final: prev: {
             ghostty = (import nixpkgs-ghostty { inherit system; config.allowUnfree = true; }).ghostty;
+            arc-browser = (import nixpkgs-arc-browser { inherit system; config.allowUnfree = true; }).arc-browser;
           })
         ];
       };
