@@ -56,6 +56,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-arc-browser": {
+      "locked": {
+        "lastModified": 1749585634,
+        "narHash": "sha256-UnFzEFX39eYoYRIMcC8psp+fiF6pp1IyP0cyX1YCHMg=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "bd18a431cb4013c146680abe8e878ffd4f9a03ca",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "bd18a43",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-ghostty": {
       "locked": {
         "lastModified": 1735475203,
@@ -77,6 +93,7 @@
         "home-manager": "home-manager",
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-arc-browser": "nixpkgs-arc-browser",
         "nixpkgs-ghostty": "nixpkgs-ghostty"
       }
     }
