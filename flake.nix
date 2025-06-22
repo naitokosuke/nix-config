@@ -39,6 +39,8 @@
               networking.hostName = "Mac-big";
               networking.computerName = "Mac-big";
 
+              system.primaryUser = "naitokosuke";
+
               nixpkgs.config.allowUnfree = true;
               nixpkgs.hostPlatform = system;
 
