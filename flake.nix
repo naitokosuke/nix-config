@@ -37,6 +37,7 @@
           [
             {
               networking.hostName = "Mac-big";
+              networking.computerName = "Mac-big";
 
               nixpkgs.config.allowUnfree = true;
               nixpkgs.hostPlatform = system;
