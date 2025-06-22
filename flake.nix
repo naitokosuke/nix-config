@@ -32,7 +32,7 @@
       };
     in
     {
-      darwinConfigurations."naito-naito" = nix-darwin.lib.darwinSystem {
+      darwinConfigurations."Mac-big" = nix-darwin.lib.darwinSystem {
         modules = (
           [
             {

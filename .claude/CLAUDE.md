@@ -15,7 +15,7 @@ The configuration targets Apple Silicon Macs (aarch64-darwin) and manages both s
 
 ### Apply Configuration Changes
 ```bash
-darwin-rebuild switch --flake .#naito-naito
+darwin-rebuild switch --flake .#Mac-big
 ```
 
 ### Format Nix Files
