@@ -18,6 +18,7 @@
       .tours
       .DS_Store
       *.memo.local.md
+      ___naito___
     '';
   };
 }
