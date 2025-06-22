@@ -22,7 +22,7 @@
       nid = "ni -D";
     };
 
-    initExtra = ''
+    initContent = ''
       # Initialize prompt
       autoload -Uz promptinit
       promptinit
