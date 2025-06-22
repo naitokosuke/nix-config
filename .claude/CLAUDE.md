@@ -57,6 +57,16 @@ The codebase follows a modular structure:
    }
    ```
 
+## Documentation Standards
+
+When creating markdown documentation, follow the rules defined in `~/src/github.com/naitokosuke/airules/markdown-writing-rules.md`:
+- Use `-` for bullet points (not `*`)
+- Use single `#` per file
+- Add blank lines after `##` and `###` headings
+- Add spaces between half-width characters and Japanese text
+- Use half-width parentheses `()`
+- Use emphasis (`**bold**`) sparingly and only for special emphasis
+
 ## Important Configuration Details
 
 - Hostname: "Mac-big" (defined in flake.nix:39)
