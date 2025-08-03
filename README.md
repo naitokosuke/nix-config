@@ -38,7 +38,7 @@ This configuration is designed for Apple Silicon Macs (aarch64-darwin) and inclu
 
 4. Build and switch to the configuration:
    ```bash
-   nix build .#darwinConfigurations.naito-naito.system
+   nix build .#darwinConfigurations.Mac-big.system
    ./result/sw/bin/darwin-rebuild switch --flake .
    ```
 
@@ -87,5 +87,5 @@ To customize this configuration for your own use:
 To update the configuration after making changes:
 
 ```bash
-darwin-rebuild switch --flake .#naito-naito
+darwin-rebuild switch --flake .#Mac-big
 ```
