@@ -58,7 +58,6 @@
                 mise
                 pnpm
                 raycast
-                rectangle
                 superfile
                 tree
                 uv
