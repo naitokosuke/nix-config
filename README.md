@@ -1,21 +1,11 @@
 # Nix Configuration for macOS
 
-This repository contains my personal Nix configuration for macOS using [nix-darwin](https://github.com/LnL7/nix-darwin) and [home-manager](https://github.com/nix-community/home-manager). 
-It provides a declarative approach to managing both system-level macOS settings and user-specific configurations.
-
-## Overview
-
-This configuration is designed for Apple Silicon Macs (aarch64-darwin) and includes:
-
-- System-level macOS configurations via nix-darwin
-- User-specific configurations via home-manager
-- Package management with Nix
+Personal Nix configuration for macOS using [nix-darwin](https://github.com/LnL7/nix-darwin) and [home-manager](https://github.com/nix-community/home-manager).
 
 ## Prerequisites
 
-- macOS running on Apple Silicon (M1/M2/M3)
-- Nix package manager installed
-- nix-darwin and home-manager
+- macOS on Apple Silicon
+- Nix package manager
 
 ## Installation
 
@@ -24,68 +14,57 @@ This configuration is designed for Apple Silicon Macs (aarch64-darwin) and inclu
    sh <(curl -L https://nixos.org/nix/install)
    ```
 
-2. Enable Nix Flakes:
+2. Clone this repository:
    ```bash
-   mkdir -p ~/.config/nix
-   echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
-   ```
-
-3. Clone this repository:
-   ```bash
-   git clone https://github.com/engineer-naito/nix-config.git
+   git clone https://github.com/naitokosuke/nix-config.git
    cd nix-config
    ```
 
-4. Build and switch to the configuration:
+3. Apply the configuration:
    ```bash
-   nix build .#darwinConfigurations.Mac-big.system
-   ./result/sw/bin/darwin-rebuild switch --flake .
+   nix run nix-darwin --extra-experimental-features "nix-command flakes" -- switch --flake .#Mac-big
    ```
 
 ## Configuration Structure
 
-### System Configuration (nix-darwin)
+### System Configuration (`nix-darwin/`)
+- `cursor.nix` - Cursor settings
+- `dock.nix` - Dock preferences
+- `finder.nix` - Finder preferences
+- `menubar.nix` - Menu bar settings
+- `scroll.nix` - Scrolling behavior
+- `screen_capture.nix` - Screen capture settings
 
-The `nix-darwin` directory contains system-level configurations:
-
-- `cursor.nix`: Cursor settings
-- `dock.nix`: Dock preferences (autohide, size, magnification)
-- `finder.nix`: Finder preferences
-- `menubar.nix`: Menu bar settings
-- `scroll.nix`: Scrolling behavior
-- `screen_capture.nix`: Screen capture settings
-
-### User Configuration (home-manager)
-
-The `home-manager` directory contains user-specific configurations:
-
-- `gh.nix`: GitHub CLI configuration
-- `ghostty.nix`: Ghostty terminal configuration (using Catppuccin Mocha theme)
-- `git.nix`: Git configuration (user info, default settings, global gitignore)
-- `zsh.nix`: Zsh shell configuration (aliases, prompt, history settings)
+### User Configuration (`home-manager/`)
+- `gh.nix` - GitHub CLI
+- `ghostty.nix` - Ghostty terminal
+- `git.nix` - Git configuration
+- `zsh.nix` - Zsh shell
 
 ### Packages
 
-The configuration installs various packages including:
+- **Development**: git, gh, ghq, mise, devbox, uv, pnpm
+- **Terminal**: ghostty, vim, fzf, tree
+- **macOS utilities**: alt-tab-macos, raycast, superfile
+- **Applications**: arc-browser, discord, vscode
 
-- Development tools: git, gh, mise, devbox, uv, pnpm
-- Terminal tools: ghostty, vim, fzf, tree
-- macOS utilities: alt-tab-macos, raycast, superfile
-- Applications: arc-browser, discord, vscode
+*Note: ghostty and arc-browser use pinned nixpkgs versions.*
 
 ## Customization
 
-To customize this configuration for your own use:
+1. Update `flake.nix`: hostname, computerName, primaryUser
+2. Update `home-manager/home.nix`: username, homeDirectory
+3. Update `home-manager/git.nix`: userName, userEmail, ghq.root
 
-1. Update the hostname in `flake.nix`
-2. Modify the username and home directory in `home-manager/home.nix`
-3. Update personal information in configuration files (e.g., Git user info)
-4. Add or remove packages as needed
+## Usage
 
-## Updating
-
-To update the configuration after making changes:
-
+Apply configuration changes:
 ```bash
+darwin-rebuild switch --flake .#Mac-big
+```
+
+Update flake inputs:
+```bash
+nix flake update
 darwin-rebuild switch --flake .#Mac-big
 ```
