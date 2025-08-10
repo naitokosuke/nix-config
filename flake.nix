@@ -43,7 +43,6 @@
               programs.zsh.enable = true;
 
               environment.systemPackages = (with pkgs; [
-                alt-tab-macos
                 devbox
                 discord
                 fzf
