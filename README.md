@@ -39,13 +39,14 @@ Personal Nix configuration for macOS using [nix-darwin](https://github.com/LnL7/
 - `gh.nix` - GitHub CLI
 - `ghostty.nix` - Ghostty terminal
 - `git.nix` - Git configuration
+- `vscode.nix` - VSCode settings sync
 - `zsh.nix` - Zsh shell
 
 ### Packages
 
 - **Development**: git, gh, ghq, mise, devbox, uv, pnpm
 - **Terminal**: ghostty, vim, fzf, tree
-- **macOS utilities**: alt-tab-macos, raycast, superfile
+- **macOS utilities**: alt-tab-macos, raycast
 - **Applications**: arc-browser, discord, vscode
 
 *Note: ghostty and arc-browser use pinned nixpkgs versions.*
@@ -68,3 +69,12 @@ Update flake inputs:
 nix flake update
 darwin-rebuild switch --flake .#Mac-big
 ```
+
+## VSCode Settings Sync
+
+VSCode settings are automatically synchronized from the [vscode-settings](https://github.com/naitokosuke/vscode-settings) repository:
+
+- Settings and keybindings are managed through Home Manager
+- Existing settings are automatically backed up with `.backup` extension
+- JSONC keybindings are converted to JSON format automatically
+- Changes to the settings repository are applied with `darwin-rebuild switch`

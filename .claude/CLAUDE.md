@@ -38,7 +38,7 @@ The codebase follows a modular structure:
   - Imported via `default.nix` which aggregates all modules
 - home-manager/: User-specific configurations
   - `home.nix`: Main entry point that imports other modules
-  - Individual modules for git, zsh, ghostty terminal, GitHub CLI
+  - Individual modules for git, zsh, ghostty terminal, GitHub CLI, VSCode settings sync
 
 ## Key Development Patterns
 
@@ -73,3 +73,19 @@ When creating markdown documentation, follow the rules defined in `~/src/github.
 - User: "naitokosuke" (referenced in flake.nix:77)
 - System: "aarch64-darwin" (Apple Silicon)
 - Experimental features enabled: nix-command, flakes
+
+## VSCode Settings Sync
+
+The repository includes automatic VSCode settings synchronization from GitHub repository `naitokosuke/vscode-settings`:
+
+- **Module**: `home-manager/vscode.nix`
+- **Settings Path**: `~/Library/Application Support/Code/User/settings.json`
+- **Keybindings Path**: `~/Library/Application Support/Code/User/keybindings.json`
+- **Backup**: Existing files are automatically backed up with `.backup` extension
+- **JSONC Support**: Keybindings are converted from JSONC to JSON format automatically
+
+### Updating VSCode Settings
+
+1. Modify settings in the `vscode-settings` repository
+2. Run `nix flake update` to fetch latest changes (optional)
+3. Run `darwin-rebuild switch --flake .#Mac-big` to apply changes
