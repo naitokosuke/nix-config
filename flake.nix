@@ -23,13 +23,9 @@
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
-        overlays = [
-          (final: prev: {
-            ghostty = (import nixpkgs-ghostty { inherit system; config.allowUnfree = true; }).ghostty;
-            arc-browser = (import nixpkgs-arc-browser { inherit system; config.allowUnfree = true; }).arc-browser;
-          })
-        ];
       };
+      ghostty = (import nixpkgs-ghostty { inherit system; config.allowUnfree = true; }).ghostty;
+      arc-browser = (import nixpkgs-arc-browser { inherit system; config.allowUnfree = true; }).arc-browser;
     in
     {
       darwinConfigurations."Mac-big" = nix-darwin.lib.darwinSystem {
@@ -46,9 +42,8 @@
 
               programs.zsh.enable = true;
 
-              environment.systemPackages = with pkgs; [
+              environment.systemPackages = (with pkgs; [
                 alt-tab-macos
-                arc-browser
                 devbox
                 discord
                 fzf
@@ -63,8 +58,7 @@
                 uv
                 vim
                 vscode
-                ghostty
-              ];
+              ]) ++ [ ghostty arc-browser ];
 
               nix.settings.experimental-features = "nix-command flakes";
 
