@@ -15,17 +15,38 @@
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    treefmt-nix.url = "github:numtide/treefmt-nix";
+    treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-ghostty, nixpkgs-arc-browser, nix-darwin, home-manager, ... }:
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      nixpkgs-ghostty,
+      nixpkgs-arc-browser,
+      nix-darwin,
+      home-manager,
+      treefmt-nix,
+      ...
+    }:
     let
       system = "aarch64-darwin";
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
       };
-      ghostty = (import nixpkgs-ghostty { inherit system; config.allowUnfree = true; }).ghostty;
-      arc-browser = (import nixpkgs-arc-browser { inherit system; config.allowUnfree = true; }).arc-browser;
+      ghostty =
+        (import nixpkgs-ghostty {
+          inherit system;
+          config.allowUnfree = true;
+        }).ghostty;
+      arc-browser =
+        (import nixpkgs-arc-browser {
+          inherit system;
+          config.allowUnfree = true;
+        }).arc-browser;
     in
     {
       darwinConfigurations."Mac-big" = nix-darwin.lib.darwinSystem {
@@ -42,23 +63,28 @@
 
               programs.zsh.enable = true;
 
-              environment.systemPackages = (with pkgs; [
-                alt-tab-macos
-                devbox
-                discord
-                fzf
-                gh
-                ghq
-                git
-                mise
-                pnpm
-                raycast
-                superfile
-                tree
-                uv
-                vim
-                vscode
-              ]) ++ [ ghostty arc-browser ];
+              environment.systemPackages =
+                (with pkgs; [
+                  alt-tab-macos
+                  devbox
+                  discord
+                  fzf
+                  gh
+                  ghq
+                  git
+                  mise
+                  pnpm
+                  raycast
+                  superfile
+                  tree
+                  uv
+                  vim
+                  vscode
+                ])
+                ++ [
+                  ghostty
+                  arc-browser
+                ];
 
               nix.settings.experimental-features = "nix-command flakes";
 
@@ -77,6 +103,10 @@
         );
       };
 
-      formatter.${system} = pkgs.nixpkgs-fmt;
+      # Use treefmt for formatting with nixfmt
+      formatter.${system} = treefmt-nix.lib.mkWrapper pkgs {
+        projectRootFile = "flake.nix";
+        programs.nixfmt.enable = true;
+      };
     };
 }
