@@ -18,6 +18,9 @@
 
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    vscode-settings.url = "github:naitokosuke/vscode-settings";
+    vscode-settings.flake = false;
   };
 
   outputs =
@@ -29,6 +32,7 @@
       nix-darwin,
       home-manager,
       treefmt-nix,
+      vscode-settings,
       ...
     }:
     let
@@ -75,7 +79,6 @@
                   mise
                   pnpm
                   raycast
-                  superfile
                   tree
                   uv
                   vim
@@ -96,7 +99,11 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = "backup";
               home-manager.users.naitokosuke = import ./home-manager/home.nix;
+              home-manager.extraSpecialArgs = {
+                inherit vscode-settings;
+              };
             }
           ]
           ++ (import ./nix-darwin)

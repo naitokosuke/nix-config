@@ -10,6 +10,7 @@
     ./gh.nix
     ./ghostty.nix
     ./git.nix
+    ./vscode.nix
     ./zsh.nix
   ];
 
