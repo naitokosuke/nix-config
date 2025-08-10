@@ -70,7 +70,7 @@ The configuration installs various packages including:
 
 - Development tools: git, gh, mise, devbox, uv, pnpm
 - Terminal tools: ghostty, vim, fzf, tree
-- macOS utilities: raycast, superfile
+- macOS utilities: alt-tab-macos, raycast, superfile
 - Applications: arc-browser, discord, vscode
 
 ## Customization
