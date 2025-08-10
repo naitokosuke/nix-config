@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(ls:*)",
-      "Bash(gh issue:*)"
+      "Bash(gh issue:*)",
+      "Bash(nix fmt:*)"
     ],
     "deny": []
   }
