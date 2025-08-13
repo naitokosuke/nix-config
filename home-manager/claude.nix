@@ -25,4 +25,10 @@
     autoInstallIdeExtension = true;
     checkpointingEnabled = true;
   };
+
+  # Serena config
+  home.file.".serena/serena_config.yml".text = ''
+    gui_log_window: false
+    web_dashboard: false
+  '';
 }
