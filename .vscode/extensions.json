@@ -1,6 +1,5 @@
 {
   "recommendations": [
     "bbenoist.Nix",
-    "streetsidesoftware.code-spell-checker"
   ]
 }
