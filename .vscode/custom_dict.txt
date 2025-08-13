@@ -1,4 +1,5 @@
 airules
+antfu
 catppuccin
 clmv
 daltonized
