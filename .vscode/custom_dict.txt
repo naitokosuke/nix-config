@@ -1,10 +1,14 @@
+airules
 catppuccin
 clmv
+daltonized
 devbox
 ghostty
 mkcd
 naito
+naitokosuke
 nixpkgs
+Notif
 pkgs
 recents
 RPROMPT
