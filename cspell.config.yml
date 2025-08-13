@@ -1,0 +1,43 @@
+version: "0.2"
+language: "en"
+words:
+  - airules
+  - antfu
+  - autohide
+  - catppuccin
+  - checkpointing
+  - clmv
+  - daltonized
+  - devbox
+  - ghostty
+  - HISTFILE
+  - HISTSIZE
+  - launchanim
+  - largesize
+  - mineffect
+  - mkcd
+  - naito
+  - naitokosuke
+  - nixfmt
+  - nixpkgs
+  - Notif
+  - numtide
+  - Pathbar
+  - pkgs
+  - promptinit
+  - recents
+  - RPROMPT
+  - SAVEHIST
+  - screencapture
+  - setopt
+  - superfile
+  - swipescrolldirection
+  - tilesize
+  - treefmt
+ignorePaths:
+  - node_modules
+  - .git
+  - "*.lock"
+  - result
+  - flake.lock
+  - ___naito___/
