@@ -26,12 +26,16 @@
     checkpointingEnabled = true;
   };
 
-  # Serena config
-  home.file.".serena/serena_config.yml".text = ''
-    gui_log_window: false
-    web_dashboard: false
-
-  '';
+  # Serena config (only create if it doesn't exist)
+  home.file.".serena/serena_config.yml" = {
+    text = ''
+      gui_log_window: false
+      web_dashboard: false
+      projects: {}
+    '';
+    # Only create if file doesn't exist, allowing Serena to manage it
+    force = false;
+  };
 
   # Global Claude Code memory
   home.file.".claude/CLAUDE.md".text = ''
