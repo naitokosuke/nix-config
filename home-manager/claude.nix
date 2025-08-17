@@ -19,7 +19,9 @@
       hasUsedBackslashReturn = true;
       autoCompactEnabled = true;
       diffTool = "auto";
-      env = { };
+      env = {
+        DISABLE_AUTOUPDATER = "1";
+      };
       todoFeatureEnabled = true;
       messageIdleNotifThresholdMs = 60000;
       autoConnectIde = false;
