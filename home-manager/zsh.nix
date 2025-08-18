@@ -27,8 +27,9 @@
       # Initialize prompt
       autoload -Uz promptinit
       promptinit
-      PROMPT='%F{green}%B%n%f at %F{magenta}%m%f in %F{blue}%B%~%f %F{red}%B$%f '
-      RPROMPT='%F{magenta}[%D{%H:%M:%S}]%f'
+      # Two-line prompt with time on the first line
+      PROMPT='%F{green}%B%n%f at %F{yellow}%m%f in %F{green}%B%~%f %F{yellow}[%D{%H:%M:%S}]%f
+%F{green}❯%f '
 
       # History settings
       HISTSIZE=10000
