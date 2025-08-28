@@ -72,6 +72,8 @@
                   alt-tab-macos
                   devbox
                   discord
+                  fcp
+                  fd
                   fzf
                   gh
                   ghq
@@ -79,6 +81,7 @@
                   mise
                   pnpm
                   raycast
+                  ripgrep
                   tree
                   uv
                   vim
