@@ -27,8 +27,8 @@
       # Initialize prompt
       autoload -Uz promptinit
       promptinit
-      # Two-line prompt with time on the first line
-      PROMPT='%F{green}%B%n%f at %F{yellow}%m%f in %F{green}%B%~%f %F{yellow}[%D{%H:%M:%S}]%f
+      # Two-line prompt
+      PROMPT='%F{green}%B%n%f at %F{yellow}%m%f in %F{green}%B%~%f
 %F{green}❯%f '
 
       # History settings
