@@ -7,7 +7,7 @@
 
 let
   ghosttyConfig = ''
-    theme = catppuccin-mocha
+    theme = "Catppuccin Mocha"
   '';
 in
 {
