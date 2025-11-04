@@ -78,6 +78,7 @@
                   gh
                   ghq
                   git
+                  google-chrome
                   mise
                   pnpm
                   raycast
