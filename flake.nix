@@ -83,6 +83,7 @@
                   pnpm
                   raycast
                   ripgrep
+                  scroll-reverser
                   tree
                   uv
                   vim
