@@ -4,10 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-    # ghostty is broken in nixpkgs-unstable, so use a previous version
-    nixpkgs-ghostty.url = "github:NixOS/nixpkgs/3187271";
-
-    # arc-browser is broken in nixpkgs-unstable, so use a previous version
+    # arc-browser was removed from nixpkgs as unmaintained, so use a pinned version
     nixpkgs-arc-browser.url = "github:NixOS/nixpkgs/bd18a43";
 
     nix-darwin.url = "github:LnL7/nix-darwin";
@@ -27,7 +24,6 @@
     inputs@{
       self,
       nixpkgs,
-      nixpkgs-ghostty,
       nixpkgs-arc-browser,
       nix-darwin,
       home-manager,
@@ -41,11 +37,6 @@
         inherit system;
         config.allowUnfree = true;
       };
-      ghostty =
-        (import nixpkgs-ghostty {
-          inherit system;
-          config.allowUnfree = true;
-        }).ghostty;
       arc-browser =
         (import nixpkgs-arc-browser {
           inherit system;
@@ -77,6 +68,7 @@
                   fzf
                   gh
                   ghq
+                  ghostty
                   git
                   google-chrome
                   mise
@@ -90,7 +82,6 @@
                   vscode
                 ])
                 ++ [
-                  ghostty
                   arc-browser
                 ];
 
