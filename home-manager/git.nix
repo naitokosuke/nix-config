@@ -3,9 +3,11 @@
 {
   programs.git = {
     enable = true;
-    userName = "naitokosuke";
-    userEmail = "kosuke.naito.engineer@gmail.com";
-    extraConfig = {
+    settings = {
+      user = {
+        name = "naitokosuke";
+        email = "kosuke.naito.engineer@gmail.com";
+      };
       core.editor = "vim";
       init.defaultBranch = "main";
       ghq.root = "/Users/naitokosuke/src";
