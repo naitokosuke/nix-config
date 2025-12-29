@@ -7,6 +7,9 @@
     # arc-browser was removed from nixpkgs as unmaintained, so use a pinned version
     nixpkgs-arc-browser.url = "github:NixOS/nixpkgs/bd18a43";
 
+    # ghostty is not available on aarch64-darwin in latest nixpkgs, so use a pinned version
+    nixpkgs-ghostty.url = "github:NixOS/nixpkgs/3187271";
+
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -25,6 +28,7 @@
       self,
       nixpkgs,
       nixpkgs-arc-browser,
+      nixpkgs-ghostty,
       nix-darwin,
       home-manager,
       treefmt-nix,
@@ -42,6 +46,11 @@
           inherit system;
           config.allowUnfree = true;
         }).arc-browser;
+      ghostty =
+        (import nixpkgs-ghostty {
+          inherit system;
+          config.allowUnfree = true;
+        }).ghostty;
     in
     {
       darwinConfigurations."Mac-big" = nix-darwin.lib.darwinSystem {
@@ -68,7 +77,6 @@
                   fzf
                   gh
                   ghq
-                  ghostty
                   git
                   google-chrome
                   mise
@@ -83,6 +91,7 @@
                 ])
                 ++ [
                   arc-browser
+                  ghostty
                 ];
 
               nix.settings.experimental-features = "nix-command flakes";
