@@ -8,6 +8,8 @@
 let
   ghosttyConfig = ''
     theme = "Catppuccin Mocha"
+    font-feature = -calt
+    font-feature = -dlig
   '';
 in
 {
