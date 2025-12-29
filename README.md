@@ -6,36 +6,43 @@ Personal Nix configuration for macOS using [nix-darwin](https://github.com/LnL7/
 
 - macOS on Apple Silicon
 - Nix package manager
+- Xcode Command Line Tools (required for Homebrew)
 
 ## Installation
 
-1. Install Nix:
+1. Install Xcode Command Line Tools:
+   ```bash
+   xcode-select --install
+   ```
+
+2. Install Nix:
    ```bash
    sh <(curl -L https://nixos.org/nix/install)
    ```
 
-2. Clone this repository:
+3. Clone this repository:
    ```bash
    git clone https://github.com/naitokosuke/nix-config.git
    cd nix-config
    ```
 
-3. Apply the configuration:
+4. Apply the configuration:
    ```bash
    nix run nix-darwin --extra-experimental-features "nix-command flakes" -- switch --flake .#Mac-big
    ```
 
 ## Configuration Structure
 
-### System Configuration (`nix-darwin/`)
+### System Configuration (nix-darwin/)
 - `cursor.nix` - Cursor settings
 - `dock.nix` - Dock preferences
 - `finder.nix` - Finder preferences
+- `homebrew.nix` - Homebrew Casks (GUI apps)
 - `menubar.nix` - Menu bar settings
 - `scroll.nix` - Scrolling behavior
 - `screen_capture.nix` - Screen capture settings
 
-### User Configuration (`home-manager/`)
+### User Configuration (home-manager/)
 - `gh.nix` - GitHub CLI
 - `ghostty.nix` - Ghostty terminal
 - `git.nix` - Git configuration
@@ -44,12 +51,13 @@ Personal Nix configuration for macOS using [nix-darwin](https://github.com/LnL7/
 
 ### Packages
 
-- **Development**: git, gh, ghq, mise, devbox, uv, pnpm
-- **Terminal**: ghostty, vim, fzf, tree
-- **macOS utilities**: alt-tab-macos, raycast
-- **Applications**: arc-browser, discord, vscode
+CLI tools are managed via nixpkgs, GUI apps via Homebrew Casks.
 
-*Note: ghostty and arc-browser use pinned nixpkgs versions.*
+**CLI (nixpkgs)**:
+- devbox, fcp, fd, fzf, gh, ghq, git, mise, pnpm, ripgrep, tree, uv, vim
+
+**GUI (Homebrew Casks)**:
+- alt-tab, arc, discord, ghostty, google-chrome, raycast, scroll-reverser, visual-studio-code
 
 ## Customization
 

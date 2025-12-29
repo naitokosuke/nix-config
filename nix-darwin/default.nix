@@ -2,6 +2,7 @@
   ./cursor.nix
   ./dock.nix
   ./finder.nix
+  ./homebrew.nix
   ./keyboard.nix
   ./menubar.nix
   ./scroll.nix
