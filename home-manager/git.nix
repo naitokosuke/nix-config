@@ -12,6 +12,7 @@
       init.defaultBranch = "main";
       ghq.root = "/Users/naitokosuke/src";
       push.autoSetupRemote = true;
+      url."git@github.com:".insteadOf = "https://github.com/";
     };
   };
 

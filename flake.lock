@@ -72,29 +72,12 @@
         "type": "github"
       }
     },
-    "nixpkgs-ghostty": {
-      "locked": {
-        "lastModified": 1735475203,
-        "narHash": "sha256-yEDjYGQ3qFXYSbtzUWZewH+d8IWakPROHrbTlkgXPiA=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "3187271a737d623ba3ebfa12ec3e8b66a0321542",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "3187271",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs",
         "nixpkgs-arc-browser": "nixpkgs-arc-browser",
-        "nixpkgs-ghostty": "nixpkgs-ghostty",
         "treefmt-nix": "treefmt-nix",
         "vscode-settings": "vscode-settings"
       }
