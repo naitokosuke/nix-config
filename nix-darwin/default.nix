@@ -5,6 +5,7 @@
   ./homebrew.nix
   ./keyboard.nix
   ./menubar.nix
+  ./rosetta.nix
   ./scroll.nix
   ./screen_capture.nix
 ]
