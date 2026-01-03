@@ -118,7 +118,7 @@
       darwinConfigurations."Mac-big" = mkDarwinConfig { hostName = "Mac-big"; };
 
       # MacBook Air
-      darwinConfigurations."Mac-heavy" = mkDarwinConfig { hostName = "Mac-heavy"; };
+      darwinConfigurations."Macbook-heavy" = mkDarwinConfig { hostName = "Macbook-heavy"; };
 
       # Use treefmt for formatting with nixfmt
       formatter.${system} = treefmt-nix.lib.mkWrapper pkgs {
