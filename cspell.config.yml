@@ -1,5 +1,5 @@
 version: "0.2"
-language: "en"
+language: en
 words:
   - airules
   - antfu
@@ -12,8 +12,8 @@ words:
   - ghostty
   - HISTFILE
   - HISTSIZE
-  - launchanim
   - largesize
+  - launchanim
   - mineffect
   - mkcd
   - naito
@@ -34,6 +34,7 @@ words:
   - swipescrolldirection
   - tilesize
   - treefmt
+  - zhaofengli
 ignorePaths:
   - node_modules
   - .git
