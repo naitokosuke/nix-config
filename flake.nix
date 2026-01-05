@@ -71,6 +71,7 @@
                   mise
                   pnpm
                   ripgrep
+                  rustup
                   tree
                   uv
                   vim
