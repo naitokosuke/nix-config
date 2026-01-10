@@ -7,6 +7,7 @@
 
 {
   imports = [
+    ./atuin.nix
     ./claude.nix
     ./gh.nix
     ./ghostty.nix
