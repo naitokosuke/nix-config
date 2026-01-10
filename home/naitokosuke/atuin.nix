@@ -5,9 +5,6 @@
     enableZshIntegration = true;
 
     settings = {
-      # Use local mode (no sync)
-      sync_address = "";
-
       # Search mode: prefix, fulltext, fuzzy, skim
       search_mode = "fuzzy";
 
