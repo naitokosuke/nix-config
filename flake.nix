@@ -61,6 +61,8 @@
                 programs.zsh.enable = true;
 
                 environment.systemPackages = with pkgs; [
+                  bun
+                  deno
                   devbox
                   devenv
                   fcp
@@ -70,6 +72,8 @@
                   ghq
                   git
                   mise
+                  ni
+                  nodejs_22
                   pnpm
                   ripgrep
                   rustup
