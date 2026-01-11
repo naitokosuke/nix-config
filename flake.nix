@@ -71,7 +71,6 @@
                   gh
                   ghq
                   git
-                  mise
                   ni
                   nodejs_22
                   pnpm
