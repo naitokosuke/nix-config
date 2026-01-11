@@ -62,6 +62,7 @@
 
                 environment.systemPackages = with pkgs; [
                   devbox
+                  devenv
                   fcp
                   fd
                   fzf
