@@ -1,5 +1,5 @@
 {
   "recommendations": [
-    "bbenoist.Nix",
+    "jnoortheen.nix-ide"
   ]
 }
