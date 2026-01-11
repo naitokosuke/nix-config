@@ -57,6 +57,36 @@ The codebase follows a modular structure:
    }
    ```
 
+## GitHub Workflow
+
+Use `gh` CLI for all issue, branch, and PR operations.
+
+### Issue Management
+
+- Use `gh issue` commands for creating and managing issues
+- Use `gh sub issue` extension for creating sub-issues
+
+### Branch Naming Convention
+
+Work branches **must** be prefixed with the issue number:
+
+```bash
+# Example: branch for issue #42
+git checkout -b 42-add-new-feature
+```
+
+### Pull Request Creation
+
+Follow these rules when creating PRs:
+
+1. Use `gh pr create` command
+2. Include `Closes #<issue-number>` in the PR body to auto-close the issue on merge
+
+```bash
+# Example
+gh pr create --title "Add new feature" --body "Closes #42"
+```
+
 ## Documentation Standards
 
 When creating markdown documentation, follow the rules defined in `~/src/github.com/naitokosuke/airules/markdown-writing-rules.md`:
