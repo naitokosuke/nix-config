@@ -71,6 +71,7 @@
                   gh
                   ghq
                   git
+                  gomi
                   ni
                   nodejs_22
                   pnpm
