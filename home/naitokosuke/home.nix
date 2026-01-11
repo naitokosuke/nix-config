@@ -9,6 +9,7 @@
   imports = [
     ./atuin.nix
     ./claude.nix
+    ./direnv.nix
     ./gh.nix
     ./ghostty.nix
     ./git.nix
