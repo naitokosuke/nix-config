@@ -42,10 +42,6 @@
               mkdir -p "$1" && cd "$1"
             }
 
-            # Mise setup
-            eval "$(mise activate zsh)"
-            export PATH="$HOME/.mise/bin:$PATH"
-
             # Default directory on terminal launch
             if [[ -z "$VSCODE_GIT_IPC_HANDLE" && "$TERM_PROGRAM" != "vscode" ]]; then
               cd /Users/naitokosuke/src/github.com/naitokosuke
