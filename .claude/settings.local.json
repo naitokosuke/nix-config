@@ -3,7 +3,8 @@
     "allow": [
       "Bash(ls:*)",
       "Bash(gh issue:*)",
-      "Bash(nix fmt:*)"
+      "Bash(nix fmt:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": []
   }
