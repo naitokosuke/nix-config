@@ -13,7 +13,6 @@
       ":q" = "exit";
       ".." = "cd ..";
       "..." = "cd ../..";
-      sf = "superfile";
 
       # I frequently typo j 😇
       j = "";
