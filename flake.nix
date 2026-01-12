@@ -24,6 +24,8 @@
     vscode-settings.flake = false;
 
     vize.url = "github:naitokosuke/vize-nix";
+
+    claude-code-overlay.url = "github:ryoppippi/claude-code-overlay";
   };
 
   outputs =
@@ -37,6 +39,7 @@
       homebrew-cask,
       vscode-settings,
       vize,
+      claude-code-overlay,
       ...
     }:
     let
@@ -44,6 +47,7 @@
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
+        overlays = [ claude-code-overlay.overlays.default ];
       };
 
       # Common Darwin system configuration
@@ -65,6 +69,7 @@
 
                 environment.systemPackages = with pkgs; [
                   bun
+                  claude-code
                   deno
                   devbox
                   devenv
