@@ -35,24 +35,6 @@
         "type": "github"
       }
     },
-    "flake-utils": {
-      "inputs": {
-        "systems": "systems"
-      },
-      "locked": {
-        "lastModified": 1731533236,
-        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -76,11 +58,11 @@
     "homebrew-cask": {
       "flake": false,
       "locked": {
-        "lastModified": 1768194761,
-        "narHash": "sha256-dDfAkVDwZZkMR8wusvpQALM/ucuI50+ZtTv+rys5qZs=",
+        "lastModified": 1768206322,
+        "narHash": "sha256-8DEVB7Sd7sWLIEA6ztQem0cZIeEO6sHsih2k7M5wbHw=",
         "owner": "homebrew",
         "repo": "homebrew-cask",
-        "rev": "61cd9b236b9be5089bc5c576dd32b9707a74e609",
+        "rev": "ae040047f7ce666a5f74d5c59b3a72d2f68f0e7c",
         "type": "github"
       },
       "original": {
@@ -188,21 +170,6 @@
         "vscode-settings": "vscode-settings"
       }
     },
-    "systems": {
-      "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
-        "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-systems",
-        "repo": "default",
-        "type": "github"
-      }
-    },
     "treefmt-nix": {
       "inputs": {
         "nixpkgs": [
@@ -225,15 +192,14 @@
     },
     "vize": {
       "inputs": {
-        "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1768198486,
-        "narHash": "sha256-7bLW5Dc8O0fjCju6iEVFeP+P8/qqvaz3DODyWN7IxSc=",
+        "lastModified": 1768211063,
+        "narHash": "sha256-/LyBIFv1f83BBICedhiOghrbclcotvFUVOkkmG86Pgc=",
         "owner": "naitokosuke",
         "repo": "vize-nix",
-        "rev": "c764e32cf6e9f016616c25bcea2bd4844b8b14bd",
+        "rev": "a62b20e3af4cefa11ab9849c323cfb00538772b4",
         "type": "github"
       },
       "original": {

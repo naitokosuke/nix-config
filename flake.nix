@@ -45,7 +45,7 @@
     let
       system = "aarch64-darwin";
       pkgs = import nixpkgs {
-        inherit system;
+        localSystem = system;
         config.allowUnfree = true;
         overlays = [ claude-code-overlay.overlays.default ];
       };
