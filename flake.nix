@@ -22,6 +22,8 @@
 
     vscode-settings.url = "github:naitokosuke/vscode-settings";
     vscode-settings.flake = false;
+
+    vize.url = "github:naitokosuke/vize-nix";
   };
 
   outputs =
@@ -34,6 +36,7 @@
       nix-homebrew,
       homebrew-cask,
       vscode-settings,
+      vize,
       ...
     }:
     let
@@ -80,10 +83,14 @@
                   tree
                   uv
                   vim
+                  vize.packages.${system}.default
                 ];
 
                 nix.settings.experimental-features = "nix-command flakes";
-                nix.settings.trusted-users = [ "root" "naitokosuke" ];
+                nix.settings.trusted-users = [
+                  "root"
+                  "naitokosuke"
+                ];
 
                 system.configurationRevision = self.rev or self.dirtyRev or null;
 
