@@ -21,6 +21,7 @@
       diffTool = "auto";
       env = {
         DISABLE_AUTOUPDATER = "1";
+        DISABLE_INSTALLATION_CHECKS = "1";
       };
       todoFeatureEnabled = true;
       messageIdleNotifThresholdMs = 60000;
