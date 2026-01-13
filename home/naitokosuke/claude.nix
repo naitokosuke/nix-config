@@ -6,32 +6,43 @@
 }:
 
 {
-  # Explicitly set default values (as of 2025/08/13) - only create if it doesn't exist
-  home.file.".claude/settings.json" = {
-    text = builtins.toJSON {
-      installMethod = "unknown";
-      autoUpdates = true;
-      theme = "dark-daltonized";
-      verbose = false;
-      preferredNotifChannel = "auto";
-      shiftEnterKeyBindingInstalled = true;
-      editorMode = "normal";
-      hasUsedBackslashReturn = true;
-      autoCompactEnabled = true;
-      diffTool = "auto";
-      env = {
-        DISABLE_AUTOUPDATER = "1";
-        DISABLE_INSTALLATION_CHECKS = "1";
-      };
-      todoFeatureEnabled = true;
-      messageIdleNotifThresholdMs = 60000;
-      autoConnectIde = false;
-      autoInstallIdeExtension = true;
-      checkpointingEnabled = true;
-    };
-    # Only create if file doesn't exist, allowing Claude Code to manage it
-    force = false;
-  };
+  # Claude Code settings - create as real writable file, not symlink
+  # home.file creates symlinks to read-only Nix store, but Claude Code needs write access
+  # for resume functionality and session management
+  home.activation.claudeSettings =
+    let
+      claudeSettingsContent = pkgs.writeText "claude-settings.json" (
+        builtins.toJSON {
+          installMethod = "unknown";
+          autoUpdates = true;
+          theme = "dark-daltonized";
+          verbose = false;
+          preferredNotifChannel = "auto";
+          shiftEnterKeyBindingInstalled = true;
+          editorMode = "normal";
+          hasUsedBackslashReturn = true;
+          autoCompactEnabled = true;
+          diffTool = "auto";
+          env = {
+            DISABLE_AUTOUPDATER = "1";
+            DISABLE_INSTALLATION_CHECKS = "1";
+          };
+          todoFeatureEnabled = true;
+          messageIdleNotifThresholdMs = 60000;
+          autoConnectIde = false;
+          autoInstallIdeExtension = true;
+          checkpointingEnabled = true;
+        }
+      );
+    in
+    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      claude_settings="$HOME/.claude/settings.json"
+      run mkdir -p "$HOME/.claude"
+      # Remove symlink if exists (from previous home.file config)
+      [ -L "$claude_settings" ] && run rm "$claude_settings"
+      # Only create if file doesn't exist, allowing Claude Code to manage it
+      [ ! -f "$claude_settings" ] && run cp ${claudeSettingsContent} "$claude_settings"
+    '';
 
   # Serena config - create as real writable file, not symlink
   # home.file creates symlinks to read-only Nix store, but Serena needs write access
