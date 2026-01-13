@@ -1,5 +1,32 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
+let
+  # Packages managed by Nix - prevent accidental brew install
+  # See: https://github.com/Homebrew/brew/issues/19939
+  homebrewForbiddenFormulae = [
+    "bun"
+    "claude"
+    "deno"
+    "fd"
+    "fzf"
+    "gh"
+    "git"
+    "node"
+    "npm"
+    "pip"
+    "pnpm"
+    "python"
+    "python3"
+    "ripgrep"
+    "vim"
+    "yarn"
+  ];
+in
 {
   programs.nushell = {
     enable = true;
@@ -19,6 +46,7 @@
     # Environment variables
     environmentVariables = {
       EDITOR = "vim";
+      HOMEBREW_FORBIDDEN_FORMULAE = lib.concatStringsSep " " homebrewForbiddenFormulae;
     };
 
     # Extra env configuration (env.nu) - runs before config.nu
