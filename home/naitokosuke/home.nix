@@ -14,6 +14,7 @@
     ./ghostty.nix
     ./git.nix
     ./nushell.nix
+    ./starship.nix
     ./vscode.nix
   ];
 

@@ -45,13 +45,6 @@
 
     # Extra configuration (config.nu)
     extraConfig = ''
-      # Custom prompt
-      $env.PROMPT_COMMAND = {||
-        let path = ($env.PWD | str replace $env.HOME '~')
-        $"(ansi green_bold)($env.USER)(ansi reset) at (ansi yellow)($env.HOSTNAME? | default 'mac')(ansi reset) in (ansi green_bold)($path)(ansi reset)\n(ansi green)❯(ansi reset) "
-      }
-      $env.PROMPT_INDICATOR = ""
-
       # Custom function: mkcd
       def mkcd [dir: string] {
         mkdir $dir
