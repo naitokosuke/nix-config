@@ -13,8 +13,9 @@
     ./gh.nix
     ./ghostty.nix
     ./git.nix
+    ./nushell.nix
     ./vscode.nix
-    ./zsh.nix
+    ./zsh.nix # Keep zsh for fallback and script compatibility
   ];
 
   # Home Manager needs a bit of information about you and the
