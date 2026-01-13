@@ -132,7 +132,7 @@
               }
             ]
             ++ (import ./hosts/common)
-            ++ (import ./hosts/${hostName})
+            ++ [ (import ./hosts/${hostName}) ]
           );
         };
     in
