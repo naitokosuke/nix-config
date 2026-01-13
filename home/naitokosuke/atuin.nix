@@ -3,6 +3,7 @@
   programs.atuin = {
     enable = true;
     enableZshIntegration = true;
+    enableNushellIntegration = true;
 
     settings = {
       # Search mode: prefix, fulltext, fuzzy, skim

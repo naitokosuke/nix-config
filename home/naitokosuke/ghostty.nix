@@ -1,7 +1,10 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   home.file.".config/ghostty/config".text = ''
+    # Use Nushell as the shell
+    command = ${pkgs.nushell}/bin/nu --login
+
     theme = "Catppuccin Mocha"
     font-feature = -calt
     font-feature = -dlig
