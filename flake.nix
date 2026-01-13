@@ -65,7 +65,8 @@
                 nixpkgs.config.allowUnfree = true;
                 nixpkgs.hostPlatform = system;
 
-                programs.zsh.enable = true;
+                # Disable zsh (using Nushell instead)
+                programs.zsh.enable = false;
 
                 environment.systemPackages = with pkgs; [
                   bun
