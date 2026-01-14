@@ -83,7 +83,7 @@ in
     # Extra configuration (config.nu)
     extraConfig = ''
       # Git completions from nu_scripts
-      source ${nu-scripts}/custom-completions/git/git-completions.nu
+      use ${nu-scripts}/custom-completions/git/git-completions.nu *
 
       # Custom function: mkcd
       def mkcd [dir: string] {
