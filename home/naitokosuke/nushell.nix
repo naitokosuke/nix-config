@@ -6,6 +6,15 @@
 }:
 
 let
+  # nu_scripts for completions
+  # https://github.com/nushell/nu_scripts
+  nu-scripts = pkgs.fetchFromGitHub {
+    owner = "nushell";
+    repo = "nu_scripts";
+    rev = "main";
+    sha256 = "sha256-KfnxoyLY8F0jx6h/SGQb5hkTBHgaa0fktE1qM4BKTBc=";
+  };
+
   # Packages managed by Nix - prevent accidental brew install
   # See: https://github.com/Homebrew/brew/issues/19939
   homebrewForbiddenFormulae = [
@@ -73,6 +82,9 @@ in
 
     # Extra configuration (config.nu)
     extraConfig = ''
+      # Git completions from nu_scripts
+      use ${nu-scripts}/custom-completions/git/git-completions.nu *
+
       # Custom function: mkcd
       def mkcd [dir: string] {
         mkdir $dir
