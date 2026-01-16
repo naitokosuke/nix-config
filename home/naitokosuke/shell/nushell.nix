@@ -1,3 +1,10 @@
+# Nushell configuration
+#
+# Nushell is used as the interactive shell in Ghostty terminal.
+# Non-POSIX shell with structured data and modern features.
+#
+# Note: Claude Code and other IDE integrations use zsh (login shell),
+# so PATH and environment variables are also configured in zsh.nix.
 {
   config,
   pkgs,
@@ -6,6 +13,8 @@
 }:
 
 let
+  common = import ./common.nix { inherit lib; };
+
   # nu_scripts for completions
   # https://github.com/nushell/nu_scripts
   nu-scripts = pkgs.fetchFromGitHub {
@@ -14,48 +23,19 @@ let
     rev = "main";
     sha256 = "sha256-KfnxoyLY8F0jx6h/SGQb5hkTBHgaa0fktE1qM4BKTBc=";
   };
-
-  # Packages managed by Nix - prevent accidental brew install
-  # See: https://github.com/Homebrew/brew/issues/19939
-  homebrewForbiddenFormulae = [
-    "bun"
-    "claude"
-    "deno"
-    "fd"
-    "fzf"
-    "gh"
-    "git"
-    "node"
-    "npm"
-    "pip"
-    "pnpm"
-    "python"
-    "python3"
-    "ripgrep"
-    "vim"
-    "yarn"
-  ];
 in
 {
   programs.nushell = {
     enable = true;
 
-    # Shell aliases
-    shellAliases = {
-      l = "ls";
-      la = "ls -la";
-      ll = "ls -l";
-      cl = "^clear"; # External command
-      ":q" = "exit";
-
-      # for antfu/ni
-      nid = "ni -D";
+    # Shell aliases (inherit common + nushell-specific)
+    shellAliases = common.aliases // {
+      cl = "^clear"; # External command (nushell syntax)
     };
 
     # Environment variables
-    environmentVariables = {
-      EDITOR = "vim";
-      HOMEBREW_FORBIDDEN_FORMULAE = lib.concatStringsSep " " homebrewForbiddenFormulae;
+    environmentVariables = common.envVars // {
+      HOMEBREW_FORBIDDEN_FORMULAE = lib.concatStringsSep " " common.homebrewForbiddenFormulae;
     };
 
     # Extra env configuration (env.nu) - runs before config.nu
@@ -66,17 +46,8 @@ in
       # Add paths using std path add (prepends by default)
       use std/util "path add"
 
-      # Standard UNIX paths (add first = lower priority)
-      path add "/usr/local/bin"
-
-      # Homebrew (Apple Silicon)
-      path add "/opt/homebrew/sbin"
-      path add "/opt/homebrew/bin"
-
-      # Nix paths (add last = higher priority)
-      path add "/nix/var/nix/profiles/default/bin"
-      path add "/run/current-system/sw/bin"
-      path add "/etc/profiles/per-user/naitokosuke/bin"
+      # Add paths from common config
+      ${lib.concatMapStringsSep "\n" (p: "path add \"${p}\"") common.pathEntries}
       path add ($env.HOME | path join ".nix-profile" "bin")
     '';
 
