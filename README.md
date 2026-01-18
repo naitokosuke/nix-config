@@ -22,8 +22,8 @@ Personal Nix configuration for macOS using [nix-darwin](https://github.com/LnL7/
 
 3. Clone this repository:
    ```bash
-   git clone https://github.com/naitokosuke/nix-config.git
-   cd nix-config
+   git clone https://github.com/naitokosuke/dotfiles.git
+   cd dotfiles
    ```
 
 4. Apply the configuration:
@@ -33,37 +33,60 @@ Personal Nix configuration for macOS using [nix-darwin](https://github.com/LnL7/
 
 ## Configuration Structure
 
-### System Configuration (nix-darwin/)
+```
+.
+├── flake.nix          # Entry point with package lists and system configuration
+├── hosts/             # System-level macOS settings (nix-darwin)
+│   ├── common/        # Shared settings for all hosts
+│   ├── Mac-big/       # Mac mini specific settings
+│   └── Macbook-heavy/ # MacBook Air specific settings
+└── home/              # User-specific configurations (home-manager)
+    └── naitokosuke/
+        ├── home.nix   # Main entry point
+        ├── shell/     # Shell configurations (Nushell, Zsh)
+        └── ...        # Other modules (git, gh, vscode, etc.)
+```
+
+### System Configuration (hosts/common/)
+
 - `cursor.nix` - Cursor settings
 - `dock.nix` - Dock preferences
 - `finder.nix` - Finder preferences
 - `homebrew.nix` - Homebrew Casks (GUI apps)
+- `keyboard.nix` - Keyboard settings
 - `menubar.nix` - Menu bar settings
-- `scroll.nix` - Scrolling behavior
+- `rosetta.nix` - Rosetta 2 for Intel compatibility
 - `screen_capture.nix` - Screen capture settings
+- `scroll.nix` - Scrolling behavior
 
-### User Configuration (home-manager/)
+### User Configuration (home/naitokosuke/)
+
+- `shell/nushell.nix` - Nushell (primary shell)
+- `shell/zsh.nix` - Zsh (fallback shell)
+- `atuin.nix` - Shell history with Atuin
+- `claude.nix` - Claude Code configuration
+- `direnv.nix` - Directory-based environments
 - `gh.nix` - GitHub CLI
 - `ghostty.nix` - Ghostty terminal
 - `git.nix` - Git configuration
+- `starship.nix` - Starship prompt
 - `vscode.nix` - VSCode settings sync
-- `zsh.nix` - Zsh shell
 
 ### Packages
 
 CLI tools are managed via nixpkgs, GUI apps via Homebrew Casks.
 
 **CLI (nixpkgs)**:
-- devbox, fcp, fd, fzf, gh, ghq, git, mise, pnpm, ripgrep, tree, uv, vim
+- bun, claude-code, deno, devbox, devenv, fcp, fd, fzf, gh, ghq, git, gomi, ni, nodejs, pnpm, ripgrep, rustup, tree, uv, vim
 
 **GUI (Homebrew Casks)**:
 - alt-tab, arc, discord, ghostty, google-chrome, raycast, scroll-reverser, visual-studio-code
 
 ## Customization
 
-1. Update `flake.nix`: hostname, computerName, primaryUser
-2. Update `home-manager/home.nix`: username, homeDirectory
-3. Update `home-manager/git.nix`: userName, userEmail, ghq.root
+1. Update `flake.nix`: Add packages to `environment.systemPackages`
+2. Update `hosts/common/`: Add or modify system settings
+3. Update `home/naitokosuke/`: Add or modify user configurations
 
 ## Usage
 

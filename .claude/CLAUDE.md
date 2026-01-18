@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a Nix configuration repository for macOS that uses:
 - nix-darwin: System-level macOS configurations
-- home-manager: User-specific configurations  
+- home-manager: User-specific configurations
 - Nix Flakes: Reproducible dependency management
 
 The configuration targets Apple Silicon Macs (aarch64-darwin) and manages both system settings and user environments declaratively.
@@ -32,23 +32,47 @@ nix flake update
 
 The codebase follows a modular structure:
 
-- flake.nix: Entry point defining the Darwin system configuration. Contains package lists and system settings.
-- nix-darwin/: System-level macOS settings (dock, finder, cursor, etc.)
-  - Each module exports specific macOS system preferences
-  - Imported via `default.nix` which aggregates all modules
-- home-manager/: User-specific configurations
-  - `home.nix`: Main entry point that imports other modules
-  - Individual modules for git, zsh, ghostty terminal, GitHub CLI, VSCode settings sync
+```
+.
+├── flake.nix          # Entry point with package lists and system configuration
+├── hosts/             # System-level macOS settings (nix-darwin)
+│   ├── common/        # Shared settings for all hosts
+│   │   ├── cursor.nix
+│   │   ├── dock.nix
+│   │   ├── finder.nix
+│   │   ├── homebrew.nix
+│   │   ├── keyboard.nix
+│   │   ├── menubar.nix
+│   │   ├── rosetta.nix
+│   │   ├── screen_capture.nix
+│   │   └── scroll.nix
+│   ├── Mac-big/       # Mac mini specific settings
+│   └── Macbook-heavy/ # MacBook Air specific settings
+└── home/              # User-specific configurations (home-manager)
+    └── naitokosuke/
+        ├── home.nix   # Main entry point
+        ├── atuin.nix  # Shell history with Atuin
+        ├── claude.nix # Claude Code configuration
+        ├── direnv.nix # Directory-based environments
+        ├── gh.nix     # GitHub CLI
+        ├── ghostty.nix# Ghostty terminal
+        ├── git.nix    # Git configuration
+        ├── starship.nix # Starship prompt
+        ├── vscode.nix # VSCode settings sync
+        └── shell/     # Shell configurations
+            ├── nushell.nix  # Nushell (primary shell)
+            └── zsh.nix      # Zsh (fallback)
+```
 
 ## Key Development Patterns
 
-1. Adding System Settings: Create a new `.nix` file in `nix-darwin/` and add it to the imports in `default.nix`
+1. Adding System Settings: Create a new `.nix` file in `hosts/common/` and add it to the imports in `default.nix`
 
-2. Adding User Configurations: Create a new `.nix` file in `home-manager/` and import it in `home.nix`
+2. Adding User Configurations: Create a new `.nix` file in `home/naitokosuke/` and import it in `home.nix`
 
-3. Package Management: 
-   - System packages: Add to `environment.systemPackages` in flake.nix:36-65
-   - Broken packages use pinned nixpkgs versions via overlays (see ghostty/arc-browser in flake.nix:26-31)
+3. Package Management:
+   - System packages: Add to `environment.systemPackages` in flake.nix (around line 71-95)
+   - GUI apps: Add to Homebrew Casks in `hosts/common/homebrew.nix`
 
 4. Module Structure: Each nix module typically follows:
    ```nix
@@ -99,20 +123,21 @@ When creating markdown documentation, follow the rules defined in `~/src/github.
 
 ## Important Configuration Details
 
-- Hostname: "Mac-big" (defined in flake.nix:39)
-- User: "naitokosuke" (referenced in flake.nix:77)
+- Hosts: "Mac-big" (Mac mini), "Macbook-heavy" (MacBook Air)
+- User: "naitokosuke"
 - System: "aarch64-darwin" (Apple Silicon)
+- Primary shell: Nushell (with Zsh as fallback)
 - Experimental features enabled: nix-command, flakes
 
 ## VSCode Settings Sync
 
 The repository includes automatic VSCode settings synchronization from GitHub repository `naitokosuke/vscode-settings`:
 
-- **Module**: `home-manager/vscode.nix`
-- **Settings Path**: `~/Library/Application Support/Code/User/settings.json`
-- **Keybindings Path**: `~/Library/Application Support/Code/User/keybindings.json`
-- **Backup**: Existing files are automatically backed up with `.backup` extension
-- **JSONC Support**: Keybindings are converted from JSONC to JSON format automatically
+- Module: `home/naitokosuke/vscode.nix`
+- Settings Path: `~/Library/Application Support/Code/User/settings.json`
+- Keybindings Path: `~/Library/Application Support/Code/User/keybindings.json`
+- Backup: Existing files are automatically backed up with `.backup` extension
+- JSONC Support: Keybindings are converted from JSONC to JSON format automatically
 
 ### Updating VSCode Settings
 
