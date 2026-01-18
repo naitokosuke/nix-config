@@ -129,6 +129,20 @@ When creating markdown documentation, follow the rules defined in `~/src/github.
 - Primary shell: Nushell (with Zsh as fallback)
 - Experimental features enabled: nix-command, flakes
 
+### Host-Specific Builds
+
+Always specify the correct host name based on the machine you are working on:
+
+```bash
+# On Mac mini
+darwin-rebuild switch --flake .#Mac-big
+
+# On MacBook Air
+darwin-rebuild switch --flake .#Macbook-heavy
+```
+
+Host-specific settings are located in `hosts/<hostname>/`. Shared settings go in `hosts/common/` and apply to all hosts.
+
 ## VSCode Settings Sync
 
 The repository includes automatic VSCode settings synchronization from GitHub repository `naitokosuke/vscode-settings`:
