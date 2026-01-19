@@ -61,7 +61,7 @@ in
       use ${nu-scripts}/custom-completions/rg/rg-completions.nu *
 
       # Custom function: mkcd
-      def mkcd [dir: string] {
+      def --env mkcd [dir: string] {
         mkdir $dir
         cd $dir
       }
