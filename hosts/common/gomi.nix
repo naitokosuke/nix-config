@@ -4,7 +4,7 @@
     serviceConfig = {
       ProgramArguments = [
         "/run/current-system/sw/bin/gomi"
-        "--prune=30d,orphans"
+        "--prune=45d,orphans"
       ];
       StartCalendarInterval = [
         {
