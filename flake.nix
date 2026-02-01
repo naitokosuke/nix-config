@@ -126,8 +126,8 @@
                   taps = {
                     "homebrew/homebrew-cask" = homebrew-cask;
                   };
-                  # Declarative tap management
-                  mutableTaps = false;
+                  # Allow taps to be managed via homebrew.taps
+                  mutableTaps = true;
                 };
               }
             ]
