@@ -50,100 +50,36 @@
         overlays = [ claude-code-overlay.overlays.default ];
       };
 
-      # Common Darwin system configuration
       mkDarwinConfig =
         { hostName }:
         nix-darwin.lib.darwinSystem {
-          modules = (
-            [
-              {
-                networking.hostName = hostName;
-                networking.computerName = hostName;
-
-                system.primaryUser = "naitokosuke";
-
-                nixpkgs.config.allowUnfree = true;
-                nixpkgs.hostPlatform = system;
-
-                # Disable zsh (using Nushell instead)
-                programs.zsh.enable = false;
-
-                environment.systemPackages =
-                  with pkgs;
-                  [
-                    bun
-                    claude-code
-                    deno
-                    devbox
-                    devenv
-                    fcp
-                    fd
-                    fzf
-                    gh
-                    ghq
-                    git
-                    gomi
-                    ni
-                    nodejs_24
-                    pnpm
-                    ripgrep
-                    rustup
-                    tree
-                    uv
-                    vim
-                  ]
-                  ++ [ vize.packages.${pkgs.stdenv.hostPlatform.system}.default ];
-
-                nix.settings.experimental-features = "nix-command flakes";
-                nix.settings.trusted-users = [
-                  "root"
-                  "naitokosuke"
-                ];
-
-                system.configurationRevision = self.rev or self.dirtyRev or null;
-
-                system.stateVersion = 5;
-              }
-              home-manager.darwinModules.home-manager
-              {
-                home-manager.useGlobalPkgs = true;
-                home-manager.useUserPackages = true;
-                home-manager.backupFileExtension = "backup";
-                home-manager.users.naitokosuke = import ./home/naitokosuke/home.nix;
-                home-manager.extraSpecialArgs = {
-                  inherit vscode-settings;
-                };
-              }
-              nix-homebrew.darwinModules.nix-homebrew
-              {
-                nix-homebrew = {
-                  enable = true;
-                  # Install Homebrew under the default Intel prefix for Rosetta 2
-                  enableRosetta = true;
-                  user = "naitokosuke";
-                  # Automatically migrate existing Homebrew installation
-                  autoMigrate = true;
-                  taps = {
-                    "homebrew/homebrew-cask" = homebrew-cask;
-                  };
-                  # Allow taps to be managed via homebrew.taps
-                  mutableTaps = true;
-                };
-              }
-            ]
-            ++ (import ./hosts/common)
-            ++ [ (import ./hosts/${hostName}) ]
-          );
+          specialArgs = {
+            inherit
+              self
+              vize
+              vscode-settings
+              homebrew-cask
+              ;
+          };
+          modules = [
+            {
+              networking.hostName = hostName;
+              networking.computerName = hostName;
+              system.primaryUser = "naitokosuke";
+              nixpkgs.config.allowUnfree = true;
+              nixpkgs.hostPlatform = system;
+            }
+            home-manager.darwinModules.home-manager
+            nix-homebrew.darwinModules.nix-homebrew
+          ]
+          ++ (import ./hosts/common)
+          ++ [ (import ./hosts/${hostName}) ];
         };
     in
     {
-      # Mac mini
       darwinConfigurations."Mac-big" = mkDarwinConfig { hostName = "Mac-big"; };
-
-      # MacBook Air
       darwinConfigurations."Macbook-heavy" = mkDarwinConfig { hostName = "Macbook-heavy"; };
 
-      # Use treefmt for formatting with nixfmt
       formatter.${system} = treefmt-nix.lib.mkWrapper pkgs {
         projectRootFile = "flake.nix";
         programs.nixfmt.enable = true;
