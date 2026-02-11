@@ -4,7 +4,9 @@
       "Bash(ls:*)",
       "Bash(gh issue:*)",
       "Bash(nix fmt:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(gh api:*)",
+      "Bash(gh repo view:*)"
     ],
     "deny": []
   }
