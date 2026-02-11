@@ -13,6 +13,7 @@
     ./gh.nix
     ./ghostty.nix
     ./git.nix
+    ./octorus.nix
     ./shell
     ./starship.nix
     ./vscode.nix

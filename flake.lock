@@ -143,6 +143,22 @@
     },
     "nixpkgs_3": {
       "locked": {
+        "lastModified": 1770537093,
+        "narHash": "sha256-pF1quXG5wsgtyuPOHcLfYg/ft/QMr8NnX0i6tW2187s=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "fef9403a3e4d31b0a23f0bacebbec52c248fbb51",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_4": {
+      "locked": {
         "lastModified": 1768178648,
         "narHash": "sha256-kz/F6mhESPvU1diB7tOM3nLcBfQe7GU7GQCymRlTi/s=",
         "owner": "NixOS",
@@ -157,6 +173,24 @@
         "type": "github"
       }
     },
+    "octorus": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_3"
+      },
+      "locked": {
+        "lastModified": 1770771824,
+        "narHash": "sha256-0yvO16BYEEY7RbsVdEe28N1X+JJYjVZP0RPBwKeJ3lk=",
+        "owner": "naitokosuke",
+        "repo": "octorus-nix",
+        "rev": "67c3d7ba7df1383f95bd84b559ed4defdb48f7f3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "naitokosuke",
+        "repo": "octorus-nix",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "claude-code-overlay": "claude-code-overlay",
@@ -165,6 +199,7 @@
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",
         "nixpkgs": "nixpkgs_2",
+        "octorus": "octorus",
         "treefmt-nix": "treefmt-nix",
         "vize": "vize",
         "vscode-settings": "vscode-settings"
@@ -192,7 +227,7 @@
     },
     "vize": {
       "inputs": {
-        "nixpkgs": "nixpkgs_3"
+        "nixpkgs": "nixpkgs_4"
       },
       "locked": {
         "lastModified": 1770692293,
