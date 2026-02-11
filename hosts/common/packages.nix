@@ -1,6 +1,7 @@
 {
   pkgs,
   vize,
+  octorus,
   ...
 }:
 {
@@ -28,5 +29,6 @@
       uv
       vim
     ]
-    ++ [ vize.packages.${pkgs.stdenv.hostPlatform.system}.default ];
+    ++ [ vize.packages.${pkgs.stdenv.hostPlatform.system}.default ]
+    ++ [ octorus.packages.${pkgs.stdenv.hostPlatform.system}.default ];
 }

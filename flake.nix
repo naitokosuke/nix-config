@@ -25,6 +25,8 @@
 
     vize.url = "github:naitokosuke/vize-nix";
 
+    octorus.url = "github:naitokosuke/octorus-nix";
+
     claude-code-overlay.url = "github:ryoppippi/claude-code-overlay";
   };
 
@@ -39,6 +41,7 @@
       homebrew-cask,
       vscode-settings,
       vize,
+      octorus,
       claude-code-overlay,
       ...
     }:
@@ -57,6 +60,7 @@
             inherit
               self
               vize
+              octorus
               vscode-settings
               homebrew-cask
               ;
