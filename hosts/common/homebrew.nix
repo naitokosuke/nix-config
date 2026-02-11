@@ -39,6 +39,7 @@
       "discord"
       "ghostty"
       "google-chrome"
+      "obsidian"
       "productdevbook/tap/portkiller"
       "raycast"
       "scroll-reverser"
