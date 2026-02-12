@@ -5,6 +5,7 @@
   ...
 }:
 let
+  # Not available in nixpkgs, so we build from source
   gh-sub-issue = pkgs.buildGoModule rec {
     pname = "gh-sub-issue";
     version = "0.5.1";
@@ -22,7 +23,10 @@ in
 {
   programs.gh = {
     enable = true;
-    extensions = [ gh-sub-issue ];
+    extensions = [
+      gh-sub-issue
+      pkgs.gh-dash
+    ];
     settings = {
       version = 1;
       git_protocol = "ssh";
