@@ -27,7 +27,7 @@
 
     octorus.url = "github:naitokosuke/octorus-nix";
 
-    claude-code-overlay.url = "github:ryoppippi/claude-code-overlay";
+    llm-agents.url = "github:numtide/llm-agents.nix";
   };
 
   outputs =
@@ -42,7 +42,7 @@
       vscode-settings,
       vize,
       octorus,
-      claude-code-overlay,
+      llm-agents,
       ...
     }:
     let
@@ -50,7 +50,7 @@
       pkgs = import nixpkgs {
         localSystem = system;
         config.allowUnfree = true;
-        overlays = [ claude-code-overlay.overlays.default ];
+        overlays = [ llm-agents.overlays.default ];
       };
 
       mkDarwinConfig =
@@ -72,6 +72,7 @@
               system.primaryUser = "naitokosuke";
               nixpkgs.config.allowUnfree = true;
               nixpkgs.hostPlatform = system;
+              nixpkgs.overlays = [ llm-agents.overlays.default ];
             }
             home-manager.darwinModules.home-manager
             nix-homebrew.darwinModules.nix-homebrew
