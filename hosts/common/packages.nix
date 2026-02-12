@@ -9,7 +9,7 @@
     with pkgs;
     [
       bun
-      claude-code
+      llm-agents.claude-code
       deno
       devbox
       devenv
