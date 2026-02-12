@@ -5,6 +5,7 @@
   ...
 }:
 let
+  # Not available in nixpkgs, so we build from source
   gh-sub-issue = pkgs.buildGoModule rec {
     pname = "gh-sub-issue";
     version = "0.5.1";
