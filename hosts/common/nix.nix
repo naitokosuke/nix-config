@@ -1,10 +1,12 @@
 {
   self,
+  pkgs,
   ...
 }:
 {
   programs.zsh.enable = false;
 
+  nix.package = pkgs.lix;
   nix.settings.experimental-features = "nix-command flakes";
   nix.settings.trusted-users = [
     "root"

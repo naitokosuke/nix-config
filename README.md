@@ -5,7 +5,7 @@ Personal Nix configuration for macOS using [nix-darwin](https://github.com/LnL7/
 ## Prerequisites
 
 - macOS on Apple Silicon
-- Nix package manager
+- [Lix](https://lix.systems/) package manager
 - Xcode Command Line Tools (required for Homebrew)
 
 ## Installation
@@ -15,9 +15,9 @@ Personal Nix configuration for macOS using [nix-darwin](https://github.com/LnL7/
    xcode-select --install
    ```
 
-2. Install Nix:
+2. Install Lix:
    ```bash
-   sh <(curl -L https://nixos.org/nix/install)
+   curl --proto '=https' --tlsv1.2 -sSf -L https://install.lix.systems/lix | sh -s -- install
    ```
 
 3. Clone this repository:
