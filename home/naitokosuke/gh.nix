@@ -4,10 +4,25 @@
   lib,
   ...
 }:
+let
+  gh-sub-issue = pkgs.buildGoModule rec {
+    pname = "gh-sub-issue";
+    version = "0.5.1";
 
+    src = pkgs.fetchFromGitHub {
+      owner = "yahsan2";
+      repo = "gh-sub-issue";
+      rev = "v${version}";
+      hash = "sha256-WeQFWa+9dPiyInpDQx52vv9VNOzHrcPJi093WG2nmpA=";
+    };
+
+    vendorHash = "sha256-U4z6S12j9PBAXHNIQT8GgjEELqc6KTeeSVQnoF9Lw2I=";
+  };
+in
 {
   programs.gh = {
     enable = true;
+    extensions = [ gh-sub-issue ];
     settings = {
       version = 1;
       git_protocol = "ssh";
@@ -19,8 +34,4 @@
       };
     };
   };
-
-  home.activation.installGhExtensions = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    ${pkgs.gh}/bin/gh extension install yahsan2/gh-sub-issue 2>/dev/null || true
-  '';
 }
