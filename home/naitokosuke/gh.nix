@@ -22,7 +22,10 @@ in
 {
   programs.gh = {
     enable = true;
-    extensions = [ gh-sub-issue ];
+    extensions = [
+      gh-sub-issue
+      pkgs.gh-dash
+    ];
     settings = {
       version = 1;
       git_protocol = "ssh";
