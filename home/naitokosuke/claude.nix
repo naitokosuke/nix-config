@@ -61,6 +61,24 @@
       [ ! -f "$serena_config" ] && run cp ${serenaConfigContent} "$serena_config"
     '';
 
+  # Claude Code local settings (hooks)
+  home.file.".claude/settings.local.json".text = builtins.toJSON {
+    hooks = {
+      PreToolUse = [
+        {
+          matcher = "ExitPlanMode";
+          hooks = [
+            {
+              type = "command";
+              command = ''code "$(ls -t ~/.claude/plans/*.md | head -1)"'';
+              timeout = 5;
+            }
+          ];
+        }
+      ];
+    };
+  };
+
   # Claude Code rules - symlink to rule-rule-rule repository
   home.file.".claude/rules".source =
     config.lib.file.mkOutOfStoreSymlink "/Users/naitokosuke/src/github.com/naitokosuke/rule-rule-rule";
