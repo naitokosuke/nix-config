@@ -1,8 +1,8 @@
 { config, pkgs, ... }:
 {
   # Remove Taps symlink and create writable directory before homebrew activation
-  # extraActivation runs before homebrew in nix-darwin's hardcoded order
-  system.activationScripts.extraActivation.text = ''
+  # This runs before homebrew activation in nix-darwin's hardcoded order
+  system.activationScripts.fixHomebrewTaps.text = ''
     TAPS_DIR="/opt/homebrew/Library/Taps"
     # Remove symlink to Nix store if exists
     if [ -L "$TAPS_DIR" ]; then
