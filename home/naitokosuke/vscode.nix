@@ -4,20 +4,43 @@
   ...
 }:
 let
-  # Convert JSONC to JSON by removing comments and trailing commas
-  keybindings-json = pkgs.runCommand "keybindings.json" { } ''
-    # Install jq for JSON processing
-    export PATH=${pkgs.jq}/bin:$PATH
+  # Convert JSONC to JSON using Node.js for correct handling of
+  # comments inside strings (e.g. URLs with "//"), multi-line block
+  # comments, and nested trailing commas.
+  jsonc-to-json = pkgs.writeText "jsonc-to-json.js" ''
+    const fs = require("fs");
+    const input = fs.readFileSync(process.argv[2], "utf8");
+    var result = "";
+    var inString = false;
+    var escape = false;
+    for (var i = 0; i < input.length; i++) {
+      var ch = input[i];
+      if (escape) { result += ch; escape = false; continue; }
+      if (inString) {
+        if (ch === "\\") { result += ch; escape = true; continue; }
+        if (ch === '"') { inString = false; }
+        result += ch;
+        continue;
+      }
+      if (ch === '"') { inString = true; result += ch; continue; }
+      if (ch === "/" && input[i+1] === "/") {
+        while (i < input.length && input[i] !== "\n") i++;
+        continue;
+      }
+      if (ch === "/" && input[i+1] === "*") {
+        i += 2;
+        while (i < input.length && !(input[i] === "*" && input[i+1] === "/")) i++;
+        i++;
+        continue;
+      }
+      result += ch;
+    }
+    var cleaned = result.replace(/,(\s*[}\]])/g, "$1");
+    process.stdout.write(JSON.stringify(JSON.parse(cleaned), null, 2));
+  '';
 
-    # Convert JSONC to JSON
-    # Remove comments and trailing commas, then format as valid JSON
-    cat ${vscode-settings}/keybinding.jsonc \
-      | sed 's|//.*||g' \
-      | sed 's|/\*.*\*/||g' \
-      | tr -d '\n' \
-      | sed 's/,\s*}/}/g' \
-      | sed 's/,\s*]/]/g' \
-      | jq . > $out
+  keybindings-json = pkgs.runCommand "keybindings.json" { } ''
+    ${pkgs.nodejs}/bin/node ${jsonc-to-json} ${vscode-settings}/keybinding.jsonc > $out
   '';
 in
 {
