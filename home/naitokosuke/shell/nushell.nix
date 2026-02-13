@@ -9,20 +9,12 @@
   config,
   pkgs,
   lib,
+  nu-scripts,
   ...
 }:
 
 let
   common = import ./common.nix { inherit lib; };
-
-  # nu_scripts for completions
-  # https://github.com/nushell/nu_scripts
-  nu-scripts = pkgs.fetchFromGitHub {
-    owner = "nushell";
-    repo = "nu_scripts";
-    rev = "main";
-    sha256 = "sha256-KfnxoyLY8F0jx6h/SGQb5hkTBHgaa0fktE1qM4BKTBc=";
-  };
 in
 {
   programs.nushell = {
