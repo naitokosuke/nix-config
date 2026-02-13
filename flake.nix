@@ -59,11 +59,11 @@
           specialArgs = {
             inherit
               self
-              vize
-              octorus
               vscode-settings
               homebrew-cask
               ;
+            vize-pkg = vize.packages.${system}.default;
+            octorus-pkg = octorus.packages.${system}.default;
           };
           modules = [
             {

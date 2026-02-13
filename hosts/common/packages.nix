@@ -1,34 +1,32 @@
 {
   pkgs,
-  vize,
-  octorus,
+  vize-pkg,
+  octorus-pkg,
   ...
 }:
 {
-  environment.systemPackages =
-    with pkgs;
-    [
-      bun
-      llm-agents.claude-code
-      deno
-      devbox
-      devenv
-      fcp
-      fd
-      fzf
-      gh
-      ghq
-      git
-      gomi
-      ni
-      nodejs_24
-      pnpm
-      ripgrep
-      rustup
-      tree
-      uv
-      vim
-    ]
-    ++ [ vize.packages.${pkgs.stdenv.hostPlatform.system}.default ]
-    ++ [ octorus.packages.${pkgs.stdenv.hostPlatform.system}.default ];
+  environment.systemPackages = with pkgs; [
+    bun
+    llm-agents.claude-code
+    deno
+    devbox
+    devenv
+    fcp
+    fd
+    fzf
+    gh
+    ghq
+    git
+    gomi
+    ni
+    nodejs_24
+    pnpm
+    ripgrep
+    rustup
+    tree
+    uv
+    vim
+    vize-pkg
+    octorus-pkg
+  ];
 }
