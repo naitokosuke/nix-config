@@ -77,11 +77,11 @@
 
   # Claude Code rules - symlink to rule-rule-rule repository
   home.file.".claude/rules".source =
-    config.lib.file.mkOutOfStoreSymlink "/Users/naitokosuke/src/github.com/naitokosuke/rule-rule-rule";
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/src/github.com/${config.home.username}/rule-rule-rule";
 
   # Claude Code skills - symlink to skill-skill-skill repository
   home.file.".claude/skills".source =
-    config.lib.file.mkOutOfStoreSymlink "/Users/naitokosuke/src/github.com/naitokosuke/skill-skill-skill";
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/src/github.com/${config.home.username}/skill-skill-skill";
 
   # Global Claude Code memory
   home.file.".claude/CLAUDE.md".text = ''

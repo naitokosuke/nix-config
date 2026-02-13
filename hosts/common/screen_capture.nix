@@ -1,7 +1,7 @@
-{ ... }:
+{ config, ... }:
 
 {
   system.defaults.screencapture = {
-    location = "/Users/naitokosuke/Pictures/screen_shots/";
+    location = "/Users/${config.system.primaryUser}/Pictures/screen_shots/";
   };
 }
