@@ -76,9 +76,9 @@
             }
             home-manager.darwinModules.home-manager
             nix-homebrew.darwinModules.nix-homebrew
-          ]
-          ++ (import ./hosts/common)
-          ++ [ (import ./hosts/${hostName}) ];
+            ./hosts/common
+            ./hosts/${hostName}
+          ];
         };
     in
     {
