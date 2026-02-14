@@ -1,7 +1,6 @@
 {
+  inputs,
   pkgs,
-  vize-pkg,
-  octorus-pkg,
   ...
 }:
 {
@@ -26,7 +25,7 @@
     tree
     uv
     vim
-    vize-pkg
-    octorus-pkg
+    inputs.vize.packages.${pkgs.stdenv.hostPlatform.system}.default
+    inputs.octorus.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 }

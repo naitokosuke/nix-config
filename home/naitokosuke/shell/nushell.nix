@@ -7,9 +7,9 @@
 # so PATH and environment variables are also configured in zsh.nix.
 {
   config,
+  inputs,
   pkgs,
   lib,
-  nu-scripts,
   ...
 }:
 
@@ -46,11 +46,11 @@ in
     # Extra configuration (config.nu)
     extraConfig = ''
       # Completions from nu_scripts
-      use ${nu-scripts}/custom-completions/git/git-completions.nu *
-      use ${nu-scripts}/custom-completions/gh/gh-completions.nu *
-      use ${nu-scripts}/custom-completions/nix/nix-completions.nu *
-      use ${nu-scripts}/custom-completions/pnpm/pnpm-completions.nu *
-      use ${nu-scripts}/custom-completions/rg/rg-completions.nu *
+      use ${inputs.nu-scripts}/custom-completions/git/git-completions.nu *
+      use ${inputs.nu-scripts}/custom-completions/gh/gh-completions.nu *
+      use ${inputs.nu-scripts}/custom-completions/nix/nix-completions.nu *
+      use ${inputs.nu-scripts}/custom-completions/pnpm/pnpm-completions.nu *
+      use ${inputs.nu-scripts}/custom-completions/rg/rg-completions.nu *
 
       # Custom function: mkcd
       def --env mkcd [dir: string] {

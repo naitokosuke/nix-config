@@ -1,6 +1,5 @@
 {
-  vscode-settings,
-  nu-scripts,
+  inputs,
   ...
 }:
 {
@@ -9,6 +8,6 @@
   home-manager.backupFileExtension = "backup";
   home-manager.users.naitokosuke = import ../../home/naitokosuke/home.nix;
   home-manager.extraSpecialArgs = {
-    inherit vscode-settings nu-scripts;
+    inherit inputs;
   };
 }
