@@ -37,18 +37,12 @@
 
   outputs =
     inputs@{
-      self,
       nixpkgs,
       nix-darwin,
       home-manager,
       treefmt-nix,
       nix-homebrew,
-      homebrew-cask,
-      vscode-settings,
-      vize,
-      octorus,
       llm-agents,
-      nu-scripts,
       ...
     }:
     let
@@ -63,14 +57,7 @@
         { hostName }:
         nix-darwin.lib.darwinSystem {
           specialArgs = {
-            inherit
-              self
-              vscode-settings
-              homebrew-cask
-              nu-scripts
-              ;
-            vize-pkg = vize.packages.${system}.default;
-            octorus-pkg = octorus.packages.${system}.default;
+            inherit inputs;
           };
           modules = [
             {

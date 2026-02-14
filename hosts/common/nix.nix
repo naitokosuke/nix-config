@@ -1,8 +1,11 @@
 {
-  self,
+  inputs,
   pkgs,
   ...
 }:
+let
+  inherit (inputs) self;
+in
 {
   # Disable nix-darwin's /etc/zshrc management.
   # Zsh configuration is handled entirely by home-manager.

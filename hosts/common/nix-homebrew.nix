@@ -1,7 +1,10 @@
 {
-  homebrew-cask,
+  inputs,
   ...
 }:
+let
+  inherit (inputs) homebrew-cask;
+in
 {
   nix-homebrew = {
     enable = true;

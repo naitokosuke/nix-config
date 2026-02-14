@@ -1,9 +1,10 @@
 {
+  inputs,
   pkgs,
-  vscode-settings,
   ...
 }:
 let
+  inherit (inputs) vscode-settings;
   # Convert JSONC to JSON by removing comments and trailing commas
   keybindings-json = pkgs.runCommand "keybindings.json" { } ''
     # Install jq for JSON processing

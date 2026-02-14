@@ -7,13 +7,14 @@
 # so PATH and environment variables are also configured in zsh.nix.
 {
   config,
+  inputs,
   pkgs,
   lib,
-  nu-scripts,
   ...
 }:
 
 let
+  inherit (inputs) nu-scripts;
   common = import ./common.nix { inherit lib; };
 in
 {
