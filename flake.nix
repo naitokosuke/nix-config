@@ -28,6 +28,11 @@
     octorus.url = "github:naitokosuke/octorus-nix";
 
     llm-agents.url = "github:numtide/llm-agents.nix";
+
+    nu-scripts = {
+      url = "github:nushell/nu_scripts";
+      flake = false;
+    };
   };
 
   outputs =
@@ -43,6 +48,7 @@
       vize,
       octorus,
       llm-agents,
+      nu-scripts,
       ...
     }:
     let
@@ -63,6 +69,7 @@
               octorus
               vscode-settings
               homebrew-cask
+              nu-scripts
               ;
           };
           modules = [
