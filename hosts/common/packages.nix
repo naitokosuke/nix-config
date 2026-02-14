@@ -3,9 +3,6 @@
   pkgs,
   ...
 }:
-let
-  inherit (inputs) vize octorus;
-in
 {
   environment.systemPackages = with pkgs; [
     bun
@@ -28,7 +25,7 @@ in
     tree
     uv
     vim
-    vize.packages.${pkgs.stdenv.hostPlatform.system}.default
-    octorus.packages.${pkgs.stdenv.hostPlatform.system}.default
+    inputs.vize.packages.${pkgs.stdenv.hostPlatform.system}.default
+    inputs.octorus.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 }

@@ -2,9 +2,6 @@
   inputs,
   ...
 }:
-let
-  inherit (inputs) homebrew-cask;
-in
 {
   nix-homebrew = {
     enable = true;
@@ -12,7 +9,7 @@ in
     user = "naitokosuke";
     autoMigrate = true;
     taps = {
-      "homebrew/homebrew-cask" = homebrew-cask;
+      "homebrew/homebrew-cask" = inputs.homebrew-cask;
     };
     mutableTaps = true;
   };

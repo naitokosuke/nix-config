@@ -3,9 +3,6 @@
   pkgs,
   ...
 }:
-let
-  inherit (inputs) self;
-in
 {
   # Disable nix-darwin's /etc/zshrc management.
   # Zsh configuration is handled entirely by home-manager.
@@ -20,6 +17,6 @@ in
     "naitokosuke"
   ];
 
-  system.configurationRevision = self.rev or self.dirtyRev or null;
+  system.configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;
   system.stateVersion = 5;
 }
