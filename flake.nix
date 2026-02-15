@@ -52,8 +52,6 @@
       system = "aarch64-darwin";
       pkgs = import nixpkgs {
         localSystem = system;
-        config.allowUnfree = true;
-        overlays = [ llm-agents.overlays.default ];
       };
 
       mkDarwinConfig =
