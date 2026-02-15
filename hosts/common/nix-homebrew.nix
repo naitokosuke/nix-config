@@ -5,7 +5,7 @@
 {
   nix-homebrew = {
     enable = true;
-    enableRosetta = true;
+    enableRosetta = false;
     user = "naitokosuke";
     autoMigrate = true;
     taps = {
