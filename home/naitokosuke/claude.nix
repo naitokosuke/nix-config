@@ -52,10 +52,10 @@
     lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       claude_settings="$HOME/.claude/settings.json"
       run mkdir -p "$HOME/.claude"
-      # Remove existing file (symlink or regular) before copying
-      [ -e "$claude_settings" ] && run rm -f "$claude_settings"
-      run cp ${claudeSettingsContent} "$claude_settings"
-      run chmod u+w "$claude_settings"
+      # Only remove symlinks (leftover from old home.file approach)
+      [ -L "$claude_settings" ] && run rm "$claude_settings"
+      # Only copy if file doesn't exist, preserving user changes made at runtime
+      [ ! -f "$claude_settings" ] && run cp ${claudeSettingsContent} "$claude_settings"
     '';
 
   # Serena config - create as real writable file, not symlink
