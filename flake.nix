@@ -24,10 +24,13 @@
     vscode-settings.flake = false;
 
     vize.url = "github:naitokosuke/vize-nix";
+    vize.inputs.nixpkgs.follows = "nixpkgs";
 
     octorus.url = "github:naitokosuke/octorus-nix";
+    octorus.inputs.nixpkgs.follows = "nixpkgs";
 
     llm-agents.url = "github:numtide/llm-agents.nix";
+    llm-agents.inputs.nixpkgs.follows = "nixpkgs";
 
     nu-scripts = {
       url = "github:nushell/nu_scripts";
