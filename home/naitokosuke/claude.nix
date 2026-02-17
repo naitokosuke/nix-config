@@ -101,5 +101,13 @@
     - `ni` instead of npm/yarn/pnpm install
     - `nr <script>` for running scripts
 
+    ## CLI Tools
+
+    Use these modern CLI tools instead of traditional alternatives:
+
+    - `fd` instead of `find` - simple, fast file finder
+    - `rg` (ripgrep) instead of `grep` - fast recursive search
+    - `sd` instead of `sed` - intuitive find & replace
+
   '';
 }
