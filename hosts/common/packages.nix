@@ -22,6 +22,7 @@
     pnpm
     ripgrep
     rustup
+    sd
     tree
     uv
     vim
