@@ -10,7 +10,6 @@
     deno
     devbox
     devenv
-    fcp
     fd
     fzf
     gh
