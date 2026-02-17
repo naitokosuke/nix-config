@@ -1,8 +1,14 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 
 {
   programs.git = {
     enable = true;
+    ignores = [
+      ".tours"
+      ".DS_Store"
+      "*.memo.local.md"
+      "___naito___"
+    ];
     settings = {
       user = {
         name = "naitokosuke";
@@ -14,14 +20,5 @@
       push.autoSetupRemote = true;
       url."git@github.com:".insteadOf = "https://github.com/";
     };
-  };
-
-  home.file = {
-    ".config/git/ignore".text = ''
-      .tours
-      .DS_Store
-      *.memo.local.md
-      ___naito___
-    '';
   };
 }
