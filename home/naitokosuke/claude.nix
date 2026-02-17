@@ -85,9 +85,13 @@
 
   # Global Claude Code memory
   home.file.".claude/CLAUDE.md".text = ''
-    # Package Management
+    # Agent Guidelines
 
-    ## JavaScript/Node.js Projects
+    Always prefer simplicity over pathological correctness. YAGNI, KISS, DRY. No backward-compat shims or fallback paths unless they come free without adding cyclomatic complexity.
+
+    ## Package Management
+
+    ### JavaScript/Node.js Projects
 
     **Always** use `@antfu/ni` - use the right package manager.
 
