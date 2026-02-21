@@ -8,6 +8,7 @@
       ".DS_Store"
       "*.memo.local.md"
       "___naito___"
+      ".claude/settings.local.json"
     ];
     settings = {
       user = {
