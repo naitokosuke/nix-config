@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ ... }:
 {
   launchd.user.agents.gomi-prune = {
     serviceConfig = {

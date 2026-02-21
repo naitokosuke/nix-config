@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ ... }:
 {
   xdg.configFile = {
     "octorus/config.toml".text = ''
