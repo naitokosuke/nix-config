@@ -17,6 +17,7 @@
     git
     gomi
     ni
+    nixd
     nodejs_24
     pnpm
     ripgrep
