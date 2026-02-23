@@ -10,7 +10,6 @@
     ./keyboard.nix
     ./menubar.nix
     ./nix.nix
-    ./nix-homebrew.nix
     ./packages.nix
     ./rosetta.nix
     ./scroll.nix
