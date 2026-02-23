@@ -1,24 +1,25 @@
-{ ... }:
+{ pkgs, ... }:
+let
+  tomlFormat = pkgs.formats.toml { };
+in
 {
   xdg.configFile = {
-    "octorus/config.toml".text = ''
-      editor = "code"
-
-      [diff]
-      theme = "base16-ocean.dark"
-
-      [keybindings]
-      approve = 'a'
-      request_changes = 'r'
-      comment = 'c'
-      suggestion = 's'
-
-      [ai]
-      reviewer = "claude"
-      reviewee = "claude"
-      max_iterations = 10
-      timeout_secs = 600
-    '';
+    "octorus/config.toml".source = tomlFormat.generate "octorus-config.toml" {
+      editor = "code";
+      diff.theme = "base16-ocean.dark";
+      keybindings = {
+        approve = "a";
+        request_changes = "r";
+        comment = "c";
+        suggestion = "s";
+      };
+      ai = {
+        reviewer = "claude";
+        reviewee = "claude";
+        max_iterations = 10;
+        timeout_secs = 600;
+      };
+    };
 
     "octorus/prompts/reviewer.md".text = ''
       You are a code reviewer for a GitHub Pull Request.
