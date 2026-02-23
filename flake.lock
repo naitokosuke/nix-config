@@ -46,11 +46,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1771683283,
-        "narHash": "sha256-WxAEkAbo8dP7qiyPM6VN4ZGAxfuBVlNBNPkrqkrXVEc=",
+        "lastModified": 1771756436,
+        "narHash": "sha256-Tl2I0YXdhSTufGqAaD1ySh8x+cvVsEI1mJyJg12lxhI=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "c6ed3eab64d23520bcbb858aa53fe2b533725d4a",
+        "rev": "5bd3589390b431a63072868a90c0f24771ff4cbb",
         "type": "github"
       },
       "original": {
@@ -62,11 +62,11 @@
     "homebrew-cask": {
       "flake": false,
       "locked": {
-        "lastModified": 1771726289,
-        "narHash": "sha256-TDJsPB3jPqWSFFXbB+cIKodGUH6+jU36ZTRWHNRevqY=",
+        "lastModified": 1771817396,
+        "narHash": "sha256-YAmkKZg67ayDTdJsWxuvboYh5fpIaRzZ6/+KArxYIhU=",
         "owner": "homebrew",
         "repo": "homebrew-cask",
-        "rev": "f919e30efeed1564b3c63a07110adb8983f2a134",
+        "rev": "287a9c240111704681a3618073e3b8d14211dcca",
         "type": "github"
       },
       "original": {
@@ -84,11 +84,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1771694905,
-        "narHash": "sha256-ldh1F4nFz1RI0ptxWklRQ3JM01GdFapSBDc3CkLEX30=",
+        "lastModified": 1771816560,
+        "narHash": "sha256-q5Wsb1573qDfIPJctG9CBZP0NMniejoB7SmBLZIVAHg=",
         "owner": "numtide",
         "repo": "llm-agents.nix",
-        "rev": "2f38010877d8ddc57c803a0c7c88c1ec26426900",
+        "rev": "db94a329058a1a37b49d3209af85708b3338559a",
         "type": "github"
       },
       "original": {
@@ -174,11 +174,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1771598465,
-        "narHash": "sha256-PGJbrGVwlpP0eTP4NgS6J0j1NGIozNbV8mJK7SuW1cA=",
+        "lastModified": 1771762457,
+        "narHash": "sha256-LH1vzAh/04nGXlAZNORbUxZZXIjtFsFu+C67TwwuaW8=",
         "owner": "naitokosuke",
         "repo": "octorus-nix",
-        "rev": "fd648997e47d912b745fafb5ceb6f1f0de7489ca",
+        "rev": "72ea9ee4f1d72cfa82d2bfc17fc5644e6c35ab40",
         "type": "github"
       },
       "original": {
@@ -265,11 +265,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1771722751,
-        "narHash": "sha256-kYmDsiz8Lx3vRtNpADSLftwhmgzC7+7n/t6QUhkt/J4=",
+        "lastModified": 1771813404,
+        "narHash": "sha256-DjkMR71q40wbNvJ6pRMZVHo/zVIHEjxd70T00et0lgk=",
         "owner": "naitokosuke",
         "repo": "vize-nix",
-        "rev": "be16f80a5b6e55e9e4a317b2f4fac1fabd3df18b",
+        "rev": "a9898788bfb900e6b01a63719f02bb28275e0e18",
         "type": "github"
       },
       "original": {

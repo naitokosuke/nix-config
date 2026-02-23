@@ -19,6 +19,7 @@
     ni
     nixd
     nodejs_24
+    oxfmt
     pnpm
     ripgrep
     rustup
