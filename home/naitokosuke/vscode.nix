@@ -4,20 +4,15 @@
   ...
 }:
 let
-  # Convert JSONC to JSON by removing comments and trailing commas
-  keybindings-json = pkgs.runCommand "keybindings.json" { } ''
-    # Install jq for JSON processing
-    export PATH=${pkgs.jq}/bin:$PATH
-
-    # Convert JSONC to JSON
-    # Remove comments and trailing commas, then format as valid JSON
-    cat ${inputs.vscode-settings}/keybinding.jsonc \
-      | sed 's|//.*||g' \
-      | sed 's|/\*.*\*/||g' \
-      | tr -d '\n' \
-      | sed 's/,\s*}/}/g' \
-      | sed 's/,\s*]/]/g' \
-      | jq . > $out
+  python = pkgs.python3.withPackages (ps: [ ps.json5 ]);
+  keybindings-json = pkgs.runCommand "keybindings.json" {
+    nativeBuildInputs = [ python ];
+  } ''
+    python3 -c "
+    import json5, json
+    data = json5.load(open('${inputs.vscode-settings}/keybinding.jsonc'))
+    json.dump(data, open('$out', 'w'), indent=2)
+    "
   '';
 in
 {
