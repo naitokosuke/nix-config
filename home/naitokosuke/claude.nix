@@ -62,11 +62,12 @@
   # home.file creates symlinks to read-only Nix store, but Serena needs write access
   home.activation.serenaConfig =
     let
-      serenaConfigContent = pkgs.writeText "serena_config.yml" ''
-        gui_log_window: false
-        web_dashboard: false
-        projects: {}
-      '';
+      yamlFormat = pkgs.formats.yaml { };
+      serenaConfigContent = yamlFormat.generate "serena_config.yml" {
+        gui_log_window = false;
+        web_dashboard = false;
+        projects = { };
+      };
     in
     lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       serena_config="$HOME/.serena/serena_config.yml"
