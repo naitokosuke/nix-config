@@ -75,43 +75,13 @@
       [ ! -f "$serena_config" ] && run cp ${serenaConfigContent} "$serena_config"
     '';
 
-  # Claude Code rules - symlink to rule-rule-rule repository
+  # Claude Code rules and CLAUDE.md - symlink to rule-rule-rule repository
   home.file.".claude/rules".source =
-    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/src/github.com/${config.home.username}/rule-rule-rule";
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/src/github.com/${config.home.username}/rule-rule-rule/rules";
+  home.file.".claude/CLAUDE.md".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/src/github.com/${config.home.username}/rule-rule-rule/CLAUDE.md";
 
   # Claude Code skills - symlink to skill-skill-skill repository
   home.file.".claude/skills".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/src/github.com/${config.home.username}/skill-skill-skill";
-
-  # Global Claude Code memory
-  home.file.".claude/CLAUDE.md".text = ''
-    # Agent Guidelines
-
-    Always prefer simplicity over pathological correctness. YAGNI, KISS, DRY. No backward-compat shims or fallback paths unless they come free without adding cyclomatic complexity.
-
-    ## Package Management
-
-    ### JavaScript/Node.js Projects
-
-    **Always** use `@antfu/ni` - use the right package manager.
-
-    ### Why use `@antfu/ni`?
-
-    > npm i in a yarn project, again? F**k!
-    > ni - use the right package manager
-
-    ### Commands
-
-    - `ni` instead of npm/yarn/pnpm install
-    - `nr <script>` for running scripts
-
-    ## CLI Tools
-
-    Use these modern CLI tools instead of traditional alternatives:
-
-    - `fd` instead of `find` - simple, fast file finder
-    - `rg` (ripgrep) instead of `grep` - fast recursive search
-    - `sd` instead of `sed` - intuitive find & replace
-
-  '';
 }
