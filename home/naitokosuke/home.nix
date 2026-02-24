@@ -14,6 +14,7 @@
     ./ghostty.nix
     ./git.nix
     ./octorus.nix
+    ./playwright.nix
     ./shell
     ./starship.nix
     ./vscode.nix

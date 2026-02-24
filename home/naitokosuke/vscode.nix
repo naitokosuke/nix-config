@@ -5,15 +5,18 @@
 }:
 let
   python = pkgs.python3.withPackages (ps: [ ps.json5 ]);
-  keybindings-json = pkgs.runCommand "keybindings.json" {
-    nativeBuildInputs = [ python ];
-  } ''
-    python3 -c "
-    import json5, json
-    data = json5.load(open('${inputs.vscode-settings}/keybinding.jsonc'))
-    json.dump(data, open('$out', 'w'), indent=2)
-    "
-  '';
+  keybindings-json =
+    pkgs.runCommand "keybindings.json"
+      {
+        nativeBuildInputs = [ python ];
+      }
+      ''
+        python3 -c "
+        import json5, json
+        data = json5.load(open('${inputs.vscode-settings}/keybinding.jsonc'))
+        json.dump(data, open('$out', 'w'), indent=2)
+        "
+      '';
 in
 {
   # VSCode settings configuration
