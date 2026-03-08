@@ -9,6 +9,7 @@
       "*.memo.local.md"
       "___naito___"
       ".claude/settings.local.json"
+      "___config___"
     ];
     settings = {
       user = {
