@@ -9,8 +9,8 @@
       "*.memo.local.md"
       "___naito___"
       ".claude/settings.local.json"
-      # VSCode file nesting 用のダミーファイル。プロジェクトルートの設定ファイルをこの下にまとめて視認性を向上させる。
-      # 関連: https://github.com/naitokosuke/vscode-settings (explorer.fileNesting.patterns の設定)
+      # Dummy file for VSCode file nesting. Nests config files under it to reduce clutter in project roots.
+      # Related: https://github.com/naitokosuke/vscode-settings (explorer.fileNesting.patterns)
       "___config___"
     ];
     settings = {
