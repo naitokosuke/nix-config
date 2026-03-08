@@ -9,6 +9,9 @@
       "*.memo.local.md"
       "___naito___"
       ".claude/settings.local.json"
+      # Dummy file for VSCode file nesting. Nests config files under it to reduce clutter in project roots.
+      # Related: https://github.com/naitokosuke/vscode-settings (explorer.fileNesting.patterns)
+      "___config___"
     ];
     settings = {
       user = {
