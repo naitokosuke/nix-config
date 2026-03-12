@@ -3,6 +3,7 @@
   pkgs,
   ...
 }:
+
 {
   # Disable nix-darwin's /etc/zshrc management.
   # Zsh configuration is handled entirely by home-manager.

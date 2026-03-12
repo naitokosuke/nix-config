@@ -7,7 +7,7 @@
 # - Common aliases
 #
 # Import this in shell-specific modules to avoid duplication.
-{ lib, ... }:
+{ ... }:
 
 {
   # Packages managed by Nix - prevent accidental brew install

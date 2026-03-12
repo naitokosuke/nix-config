@@ -12,8 +12,6 @@
 # PATH is configured in .zprofile (not .zshenv) per Nix best practices.
 # See: https://github.com/nix-community/home-manager/issues/2991
 {
-  config,
-  pkgs,
   lib,
   ...
 }:

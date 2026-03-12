@@ -1,4 +1,7 @@
-{ config, ... }:
+{ 
+  config, 
+  ... 
+}:
 
 {
   system.defaults.screencapture = {
