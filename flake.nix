@@ -29,6 +29,9 @@
     octorus.url = "github:naitokosuke/octorus-nix";
     octorus.inputs.nixpkgs.follows = "nixpkgs";
 
+    vp.url = "github:naitokosuke/vp-nix";
+    vp.inputs.nixpkgs.follows = "nixpkgs";
+
     llm-agents.url = "github:numtide/llm-agents.nix";
     llm-agents.inputs.nixpkgs.follows = "nixpkgs";
 

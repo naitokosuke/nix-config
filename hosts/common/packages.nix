@@ -30,5 +30,6 @@
     vim
     inputs.vize.packages.${pkgs.stdenv.hostPlatform.system}.default
     inputs.octorus.packages.${pkgs.stdenv.hostPlatform.system}.default
+    inputs.vp.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 }
