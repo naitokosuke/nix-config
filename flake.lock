@@ -135,11 +135,11 @@
     "homebrew-cask": {
       "flake": false,
       "locked": {
-        "lastModified": 1774664335,
-        "narHash": "sha256-+WplXVGz8LxCjJDBHDVJWO+TIC1PDBivWx5xHEBM6ZM=",
+        "lastModified": 1774664697,
+        "narHash": "sha256-n4d2Qa92kjq/1DraAim4hr0PJ2KcFRYp1zAREbRPSrY=",
         "owner": "homebrew",
         "repo": "homebrew-cask",
-        "rev": "da418623b5eb61e89c2d470f1a5f04e6dff8bdb0",
+        "rev": "ab190d0db62ded5cb97e4befeb9eccc83b681662",
         "type": "github"
       },
       "original": {
@@ -175,11 +175,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1774623710,
-        "narHash": "sha256-UVVA1OCUeDm7fnH98G+Okfb6vUuA1in89LZGDgVWR/4=",
+        "lastModified": 1774667437,
+        "narHash": "sha256-Urro30uWxVmiGOVntufJr2Aj2Zgwx/ugYTyPQghZyA0=",
         "owner": "numtide",
         "repo": "llm-agents.nix",
-        "rev": "4814adf48100a2138b02591e6a7e000c106887b1",
+        "rev": "ddacf04ccffb5d16b15c1c2aa70a065e3d06f61d",
         "type": "github"
       },
       "original": {
@@ -400,11 +400,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1774574412,
-        "narHash": "sha256-nLHVdHN9FOSNH3LQ/x9IR7rlICDS5QuCa042BrqB+ic=",
+        "lastModified": 1774667134,
+        "narHash": "sha256-aJk8TzfJD5/zsBdJOpcFRgNL8mX3vsYb4XmNEb2Dh5I=",
         "owner": "naitokosuke",
         "repo": "vp-nix",
-        "rev": "cdf0a2809fff6f15390e5bb6de78a4e7f78b65c1",
+        "rev": "fa64f5266ba2c8d5e140b52ca5eb031d2a18a141",
         "type": "github"
       },
       "original": {
