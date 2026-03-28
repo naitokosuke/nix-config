@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./cursor.nix
+    ./key_repeat.nix
     ./dock.nix
     ./finder.nix
     ./gomi.nix
