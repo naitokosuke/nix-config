@@ -1,22 +1,25 @@
 {
   inputs,
+  lib,
   pkgs,
   ...
 }:
 let
-  python = pkgs.python3.withPackages (ps: [ ps.json5 ]);
-  keybindings-json =
-    pkgs.runCommand "keybindings.json"
-      {
-        nativeBuildInputs = [ python ];
-      }
-      ''
-        python3 -c "
-        import json5, json
-        data = json5.load(open('${inputs.vscode-settings}/keybinding.jsonc'))
-        json.dump(data, open('$out', 'w'), indent=2)
-        "
-      '';
+  # Convert JSONC → JSON using Nix builtins (no Python dependency)
+  rawContent = builtins.readFile "${inputs.vscode-settings}/keybinding.jsonc";
+
+  # Strip full-line // comments
+  lines = lib.splitString "\n" rawContent;
+  withoutComments = builtins.filter (line: builtins.match "[[:space:]]*//.*" line == null) lines;
+  joined = lib.concatStringsSep "\n" withoutComments;
+
+  # Remove trailing commas before ] or }
+  parts = builtins.split ",([[:space:]]*[]}])" joined;
+  cleaned = lib.concatStrings (
+    map (part: if builtins.isList part then builtins.head part else part) parts
+  );
+
+  keybindings-json = pkgs.writeText "keybindings.json" (builtins.toJSON (builtins.fromJSON cleaned));
 in
 {
   # VSCode settings configuration
