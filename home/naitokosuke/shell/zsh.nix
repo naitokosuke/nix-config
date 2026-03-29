@@ -17,7 +17,7 @@
 }:
 
 let
-  common = import ./common.nix { inherit lib; };
+  common = import ./common.nix;
 in
 {
   programs.zsh = {
