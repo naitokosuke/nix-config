@@ -5,76 +5,78 @@
   ...
 }:
 
-{
-  # Claude Code settings - create as real writable file, not symlink
-  # home.file creates symlinks to read-only Nix store, but Claude Code needs write access
-  # for resume functionality and session management
-  home.activation.claudeSettings =
-    let
-      claudeSettingsContent = pkgs.writeText "claude-settings.json" (
-        builtins.toJSON {
-          installMethod = "unknown";
-          autoUpdates = true;
-          theme = "dark-daltonized";
-          verbose = false;
-          preferredNotifChannel = "auto";
-          shiftEnterKeyBindingInstalled = true;
-          editorMode = "normal";
-          hasUsedBackslashReturn = true;
-          autoCompactEnabled = true;
-          diffTool = "auto";
-          env = {
-            DISABLE_AUTOUPDATER = "1";
-            DISABLE_INSTALLATION_CHECKS = "1";
-          };
-          todoFeatureEnabled = true;
-          messageIdleNotifThresholdMs = 60000;
-          autoConnectIde = false;
-          autoInstallIdeExtension = true;
-          checkpointingEnabled = true;
-          hooks = {
-            PreToolUse = [
-              {
-                matcher = "ExitPlanMode";
-                hooks = [
-                  {
-                    type = "command";
-                    command = ''code "$(ls -t ~/.claude/plans/*.md | head -1)"'';
-                    timeout = 5;
-                  }
-                ];
-              }
-            ];
-          };
-        }
-      );
-    in
+let
+  # Helper: create a writable config file (not a Nix store symlink)
+  # Removes leftover symlinks, copies only if file doesn't exist (preserving runtime changes)
+  mkWritableConfig =
+    { dir, filename, content }:
     lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      claude_settings="$HOME/.claude/settings.json"
-      run mkdir -p "$HOME/.claude"
-      # Only remove symlinks (leftover from old home.file approach)
-      [ -L "$claude_settings" ] && run rm "$claude_settings"
-      # Only copy if file doesn't exist, preserving user changes made at runtime
-      [ ! -f "$claude_settings" ] && run cp ${claudeSettingsContent} "$claude_settings"
+      target="${dir}/${filename}"
+      run mkdir -p "${dir}"
+      [ -L "$target" ] && run rm "$target"
+      [ ! -f "$target" ] && run cp ${content} "$target"
     '';
+in
+{
+  # Claude Code settings - writable file, not symlink
+  # Claude Code needs write access for resume functionality and session management
+  home.activation.claudeSettings = mkWritableConfig {
+    dir = "$HOME/.claude";
+    filename = "settings.json";
+    content = pkgs.writeText "claude-settings.json" (
+      builtins.toJSON {
+        installMethod = "unknown";
+        autoUpdates = true;
+        theme = "dark-daltonized";
+        verbose = false;
+        preferredNotifChannel = "auto";
+        shiftEnterKeyBindingInstalled = true;
+        editorMode = "normal";
+        hasUsedBackslashReturn = true;
+        autoCompactEnabled = true;
+        diffTool = "auto";
+        env = {
+          DISABLE_AUTOUPDATER = "1";
+          DISABLE_INSTALLATION_CHECKS = "1";
+        };
+        todoFeatureEnabled = true;
+        messageIdleNotifThresholdMs = 60000;
+        autoConnectIde = false;
+        autoInstallIdeExtension = true;
+        checkpointingEnabled = true;
+        hooks = {
+          PreToolUse = [
+            {
+              matcher = "ExitPlanMode";
+              hooks = [
+                {
+                  type = "command";
+                  command = ''code "$(ls -t ~/.claude/plans/*.md | head -1)"'';
+                  timeout = 5;
+                }
+              ];
+            }
+          ];
+        };
+      }
+    );
+  };
 
-  # Serena config - create as real writable file, not symlink
-  # home.file creates symlinks to read-only Nix store, but Serena needs write access
-  home.activation.serenaConfig =
-    let
-      yamlFormat = pkgs.formats.yaml { };
-      serenaConfigContent = yamlFormat.generate "serena_config.yml" {
+  # Serena config - writable file, not symlink
+  # Serena needs write access for runtime configuration
+  home.activation.serenaConfig = mkWritableConfig {
+    dir = "$HOME/.serena";
+    filename = "serena_config.yml";
+    content =
+      let
+        yamlFormat = pkgs.formats.yaml { };
+      in
+      yamlFormat.generate "serena_config.yml" {
         gui_log_window = false;
         web_dashboard = false;
         projects = { };
       };
-    in
-    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      serena_config="$HOME/.serena/serena_config.yml"
-      run mkdir -p "$HOME/.serena"
-      [ -L "$serena_config" ] && run rm "$serena_config"
-      [ ! -f "$serena_config" ] && run cp ${serenaConfigContent} "$serena_config"
-    '';
+  };
 
   # Claude Code rules and CLAUDE.md - symlink to rule-rule-rule repository
   home.file.".claude/rules".source =
