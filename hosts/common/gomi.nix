@@ -1,10 +1,14 @@
-{ ... }:
+{
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   launchd.user.agents.gomi-prune = {
     serviceConfig = {
       ProgramArguments = [
-        "/run/current-system/sw/bin/gomi"
+        (lib.getExe pkgs.gomi)
         "--prune=45d,orphans"
       ];
       StartCalendarInterval = [
