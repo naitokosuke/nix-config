@@ -22,16 +22,11 @@ let
 in
 {
   # PATH configuration via home-manager's sessionPath
-  # Entries are prepended to $PATH (first entry = highest priority)
+  # common.pathEntries is low-to-high priority; sessionPath is high-to-low, so reverse
   home.sessionPath = [
     "${config.home.homeDirectory}/.nix-profile/bin"
-    "/etc/profiles/per-user/naitokosuke/bin"
-    "/run/current-system/sw/bin"
-    "/nix/var/nix/profiles/default/bin"
-    "/opt/homebrew/bin"
-    "/opt/homebrew/sbin"
-    "/usr/local/bin"
-  ];
+  ]
+  ++ lib.reverseList common.pathEntries;
 
   programs.zsh = {
     enable = true;
