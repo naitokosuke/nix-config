@@ -7,8 +7,6 @@
 # - Common aliases
 #
 # Import this in shell-specific modules to avoid duplication.
-{ ... }:
-
 {
   # Packages managed by Nix - prevent accidental brew install
   # See: https://github.com/Homebrew/brew/issues/19939
