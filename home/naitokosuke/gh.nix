@@ -23,7 +23,6 @@ in
     enable = true;
     extensions = [
       gh-sub-issue
-      pkgs.gh-dash
     ];
     settings = {
       version = 1;
