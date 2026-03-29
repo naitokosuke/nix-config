@@ -9,7 +9,11 @@ let
   # Helper: create a writable config file (not a Nix store symlink)
   # Removes leftover symlinks, copies only if file doesn't exist (preserving runtime changes)
   mkWritableConfig =
-    { dir, filename, content }:
+    {
+      dir,
+      filename,
+      content,
+    }:
     lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       target="${dir}/${filename}"
       run mkdir -p "${dir}"
