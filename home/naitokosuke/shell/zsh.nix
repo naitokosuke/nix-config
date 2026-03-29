@@ -12,6 +12,7 @@
 # PATH is configured in .zprofile (not .zshenv) per Nix best practices.
 # See: https://github.com/nix-community/home-manager/issues/2991
 {
+  config,
   lib,
   ...
 }:
@@ -20,6 +21,18 @@ let
   common = import ./common.nix { inherit lib; };
 in
 {
+  # PATH configuration via home-manager's sessionPath
+  # Entries are prepended to $PATH (first entry = highest priority)
+  home.sessionPath = [
+    "${config.home.homeDirectory}/.nix-profile/bin"
+    "/etc/profiles/per-user/naitokosuke/bin"
+    "/run/current-system/sw/bin"
+    "/nix/var/nix/profiles/default/bin"
+    "/opt/homebrew/bin"
+    "/opt/homebrew/sbin"
+    "/usr/local/bin"
+  ];
+
   programs.zsh = {
     enable = true;
 
@@ -27,15 +40,6 @@ in
     sessionVariables = common.envVars // {
       HOMEBREW_FORBIDDEN_FORMULAE = lib.concatStringsSep " " common.homebrewForbiddenFormulae;
     };
-
-    # PATH configuration (added to .zprofile)
-    # profileExtra runs in login shells (terminal, SSH, IDE integrations)
-    # Note: .zshenv is not recommended for PATH (see home-manager#2991)
-    profileExtra = ''
-      # Add paths from common config (last entry becomes first in $PATH)
-      ${lib.concatMapStringsSep "\n" (p: "export PATH=\"${p}:$PATH\"") common.pathEntries}
-      export PATH="$HOME/.nix-profile/bin:$PATH"
-    '';
 
     # Shell aliases (inherit common + zsh-specific)
     shellAliases = common.aliases // {
