@@ -400,11 +400,11 @@
     "vscode-settings": {
       "flake": false,
       "locked": {
-        "lastModified": 1772955490,
-        "narHash": "sha256-zg1Hhl3LE+eujemTx0jkqPcnhDnJMBPuRbocWK4TpKw=",
+        "lastModified": 1775743299,
+        "narHash": "sha256-ZTyXWCrNEn4DiLOGvlP1GzBVKvV9dsOeW7426I+7aRQ=",
         "owner": "naitokosuke",
         "repo": "vscode-settings",
-        "rev": "7f2af9d62fc248b6ece5c6d05bb2cf2c6bbe6237",
+        "rev": "e17acffc31ac05e7f0920e6f1ef2692ea61d4ca7",
         "type": "github"
       },
       "original": {
