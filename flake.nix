@@ -70,7 +70,16 @@
               system.primaryUser = "naitokosuke";
               nixpkgs.config.allowUnfree = true;
               nixpkgs.hostPlatform = system;
-              nixpkgs.overlays = [ llm-agents.overlays.default ];
+              nixpkgs.overlays = [
+                llm-agents.overlays.default
+                # TODO: Remove after nixpkgs fixes nushell test failures in sandbox
+                # https://github.com/NixOS/nixpkgs/issues (nushell 0.112.1 SHLVL tests fail with "Operation not permitted")
+                (final: prev: {
+                  nushell = prev.nushell.overrideAttrs (old: {
+                    doCheck = false;
+                  });
+                })
+              ];
             }
             home-manager.darwinModules.home-manager
             nix-homebrew.darwinModules.nix-homebrew
