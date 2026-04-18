@@ -100,5 +100,5 @@ in
 
   # Claude Code skills - symlink to skill-skill-skill repository
   home.file.".claude/skills".source =
-    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/src/github.com/${config.home.username}/skill-skill-skill";
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/src/github.com/${config.home.username}/skill-skill-skill/.claude/skills";
 }
