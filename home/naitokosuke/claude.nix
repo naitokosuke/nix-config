@@ -36,6 +36,16 @@ in
         preferredNotifChannel = "auto";
         shiftEnterKeyBindingInstalled = true;
         editorMode = "normal";
+        spinnerVerbs = {
+          mode = "replace";
+          verbs = [
+            "考え中"
+            "深く考え中"
+            "実装中"
+            "リファクタリング中"
+            "調査中"
+          ];
+        };
         hasUsedBackslashReturn = true;
         autoCompactEnabled = true;
         diffTool = "auto";
