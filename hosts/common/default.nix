@@ -12,7 +12,6 @@
     ./menubar.nix
     ./nix.nix
     ./packages.nix
-    ./rosetta.nix
     ./scroll.nix
     ./screen_capture.nix
   ];
