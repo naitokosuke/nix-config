@@ -3,6 +3,17 @@
   "nix.serverPath": "nixd",
   "nix.serverSettings": {
     "nixd": {
+      "nixpkgs": {
+        "expr": "import (builtins.getFlake (builtins.toString ./.)).inputs.nixpkgs { }"
+      },
+      "options": {
+        "darwin": {
+          "expr": "(builtins.head (builtins.attrValues (builtins.getFlake (builtins.toString ./.)).darwinConfigurations)).options"
+        },
+        "home-manager": {
+          "expr": "(builtins.head (builtins.attrValues (builtins.getFlake (builtins.toString ./.)).darwinConfigurations)).options.home-manager.users.type.getSubOptions []"
+        }
+      },
       "formatting": {
         "command": ["nixfmt"]
       }
