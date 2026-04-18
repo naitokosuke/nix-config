@@ -4,6 +4,25 @@
   ...
 }:
 
+let
+  # Not available in nixpkgs, so we build from source
+  gwq = pkgs.buildGoModule rec {
+    pname = "gwq";
+    version = "0.0.19";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "d-kuro";
+      repo = "gwq";
+      rev = "v${version}";
+      hash = "sha256-2uE04frxfvQBlrOg5d0hPzGE9sbpzxHEiCeJX1ilG2M=";
+    };
+
+    vendorHash = "sha256-4K01Xf1EXl/NVX1loQ76l1bW8QglBAQdvlZSo7J4NPI=";
+
+    # Upstream tests require git in PATH and a writable HOME — skip in the Nix sandbox
+    doCheck = false;
+  };
+in
 {
   environment.systemPackages = with pkgs; [
     bun
@@ -17,6 +36,7 @@
     ghq
     git
     gomi
+    gwq
     ni
     nixd
     nodejs_24
