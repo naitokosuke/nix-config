@@ -12,6 +12,7 @@
     ./ghostty.nix
     ./git.nix
     ./gwq.nix
+    ./mcp.nix
     ./octorus.nix
     ./playwright.nix
     ./shell
