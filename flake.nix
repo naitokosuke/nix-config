@@ -82,6 +82,17 @@
                     doCheck = false;
                   });
                 })
+                # FIXME: Remove once nixpkgs ships a fix for direnv checkPhase hang on Darwin.
+                # cache.nixos.org serves fish/zsh binaries with broken code signatures, so
+                # macOS Gatekeeper SIGKILLs them during `zsh ./test/direnv-test.zsh`, causing
+                # the build to hang indefinitely.
+                # https://github.com/NixOS/nixpkgs/issues/513019
+                # https://github.com/NixOS/nixpkgs/pull/513081 (proposed fix, not merged)
+                (final: prev: {
+                  direnv = prev.direnv.overrideAttrs (old: {
+                    doCheck = false;
+                  });
+                })
               ];
             }
             home-manager.darwinModules.home-manager
