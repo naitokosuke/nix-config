@@ -34,6 +34,7 @@
       "discord"
       "ghostty"
       "google-chrome"
+      "obs"
       "obsidian"
       "productdevbook/tap/portkiller"
       "raycast"
