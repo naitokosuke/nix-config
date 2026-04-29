@@ -22,11 +22,21 @@ let
     # Upstream tests require git in PATH and a writable HOME — skip in the Nix sandbox
     doCheck = false;
   };
+
+  # darwin-rebuild output piped through nix-output-monitor for richer build progress
+  darwin-rebuild-nom = pkgs.writeShellApplication {
+    name = "darwin-rebuild-nom";
+    runtimeInputs = [ pkgs.nix-output-monitor ];
+    text = ''
+      darwin-rebuild "$@" --log-format internal-json -v 2>&1 | nom --json
+    '';
+  };
 in
 {
   environment.systemPackages = with pkgs; [
     bun
     llm-agents.claude-code
+    darwin-rebuild-nom
     devenv
     fd
     fzf
@@ -37,6 +47,7 @@ in
     gwq
     ni
     nixd
+    nix-output-monitor
     nodejs_24
     oxfmt
     pnpm
