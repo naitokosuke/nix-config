@@ -27,8 +27,6 @@ in
   environment.systemPackages = with pkgs; [
     bun
     llm-agents.claude-code
-    deno
-    devbox
     devenv
     fd
     fzf
