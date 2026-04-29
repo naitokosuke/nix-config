@@ -23,12 +23,14 @@ let
     doCheck = false;
   };
 
-  # darwin-rebuild output piped through nix-output-monitor for richer build progress
+  # darwin-rebuild output piped through nix-output-monitor for richer build progress.
+  # darwin-rebuild rejects --log-format and Lix doesn't expose it as a setting,
+  # so use nom in its default (non-JSON) mode which parses bare nix output.
   darwin-rebuild-nom = pkgs.writeShellApplication {
     name = "darwin-rebuild-nom";
     runtimeInputs = [ pkgs.nix-output-monitor ];
     text = ''
-      darwin-rebuild "$@" --log-format internal-json -v 2>&1 | nom --json
+      darwin-rebuild "$@" 2>&1 | nom
     '';
   };
 in
