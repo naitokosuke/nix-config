@@ -14,6 +14,15 @@
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+    nix-homebrew.inputs.brew-src.follows = "brew-src";
+
+    # Override brew-src to 5.1.10 to pick up the upstream fix for the
+    # `process_depends_on` crash on `depends_on: { macos: {} }` casks.
+    # https://github.com/zhaofengli/nix-homebrew/issues/138
+    brew-src = {
+      url = "github:Homebrew/brew/5.1.10";
+      flake = false;
+    };
 
     homebrew-cask = {
       url = "github:homebrew/homebrew-cask";
