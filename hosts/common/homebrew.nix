@@ -31,6 +31,7 @@
     casks = [
       "alt-tab"
       "arc"
+      "blender"
       "discord"
       "ghostty"
       "google-chrome"
