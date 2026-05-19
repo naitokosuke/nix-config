@@ -18,8 +18,8 @@
     ];
     settings = {
       user = {
-        name = "naitokosuke";
-        email = "kosuke.naito.engineer@gmail.com";
+        name = config.naitokosuke.fullName;
+        email = config.naitokosuke.email;
       };
       core.editor = "vim";
       init.defaultBranch = "main";

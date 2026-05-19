@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   ...
 }:
@@ -7,7 +8,7 @@
   nix-homebrew = {
     enable = true;
     enableRosetta = false;
-    user = "naitokosuke";
+    user = config.naitokosuke.username;
     autoMigrate = true;
     taps = {
       "homebrew/homebrew-cask" = inputs.homebrew-cask;

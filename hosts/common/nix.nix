@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   pkgs,
   ...
@@ -15,7 +16,7 @@
   nix.settings.experimental-features = "nix-command flakes";
   nix.settings.trusted-users = [
     "root"
-    "naitokosuke"
+    config.naitokosuke.username
   ];
 
   system.configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;

@@ -18,7 +18,7 @@
 }:
 
 let
-  common = import ./common.nix;
+  common = import ./common.nix { inherit (config.naitokosuke) username; };
 in
 {
   # PATH configuration via home-manager's sessionPath

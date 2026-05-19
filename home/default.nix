@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   ...
 }:
@@ -21,8 +22,8 @@
     ./zoxide.nix
   ];
 
-  home.username = "naitokosuke";
-  home.homeDirectory = lib.mkForce "/Users/naitokosuke";
+  home.username = config.naitokosuke.username;
+  home.homeDirectory = lib.mkForce config.naitokosuke.homeDirectory;
 
   home.stateVersion = "25.05";
 }

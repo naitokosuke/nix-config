@@ -13,7 +13,7 @@
 }:
 
 let
-  common = import ./common.nix;
+  common = import ./common.nix { inherit (config.naitokosuke) username; };
 in
 {
   programs.nushell = {

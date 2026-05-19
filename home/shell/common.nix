@@ -7,6 +7,8 @@
 # - Common aliases
 #
 # Import this in shell-specific modules to avoid duplication.
+{ username }:
+
 {
   # Packages managed by Nix - prevent accidental brew install
   # See: https://github.com/Homebrew/brew/issues/19939
@@ -53,7 +55,7 @@
     "/opt/homebrew/bin"
     "/nix/var/nix/profiles/default/bin"
     "/run/current-system/sw/bin"
-    "/etc/profiles/per-user/naitokosuke/bin"
+    "/etc/profiles/per-user/${username}/bin"
     # Note: $HOME/.nix-profile/bin is handled separately in each shell
     # because of different variable expansion syntax
   ];
