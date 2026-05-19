@@ -35,6 +35,7 @@
       "discord"
       "ghostty"
       "google-chrome"
+      "monitorcontrol"
       "obs"
       "obsidian"
       "productdevbook/tap/portkiller"
