@@ -58,6 +58,44 @@ in
         autoConnectIde = false;
         autoInstallIdeExtension = true;
         checkpointingEnabled = true;
+        # Permissions reference:
+        #   https://code.claude.com/docs/en/permissions
+        #   https://www.claudedirectory.org/blog/claude-code-permissions-guide
+        #   https://www.backslash.security/blog/claude-code-security-best-practices
+        # Known issue (deny may be ignored on older versions): https://github.com/anthropics/claude-code/issues/6699
+        permissions = {
+          deny = [
+            # Joke: discourage legacy / non-preferred runtimes
+            "Bash(perl:*)"
+            "Bash(python:*)"
+            "Bash(python3:*)"
+
+            # Credentials and secrets (gitignore semantics, recursive)
+            "Read(.env)"
+            "Read(.env.*)"
+            "Read(./secrets/**)"
+            "Read(**/credentials.json)"
+            "Read(~/.ssh/**)"
+            "Read(~/.aws/**)"
+            "Read(~/.gnupg/**)"
+
+            # Destructive shell — root / home wipes still trip the circuit breaker,
+            # but make it explicit
+            "Bash(rm -rf /:*)"
+            "Bash(rm -rf ~:*)"
+            "Bash(rm -rf ~/:*)"
+
+            # Force-push protection (regular push stays in `ask`/allow)
+            "Bash(git push --force:*)"
+            "Bash(git push -f:*)"
+            "Bash(git push * --force:*)"
+            "Bash(git push * -f:*)"
+
+            # Prefer WebFetch with explicit domain over raw curl/wget
+            "Bash(curl:*)"
+            "Bash(wget:*)"
+          ];
+        };
         hooks = {
           PreToolUse = [
             {
