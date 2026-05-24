@@ -19,13 +19,14 @@ const state = reactive({
 });
 
 function hrefForFile(path: string): string {
-  return `/${path}`;
+  return `/file/${path}`;
 }
 
 function activeKeyFromPath(pathname: string): string {
   const trimmed = pathname.replace(/^\/+/, "").replace(/\/+$/, "");
   if (trimmed === "") return WELCOME_KEY;
-  return trimmed;
+  if (trimmed.startsWith("file/")) return trimmed.slice("file/".length);
+  return WELCOME_KEY;
 }
 
 export function useTabs(): {

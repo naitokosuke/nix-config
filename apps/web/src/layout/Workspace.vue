@@ -23,7 +23,8 @@ const currentPath = computed(() => router.path);
 
 const activeFilePath = computed(() => {
   const path = currentPath.value.replace(/^\/+/, "").replace(/\/+$/, "");
-  return path === "" ? null : path;
+  if (path.startsWith("file/")) return path.slice("file/".length);
+  return null;
 });
 const isHome = computed(() => activeFilePath.value === null);
 
