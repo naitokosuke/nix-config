@@ -154,6 +154,17 @@ a:focus-visible {
   position: relative;
 }
 
+/* Sidebar collapsed state — the grid column folds to 0 and the
+   sidebar itself is removed from layout. The resizer stays as a
+   slim affordance pinned to the right edge so the user can drag
+   it back out (or click to restore the saved width). */
+.workspace.sidebar-collapsed {
+  grid-template-columns: 1fr 0px;
+}
+.workspace.sidebar-collapsed .sidebar {
+  display: none;
+}
+
 /* Sidebar resizer — a thin draggable splitter on the seam between
    editor and sidebar. Centred on the boundary line, 6px wide for
    a comfortable hit target, no visible chrome until hovered. */
@@ -182,6 +193,26 @@ a:focus-visible {
   transition-delay: 0s;
 }
 .sidebar-resizer:focus-visible::before {
+  background: var(--accent);
+}
+
+/* While dragging the splitter into the collapse zone, show the
+   "danger / collapse" tint instead of the regular accent. */
+.workspace.sidebar-collapse-preview .sidebar-resizer::before {
+  background: var(--fg-muted);
+}
+
+/* Collapsed: pin the resizer to the right edge as a wider grab
+   target. Always show a faint hairline so users notice it. */
+.workspace.sidebar-collapsed .sidebar-resizer {
+  right: 0;
+  width: 10px;
+}
+.workspace.sidebar-collapsed .sidebar-resizer::before {
+  inset: 0 4px;
+  background: var(--border-2);
+}
+.workspace.sidebar-collapsed .sidebar-resizer:hover::before {
   background: var(--accent);
 }
 
@@ -283,6 +314,10 @@ body.resizing-sidebar [data-resize-sidebar] {
 .icon-btn:hover {
   background: var(--hover);
   color: var(--fg-strong);
+}
+.icon-btn[aria-pressed="true"] {
+  color: var(--fg-subtle);
+  background: var(--hover);
 }
 
 /* ============================================================

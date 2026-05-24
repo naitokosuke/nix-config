@@ -72,6 +72,11 @@ export const icons = {
       '<line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="14" y2="17"/>',
       a,
     ),
+  panelRight: (a?: IconAttrs) =>
+    svg(
+      '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="15" y1="3" x2="15" y2="21"/>',
+      a,
+    ),
 };
 
 export function iconForFile(name: string): string {

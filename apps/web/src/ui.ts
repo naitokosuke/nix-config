@@ -328,6 +328,17 @@ function renderShell(): string {
           <a class="icon-btn" href="https://github.com/naitokosuke/dotfiles" target="_blank" rel="noopener" aria-label="GitHub repository">
             ${icons.github()}
           </a>
+          <button
+            class="icon-btn"
+            type="button"
+            data-action="toggle-sidebar"
+            aria-controls="sidebar"
+            aria-pressed="false"
+            aria-label="Toggle sidebar (⌘B)"
+            title="Toggle sidebar (⌘B)"
+          >
+            ${icons.panelRight()}
+          </button>
         </div>
       </header>
       <main class="editor">
@@ -411,22 +422,36 @@ export class App {
   }
 
   /**
-   * VS Code-style draggable splitter between editor and sidebar.
+   * VS Code-style draggable splitter between editor and sidebar,
+   * with full collapse / expand support.
    *
-   * Uses Pointer Events + `setPointerCapture` so the move stream
-   * keeps flowing even when the cursor briefly leaves the 6px hit
-   * region. The width is written to a CSS variable on the
-   * workspace (so the grid template re-resolves), and the final
-   * value persists to localStorage.
+   * * Width lives in the `--sidebar-w` custom property on the
+   *   workspace; writing to it makes the grid template re-resolve.
+   * * Collapsed state is a separate class (`sidebar-collapsed`)
+   *   on the workspace — the grid column is forced to 0 and the
+   *   sidebar gets `display: none`.
+   * * Drag below `COLLAPSE_AT` snaps to collapsed; dragging the
+   *   splitter outward from the edge restores width naturally.
+   * * Clicking the splitter while collapsed restores the previous
+   *   width; ⌘B / Ctrl+B toggles from anywhere.
+   * * Width and collapsed flag are persisted to localStorage.
+   *
+   * Pointer Events + `setPointerCapture` keep the move stream
+   * flowing even when the cursor leaves the 6px hit region.
    */
   private initSidebarResize(): void {
     const resizer = this.root.querySelector<HTMLElement>("[data-resize-sidebar]");
     const workspace = this.workspaceEl;
     if (!resizer || !workspace) return;
 
-    const STORAGE_KEY = "naitokosuke-dotfiles:sidebar-w";
+    const WIDTH_KEY = "naitokosuke-dotfiles:sidebar-w";
+    const COLLAPSED_KEY = "naitokosuke-dotfiles:sidebar-collapsed";
     const MIN_W = 200;
+    const COLLAPSE_AT = 140; // drag below this on release → collapse
+    const DEFAULT_W = 280;
     const MAX_W = () => Math.min(680, Math.max(MIN_W, Math.round(window.innerWidth * 0.55)));
+
+    const isCollapsed = () => workspace.classList.contains("sidebar-collapsed");
 
     const applyWidth = (value: number): number => {
       const clamped = Math.max(MIN_W, Math.min(MAX_W(), Math.round(value)));
@@ -434,18 +459,38 @@ export class App {
       return clamped;
     };
 
-    const stored = Number.parseInt(localStorage.getItem(STORAGE_KEY) ?? "", 10);
-    if (Number.isFinite(stored)) applyWidth(stored);
+    const setCollapsed = (collapsed: boolean): void => {
+      workspace.classList.toggle("sidebar-collapsed", collapsed);
+      this.syncSidebarToggleAria();
+      localStorage.setItem(COLLAPSED_KEY, collapsed ? "1" : "0");
+    };
+
+    this.toggleSidebar = () => setCollapsed(!isCollapsed());
+
+    // Restore persisted state.
+    const storedWidth = Number.parseInt(localStorage.getItem(WIDTH_KEY) ?? "", 10);
+    if (Number.isFinite(storedWidth)) applyWidth(storedWidth);
+    if (localStorage.getItem(COLLAPSED_KEY) === "1") {
+      workspace.classList.add("sidebar-collapsed");
+      this.syncSidebarToggleAria();
+    }
 
     let startX = 0;
     let startW = 0;
+    let dragMoved = false;
 
     const onPointerDown = (event: PointerEvent) => {
       if (event.button !== 0) return;
+      if (isCollapsed()) {
+        // Expanding from a closed state — seed width before measuring.
+        setCollapsed(false);
+        applyWidth(DEFAULT_W);
+      }
       const sidebar = this.root.querySelector<HTMLElement>(".sidebar");
       if (!sidebar) return;
       startX = event.clientX;
-      startW = sidebar.getBoundingClientRect().width;
+      startW = sidebar.getBoundingClientRect().width || DEFAULT_W;
+      dragMoved = false;
       resizer.setPointerCapture(event.pointerId);
       resizer.classList.add("is-active");
       document.body.classList.add("resizing-sidebar");
@@ -454,8 +499,10 @@ export class App {
 
     const onPointerMove = (event: PointerEvent) => {
       if (!resizer.hasPointerCapture(event.pointerId)) return;
-      // Sidebar is on the right edge — dragging *left* widens it.
       const next = startW - (event.clientX - startX);
+      if (Math.abs(event.clientX - startX) > 2) dragMoved = true;
+      // Visually preview the collapse threshold while dragging.
+      workspace.classList.toggle("sidebar-collapse-preview", next < COLLAPSE_AT);
       applyWidth(next);
     };
 
@@ -464,13 +511,25 @@ export class App {
       resizer.releasePointerCapture(event.pointerId);
       resizer.classList.remove("is-active");
       document.body.classList.remove("resizing-sidebar");
+      workspace.classList.remove("sidebar-collapse-preview");
+
       const current = Number.parseInt(workspace.style.getPropertyValue("--sidebar-w"), 10);
-      if (Number.isFinite(current)) localStorage.setItem(STORAGE_KEY, String(current));
+      // No movement at all → treat as a click. Toggle collapse.
+      if (!dragMoved) {
+        this.toggleSidebar?.();
+        return;
+      }
+      if (Number.isFinite(current) && current < COLLAPSE_AT) {
+        setCollapsed(true);
+      } else if (Number.isFinite(current)) {
+        localStorage.setItem(WIDTH_KEY, String(current));
+      }
     };
 
     const onDoubleClick = () => {
       workspace.style.removeProperty("--sidebar-w");
-      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(WIDTH_KEY);
+      setCollapsed(false);
     };
 
     resizer.addEventListener("pointerdown", onPointerDown);
@@ -478,6 +537,17 @@ export class App {
     resizer.addEventListener("pointerup", onPointerUp);
     resizer.addEventListener("pointercancel", onPointerUp);
     resizer.addEventListener("dblclick", onDoubleClick);
+  }
+
+  private toggleSidebar?: () => void;
+
+  private syncSidebarToggleAria(): void {
+    const workspace = this.workspaceEl;
+    const btn = this.root.querySelector<HTMLElement>('[data-action="toggle-sidebar"]');
+    if (!workspace || !btn) return;
+    const collapsed = workspace.classList.contains("sidebar-collapsed");
+    // aria-pressed reflects "is the sidebar currently hidden?"
+    btn.setAttribute("aria-pressed", String(collapsed));
   }
 
   private renderEverything(): void {
@@ -698,6 +768,12 @@ export class App {
       this.closeMenu();
       return;
     }
+
+    if (action === "toggle-sidebar") {
+      event.preventDefault();
+      this.toggleSidebar?.();
+      return;
+    }
   };
 
   private readonly handleAuxClick = (event: MouseEvent): void => {
@@ -721,6 +797,11 @@ export class App {
     if ((event.metaKey || event.ctrlKey) && event.key === "w") {
       event.preventDefault();
       this.closeTab(this.currentActiveKey());
+      return;
+    }
+    if ((event.metaKey || event.ctrlKey) && (event.key === "b" || event.key === "B")) {
+      event.preventDefault();
+      this.toggleSidebar?.();
       return;
     }
     if ((event.metaKey || event.ctrlKey) && event.key === "k") {
