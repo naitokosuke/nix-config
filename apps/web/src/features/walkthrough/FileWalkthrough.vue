@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { icons } from "../../icons.ts";
+import CodeBlock from "../../primitives/CodeBlock.vue";
+import { highlight } from "../../syntax.ts";
 import type { FileEntry } from "../../types.ts";
-import CodeBlock from "./CodeBlock.vue";
 import FileBreadcrumb from "./FileBreadcrumb.vue";
 import FullSourceDetails from "./FullSourceDetails.vue";
 import { renderProse } from "./markdown.ts";
@@ -20,6 +21,9 @@ const hasSections = computed(() => sections.value.length > 0);
 const lineCount = computed(() => props.file.content.split("\n").length);
 const charCount = computed(() => props.file.content.length.toLocaleString());
 const langLabel = computed(() => props.file.lang.toUpperCase());
+const fullHtml = computed(() =>
+  hasSections.value ? "" : highlight(props.file.content, props.file.lang),
+);
 
 const hashIcon = icons.hash({ size: 10 });
 </script>
@@ -44,7 +48,7 @@ const hashIcon = icons.hash({ size: 10 });
         />
         <FullSourceDetails v-if="hasSections" :file="file" />
         <div v-else class="code-scroller">
-          <CodeBlock :content="file.content" :lang="file.lang" />
+          <CodeBlock :html="fullHtml" :line-count="lineCount" :lang-class="`lang-${file.lang}`" />
         </div>
       </article>
     </div>

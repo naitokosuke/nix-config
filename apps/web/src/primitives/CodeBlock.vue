@@ -1,27 +1,31 @@
 <script setup lang="ts">
+/**
+ * Generic code block — a fixed-width column of line numbers next
+ * to a `<code>` element whose contents are dropped in via the
+ * `html` prop. The primitive does not perform syntax highlighting
+ * itself; callers pre-render whatever HTML they want (the bundled
+ * `.t-*` token classes are styled so a tokenizer that emits them
+ * works out of the box, but any other markup works just as well).
+ */
 import { computed } from "vue";
-import { highlight } from "../../syntax.ts";
-import type { Lang } from "../../types.ts";
 
 const props = defineProps<{
-  content: string;
-  lang: Lang;
+  html: string;
+  lineCount: number;
   startLine?: number;
+  langClass?: string;
 }>();
 
-const lines = computed(() => props.content.split("\n"));
-const lineCount = computed(() => lines.value.length);
 const startAt = computed(() => props.startLine ?? 1);
 const lineNumbers = computed(() =>
-  Array.from({ length: lineCount.value }, (_, i) => startAt.value + i).join("\n"),
+  Array.from({ length: props.lineCount }, (_, i) => startAt.value + i).join("\n"),
 );
-const highlighted = computed(() => highlight(props.content, props.lang));
 </script>
 
 <template>
   <pre
     class="code"
-  ><span class="line-numbers">{{ lineNumbers }}</span><code :class="`lang-${lang}`" v-html="highlighted" /></pre>
+  ><span class="line-numbers">{{ lineNumbers }}</span><code :class="langClass" v-html="html" /></pre>
 </template>
 
 <style scoped>
@@ -66,6 +70,9 @@ code {
   }
 }
 
+/* Token classes emitted by the bundled tokenizer.  They are kept
+   in the primitive because the class names themselves carry no
+   domain meaning — they're just CSS hooks. */
 :deep(.t-kw) {
   color: var(--syn-kw);
   font-weight: 600;

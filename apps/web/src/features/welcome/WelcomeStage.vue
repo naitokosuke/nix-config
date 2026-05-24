@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Link } from "@void/vue";
 import Card from "../../primitives/Card.vue";
-import BackgroundCanvas from "./BackgroundCanvas.vue";
+import DotGrid from "../../primitives/DotGrid.vue";
 import NixLogo from "./NixLogo.vue";
 
 interface Entry {
@@ -32,7 +32,7 @@ const entries: ReadonlyArray<Entry> = [
 <template>
   <div class="welcome-stage">
     <div class="welcome-bg" aria-hidden="true">
-      <BackgroundCanvas />
+      <DotGrid />
       <NixLogo />
     </div>
     <div class="welcome-inner">

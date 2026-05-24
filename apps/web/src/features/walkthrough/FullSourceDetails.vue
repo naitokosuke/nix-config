@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import CodeBlock from "../../primitives/CodeBlock.vue";
+import { highlight } from "../../syntax.ts";
 import type { FileEntry } from "../../types.ts";
-import CodeBlock from "./CodeBlock.vue";
 
 const props = defineProps<{
   file: FileEntry;
 }>();
 
 const lineCount = computed(() => props.file.content.split("\n").length);
+const html = computed(() => highlight(props.file.content, props.file.lang));
 </script>
 
 <template>
@@ -17,7 +19,7 @@ const lineCount = computed(() => props.file.content.split("\n").length);
       <span class="full-source-meta">{{ lineCount }} lines · {{ file.name }}</span>
     </summary>
     <div class="code-scroller">
-      <CodeBlock :content="file.content" :lang="file.lang" />
+      <CodeBlock :html="html" :line-count="lineCount" :lang-class="`lang-${file.lang}`" />
     </div>
   </details>
 </template>

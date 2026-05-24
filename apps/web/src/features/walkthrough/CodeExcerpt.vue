@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import CodeBlock from "../../primitives/CodeBlock.vue";
+import { highlight } from "../../syntax.ts";
 import type { FileEntry } from "../../types.ts";
-import CodeBlock from "./CodeBlock.vue";
 
 const props = defineProps<{
   file: FileEntry;
@@ -14,6 +15,8 @@ const chunk = computed(() => {
   const lines = props.file.content.split("\n");
   return lines.slice(start.value - 1, end.value).join("\n");
 });
+const lineCount = computed(() => end.value - start.value + 1);
+const html = computed(() => highlight(chunk.value, props.file.lang));
 const caption = computed(() =>
   start.value === end.value ? `line ${start.value}` : `lines ${start.value}–${end.value}`,
 );
@@ -23,7 +26,12 @@ const caption = computed(() =>
   <figure class="excerpt">
     <figcaption>{{ caption }}</figcaption>
     <div class="excerpt-body">
-      <CodeBlock :content="chunk" :lang="file.lang" :start-line="start" />
+      <CodeBlock
+        :html="html"
+        :line-count="lineCount"
+        :start-line="start"
+        :lang-class="`lang-${file.lang}`"
+      />
     </div>
   </figure>
 </template>

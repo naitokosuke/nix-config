@@ -17,7 +17,7 @@ function paletteFor(dark: boolean): Palette {
     : { dot: "rgba(0, 0, 0, 0.04)", dotNear: "rgba(0, 0, 0, 0.14)" };
 }
 
-export function mountWelcomeCanvas(canvas: HTMLCanvasElement): Disposer {
+export function mountDotGrid(canvas: HTMLCanvasElement): Disposer {
   const ctx = canvas.getContext("2d", { alpha: true });
   if (!ctx) return () => undefined;
 
