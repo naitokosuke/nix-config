@@ -2,7 +2,7 @@
 import { Link } from "@void/vue";
 import Card from "../../primitives/Card.vue";
 import DotGrid from "../../primitives/DotGrid.vue";
-import NixLogo from "./NixLogo.vue";
+import Logo from "../../primitives/Logo.vue";
 
 interface Entry {
   readonly label: string;
@@ -33,7 +33,7 @@ const entries: ReadonlyArray<Entry> = [
   <div class="welcome-stage">
     <div class="welcome-bg" aria-hidden="true">
       <DotGrid />
-      <NixLogo />
+      <Logo class="welcome-logo" variant="nix" />
     </div>
     <div class="welcome-inner">
       <h1><span class="user">naitokosuke</span><span class="slash">/</span>dotfiles</h1>
@@ -84,6 +84,31 @@ const entries: ReadonlyArray<Entry> = [
   inset: 0;
   z-index: 0;
   pointer-events: none;
+}
+
+/* Welcome-side framing for the Nix logo primitive: pin it to the
+   bottom-right corner so only the inner quadrant is visible, tint
+   it via `color` (the primitive fills its paths with `currentColor`),
+   and rotate the inner `.rotor` group slowly. */
+.welcome-logo {
+  --nix-size: clamp(560px, 92dvw, 1120px);
+  position: absolute;
+  width: var(--nix-size);
+  aspect-ratio: 1;
+  right: calc(var(--nix-size) * -0.5);
+  bottom: calc(var(--nix-size) * -0.5);
+  color: light-dark(rgba(0, 0, 0, 0.085), rgba(255, 255, 255, 0.075));
+  filter: blur(0.4px);
+}
+
+.welcome-logo :deep(.rotor) {
+  animation: welcome-logo-spin 240s linear infinite;
+}
+
+@keyframes welcome-logo-spin {
+  to {
+    rotate: 360deg;
+  }
 }
 
 .welcome-inner {
