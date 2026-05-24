@@ -5,6 +5,8 @@ import { iconForFile, icons } from "./icons.ts";
 import { Router, routeToHref } from "./router.ts";
 import { mountWelcomeCanvas } from "./canvas-bg.ts";
 
+const WELCOME_KEY = "__welcome__";
+
 /**
  * Tiny inline-Markdown renderer for prose copy. Handles paragraph splits on
  * blank lines, and inline `code`, **bold**, and [text](url). Everything else
@@ -57,26 +59,12 @@ function renderWalkthroughSection(section: WalkthroughSection, file: FileEntry):
   return `<section class="walkthrough-section">${heading}${prose}${excerpt}</section>`;
 }
 
-const SUPPORTS_VIEW_TRANSITIONS =
-  typeof document !== "undefined" && typeof document.startViewTransition === "function";
-
-function withTransition(update: () => void): void {
-  if (SUPPORTS_VIEW_TRANSITIONS) {
-    document.startViewTransition?.(update);
-  } else {
-    update();
-  }
-}
-
 function renderTree(
   node: DirNode,
   openDirs: ReadonlySet<string>,
   activePath: string | null,
 ): string {
-  const childrenHtml = node.children
-    .map((child) => renderNode(child, openDirs, activePath, 1))
-    .join("");
-  return childrenHtml;
+  return node.children.map((child) => renderNode(child, openDirs, activePath, 1)).join("");
 }
 
 function renderNode(
@@ -139,7 +127,7 @@ function renderFullSource(file: FileEntry): string {
   return `<pre class="code"><span class="line-numbers">${lineNumbers}</span><code class="lang-${file.lang}">${code}</code></pre>`;
 }
 
-function renderEditor(file: FileEntry): string {
+function renderFileContent(file: FileEntry): string {
   const lines = file.content.split("\n");
   const langLabel = file.lang.toUpperCase();
   const tagsHtml = file.tags?.length
@@ -171,14 +159,7 @@ function renderEditor(file: FileEntry): string {
     : `<div class="code-scroller">${fullSource}</div>`;
 
   return `
-    <div class="editor-shell" style="view-transition-name: editor;">
-      <header class="tabs">
-        <div class="tab active" data-tab="${file.path}">
-          <span class="tab-icon">${iconForFile(file.name)}</span>
-          <span class="tab-name">${escapeHtml(file.name)}</span>
-        </div>
-        <div class="tabs-spacer"></div>
-      </header>
+    <div class="file-view">
       <div class="breadcrumb">${renderBreadcrumb(file.path)}</div>
       <div class="walkthrough-scroller">
         <article class="walkthrough">
@@ -202,8 +183,7 @@ function renderEditor(file: FileEntry): string {
 function nixLogoSvg(): string {
   // Official Nix snowflake mark — path data verbatim from
   // https://github.com/NixOS/nixos-artwork/blob/master/logo/nix-snowflake-colours.svg
-  // (CC BY 4.0). One "lambda-blade" path is rotated 6× around the figure
-  // centre (407.11, -715.79) to assemble the 6-fold rotational pattern.
+  // (CC BY 4.0).
   return `
     <svg
       class="nix-bg"
@@ -229,7 +209,7 @@ function nixLogoSvg(): string {
   `;
 }
 
-function renderWelcome(): string {
+function renderWelcomeContent(): string {
   const entries: ReadonlyArray<{
     readonly label: string;
     readonly path: string;
@@ -264,33 +244,24 @@ function renderWelcome(): string {
     .join("");
 
   return `
-    <div class="editor-shell welcome" style="view-transition-name: editor;">
-      <header class="tabs">
-        <div class="tab active" data-tab="home">
-          <span class="tab-icon">${icons.sparkle({ size: 14 })}</span>
-          <span class="tab-name">Welcome</span>
-        </div>
-        <div class="tabs-spacer"></div>
-      </header>
-      <div class="welcome-stage">
-        <div class="welcome-bg" aria-hidden="true">
-          <canvas data-welcome-canvas></canvas>
-          ${nixLogoSvg()}
-        </div>
-        <div class="welcome-inner">
-          <h1><span class="user">naitokosuke</span><span class="slash">/</span>dotfiles</h1>
-          <p class="lede">
-            An Apple Silicon macOS, declared end-to-end in <strong>Nix</strong>.
-            <strong>nix-darwin</strong> owns the system layer and <strong>home-manager</strong> owns the user layer —
-            the whole environment rebuilds from <code>flake.nix</code> with
-            <code>darwin-rebuild switch --flake .#&lt;host&gt;</code>.
-          </p>
-          <nav class="entry-row" aria-label="entry points">${cards}</nav>
-          <p class="attribution">
-            Nix logo by Simon Frankau (revised by Tim Cuthbertson) ·
-            <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>
-          </p>
-        </div>
+    <div class="welcome-stage">
+      <div class="welcome-bg" aria-hidden="true">
+        <canvas data-welcome-canvas></canvas>
+        ${nixLogoSvg()}
+      </div>
+      <div class="welcome-inner">
+        <h1><span class="user">naitokosuke</span><span class="slash">/</span>dotfiles</h1>
+        <p class="lede">
+          An Apple Silicon macOS, declared end-to-end in <strong>Nix</strong>.
+          <strong>nix-darwin</strong> owns the system layer and <strong>home-manager</strong> owns the user layer —
+          the whole environment rebuilds from <code>flake.nix</code> with
+          <code>darwin-rebuild switch --flake .#&lt;host&gt;</code>.
+        </p>
+        <nav class="entry-row" aria-label="entry points">${cards}</nav>
+        <p class="attribution">
+          Nix logo by Simon Frankau (revised by Tim Cuthbertson) ·
+          <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>
+        </p>
       </div>
     </div>
   `;
@@ -321,6 +292,50 @@ function renderStatusBar(route: Route): string {
   `;
 }
 
+interface TabModel {
+  readonly key: string; // file path or WELCOME_KEY
+  readonly name: string;
+  readonly iconHtml: string;
+  readonly href: string;
+  readonly isWelcome: boolean;
+}
+
+function tabFromFile(file: FileEntry): TabModel {
+  return {
+    key: file.path,
+    name: file.name,
+    iconHtml: iconForFile(file.name),
+    href: routeToHref({ kind: "file", path: file.path }),
+    isWelcome: false,
+  };
+}
+
+function welcomeTab(): TabModel {
+  return {
+    key: WELCOME_KEY,
+    name: "Welcome",
+    iconHtml: icons.sparkle({ size: 14 }),
+    href: routeToHref({ kind: "home" }),
+    isWelcome: true,
+  };
+}
+
+function renderTab(tab: TabModel, active: boolean): string {
+  const action = tab.isWelcome ? "go-home" : "open-file";
+  const pathAttr = tab.isWelcome ? "" : `data-path="${escapeHtml(tab.key)}"`;
+  return `
+    <div class="tab${active ? " active" : ""}" data-tab-key="${escapeHtml(tab.key)}">
+      <a class="tab-link" href="${tab.href}" data-action="${action}" ${pathAttr}>
+        <span class="tab-icon">${tab.iconHtml}</span>
+        <span class="tab-name">${escapeHtml(tab.name)}</span>
+      </a>
+      <button class="tab-close" type="button" data-action="close-tab" data-tab-key="${escapeHtml(tab.key)}" aria-label="Close ${escapeHtml(tab.name)}">
+        ${icons.close({ size: 12 })}
+      </button>
+    </div>
+  `;
+}
+
 function renderShell(): string {
   return `
     <div class="workspace" data-workspace>
@@ -337,11 +352,10 @@ function renderShell(): string {
           </a>
         </div>
       </header>
-      <nav class="activity-bar" aria-label="primary">
-        <button class="activity active" type="button" aria-label="Explorer">${icons.explorer()}</button>
-        <button class="activity" type="button" aria-label="Search" data-action="focus-search">${icons.search()}</button>
-        <button class="activity" type="button" aria-label="About" data-action="go-home">${icons.info()}</button>
-      </nav>
+      <main class="editor">
+        <header class="tabs" data-tabs></header>
+        <div class="editor-content" data-editor-content></div>
+      </main>
       <aside id="sidebar" class="sidebar" aria-label="explorer">
         <span class="sheet-handle" aria-hidden="true"></span>
         <header class="sidebar-head">
@@ -359,7 +373,6 @@ function renderShell(): string {
         </div>
       </aside>
       <button class="sidebar-backdrop" type="button" data-action="close-menu" aria-label="Close menu" tabindex="-1"></button>
-      <main class="editor" data-editor></main>
       <footer class="status-bar" data-status></footer>
       <nav class="bottom-nav" aria-label="mobile primary" data-bottom-nav>
         <button class="bn-btn" type="button" data-action="toggle-menu" aria-controls="sidebar" aria-expanded="false" data-bn="files">
@@ -383,6 +396,8 @@ export class App {
   private readonly root: HTMLElement;
   private readonly router = new Router();
   private readonly openDirs = new Set<string>();
+  private readonly openFiles: string[] = [];
+  private welcomeOpen = true;
   private disposeCanvas: (() => void) | null = null;
 
   constructor(root: HTMLElement) {
@@ -393,25 +408,28 @@ export class App {
     this.root.innerHTML = renderShell();
     this.root.removeAttribute("aria-busy");
 
+    this.syncTabsFromRoute();
     this.seedOpenDirsFromRoute();
-    this.renderSidebar();
-    this.renderRoute();
-    this.renderStatus();
-    this.updateBottomNav();
+    this.renderEverything();
 
     this.router.subscribe(() => {
+      this.syncTabsFromRoute();
       this.seedOpenDirsFromRoute();
       this.closeMenu();
-      withTransition(() => {
-        this.renderSidebar();
-        this.renderRoute();
-        this.renderStatus();
-        this.updateBottomNav();
-      });
+      this.renderEverything();
     });
 
     this.root.addEventListener("click", this.handleClick);
+    this.root.addEventListener("auxclick", this.handleAuxClick);
     document.addEventListener("keydown", this.handleKey);
+  }
+
+  private renderEverything(): void {
+    this.renderSidebar();
+    this.renderTabs();
+    this.renderContent();
+    this.renderStatus();
+    this.updateBottomNav();
   }
 
   private get workspaceEl(): HTMLElement | null {
@@ -445,6 +463,17 @@ export class App {
     }
   }
 
+  private syncTabsFromRoute(): void {
+    const route = this.router.route;
+    if (route.kind === "file") {
+      if (!filesByPath.has(route.path)) return;
+      if (!this.openFiles.includes(route.path)) this.openFiles.push(route.path);
+    } else if (route.kind === "home") {
+      // Re-open the Welcome tab if it was closed and the user navigated home.
+      this.welcomeOpen = true;
+    }
+  }
+
   private seedOpenDirsFromRoute(): void {
     const route = this.router.route;
     if (route.kind === "file") {
@@ -459,24 +488,52 @@ export class App {
     treeEl.innerHTML = renderTree(tree, this.openDirs, activePath);
   }
 
-  private renderRoute(): void {
-    const editorEl = this.root.querySelector<HTMLElement>("[data-editor]");
-    if (!editorEl) return;
+  private currentActiveKey(): string {
+    const route = this.router.route;
+    return route.kind === "file" ? route.path : WELCOME_KEY;
+  }
+
+  private buildTabModels(): TabModel[] {
+    const tabs: TabModel[] = [];
+    if (this.welcomeOpen) tabs.push(welcomeTab());
+    for (const path of this.openFiles) {
+      const file = filesByPath.get(path);
+      if (file) tabs.push(tabFromFile(file));
+    }
+    return tabs;
+  }
+
+  private renderTabs(): void {
+    const tabsEl = this.root.querySelector<HTMLElement>("[data-tabs]");
+    if (!tabsEl) return;
+    const activeKey = this.currentActiveKey();
+    const tabs = this.buildTabModels();
+    const tabsHtml = tabs.map((tab) => renderTab(tab, tab.key === activeKey)).join("");
+    tabsEl.innerHTML = `${tabsHtml}<div class="tabs-spacer"></div>`;
+
+    // Scroll the active tab into view (instant, no animation).
+    const activeEl = tabsEl.querySelector<HTMLElement>(`[data-tab-key="${CSS.escape(activeKey)}"]`);
+    activeEl?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "instant" });
+  }
+
+  private renderContent(): void {
+    const contentEl = this.root.querySelector<HTMLElement>("[data-editor-content]");
+    if (!contentEl) return;
 
     this.disposeCanvas?.();
     this.disposeCanvas = null;
 
     const route = this.router.route;
     if (route.kind === "home") {
-      editorEl.innerHTML = renderWelcome();
-      const canvas = editorEl.querySelector<HTMLCanvasElement>("[data-welcome-canvas]");
+      contentEl.innerHTML = renderWelcomeContent();
+      const canvas = contentEl.querySelector<HTMLCanvasElement>("[data-welcome-canvas]");
       if (canvas) this.disposeCanvas = mountWelcomeCanvas(canvas);
       return;
     }
     const file = filesByPath.get(route.path);
     if (!file) {
-      editorEl.innerHTML = `
-        <div class="not-found" style="view-transition-name: editor;">
+      contentEl.innerHTML = `
+        <div class="not-found">
           <h2>404</h2>
           <p>${escapeHtml(route.path)} was not found.</p>
           <a class="cta" href="/" data-action="go-home">Back to home</a>
@@ -484,15 +541,57 @@ export class App {
       `;
       return;
     }
-    editorEl.innerHTML = renderEditor(file);
-    const scroller = editorEl.querySelector<HTMLElement>(".walkthrough-scroller, .code-scroller");
-    scroller?.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+    contentEl.innerHTML = renderFileContent(file);
+    const scroller = contentEl.querySelector<HTMLElement>(".walkthrough-scroller");
+    scroller?.scrollTo({ top: 0, behavior: "instant" });
   }
 
   private renderStatus(): void {
     const statusEl = this.root.querySelector<HTMLElement>("[data-status]");
     if (!statusEl) return;
     statusEl.innerHTML = renderStatusBar(this.router.route);
+  }
+
+  private closeTab(key: string): void {
+    const activeKey = this.currentActiveKey();
+    let neighbour: string | null = null;
+
+    if (key === WELCOME_KEY) {
+      if (!this.welcomeOpen) return;
+      this.welcomeOpen = false;
+    } else {
+      const idx = this.openFiles.indexOf(key);
+      if (idx === -1) return;
+      this.openFiles.splice(idx, 1);
+      if (activeKey === key) {
+        neighbour = this.openFiles[idx] ?? this.openFiles[idx - 1] ?? null;
+      }
+    }
+
+    if (activeKey === key) {
+      if (neighbour) {
+        this.router.navigate({ kind: "file", path: neighbour });
+        return;
+      }
+      if (this.openFiles.length > 0) {
+        const last = this.openFiles[this.openFiles.length - 1];
+        if (last) {
+          this.router.navigate({ kind: "file", path: last });
+          return;
+        }
+      }
+      if (this.welcomeOpen) {
+        this.router.navigate({ kind: "home" });
+        return;
+      }
+      // Closing the last remaining tab — re-open Welcome and go home.
+      this.welcomeOpen = true;
+      this.router.navigate({ kind: "home" });
+      return;
+    }
+
+    // Closing a non-active tab: keep the current route, just re-render.
+    this.renderTabs();
   }
 
   private readonly handleClick = (event: MouseEvent): void => {
@@ -503,12 +602,13 @@ export class App {
     if (!actionEl) return;
 
     const action = actionEl.dataset["action"];
+
     if (action === "toggle-dir") {
       event.preventDefault();
       const dirPath = actionEl.dataset["path"] ?? "";
       if (this.openDirs.has(dirPath)) this.openDirs.delete(dirPath);
       else this.openDirs.add(dirPath);
-      withTransition(() => this.renderSidebar());
+      this.renderSidebar();
       return;
     }
 
@@ -528,6 +628,15 @@ export class App {
       return;
     }
 
+    if (action === "close-tab") {
+      event.preventDefault();
+      event.stopPropagation();
+      const key = actionEl.dataset["tabKey"];
+      if (!key) return;
+      this.closeTab(key);
+      return;
+    }
+
     if (action === "toggle-menu") {
       event.preventDefault();
       if (this.workspaceEl?.classList.contains("menu-open")) this.closeMenu();
@@ -540,16 +649,29 @@ export class App {
       this.closeMenu();
       return;
     }
+  };
 
-    if (action === "focus-search") {
-      event.preventDefault();
-    }
+  private readonly handleAuxClick = (event: MouseEvent): void => {
+    if (event.button !== 1) return; // middle-click only
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const tab = target.closest<HTMLElement>(".tab");
+    if (!tab) return;
+    const key = tab.dataset["tabKey"];
+    if (!key) return;
+    event.preventDefault();
+    this.closeTab(key);
   };
 
   private readonly handleKey = (event: KeyboardEvent): void => {
     if (event.key === "Escape" && this.workspaceEl?.classList.contains("menu-open")) {
       event.preventDefault();
       this.closeMenu();
+      return;
+    }
+    if ((event.metaKey || event.ctrlKey) && event.key === "w") {
+      event.preventDefault();
+      this.closeTab(this.currentActiveKey());
       return;
     }
     if ((event.metaKey || event.ctrlKey) && event.key === "k") {
