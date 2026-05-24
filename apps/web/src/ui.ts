@@ -351,6 +351,14 @@ function renderShell(): string {
         </div>
       </aside>
       <button class="sidebar-backdrop" type="button" data-action="close-menu" aria-label="Close menu" tabindex="-1"></button>
+      <div
+        class="sidebar-resizer"
+        data-resize-sidebar
+        role="separator"
+        aria-orientation="vertical"
+        aria-label="Resize sidebar"
+        title="Drag to resize · double-click to reset"
+      ></div>
       <nav class="bottom-nav" aria-label="mobile primary" data-bottom-nav>
         <button class="bn-btn" type="button" data-action="toggle-menu" aria-controls="sidebar" aria-expanded="false" data-bn="files">
           ${icons.explorer({ size: 20 })}
@@ -388,6 +396,7 @@ export class App {
     this.syncTabsFromRoute();
     this.seedOpenDirsFromRoute();
     this.renderEverything();
+    this.initSidebarResize();
 
     this.router.subscribe(() => {
       this.syncTabsFromRoute();
@@ -399,6 +408,76 @@ export class App {
     this.root.addEventListener("click", this.handleClick);
     this.root.addEventListener("auxclick", this.handleAuxClick);
     document.addEventListener("keydown", this.handleKey);
+  }
+
+  /**
+   * VS Code-style draggable splitter between editor and sidebar.
+   *
+   * Uses Pointer Events + `setPointerCapture` so the move stream
+   * keeps flowing even when the cursor briefly leaves the 6px hit
+   * region. The width is written to a CSS variable on the
+   * workspace (so the grid template re-resolves), and the final
+   * value persists to localStorage.
+   */
+  private initSidebarResize(): void {
+    const resizer = this.root.querySelector<HTMLElement>("[data-resize-sidebar]");
+    const workspace = this.workspaceEl;
+    if (!resizer || !workspace) return;
+
+    const STORAGE_KEY = "naitokosuke-dotfiles:sidebar-w";
+    const MIN_W = 200;
+    const MAX_W = () => Math.min(680, Math.max(MIN_W, Math.round(window.innerWidth * 0.55)));
+
+    const applyWidth = (value: number): number => {
+      const clamped = Math.max(MIN_W, Math.min(MAX_W(), Math.round(value)));
+      workspace.style.setProperty("--sidebar-w", `${clamped}px`);
+      return clamped;
+    };
+
+    const stored = Number.parseInt(localStorage.getItem(STORAGE_KEY) ?? "", 10);
+    if (Number.isFinite(stored)) applyWidth(stored);
+
+    let startX = 0;
+    let startW = 0;
+
+    const onPointerDown = (event: PointerEvent) => {
+      if (event.button !== 0) return;
+      const sidebar = this.root.querySelector<HTMLElement>(".sidebar");
+      if (!sidebar) return;
+      startX = event.clientX;
+      startW = sidebar.getBoundingClientRect().width;
+      resizer.setPointerCapture(event.pointerId);
+      resizer.classList.add("is-active");
+      document.body.classList.add("resizing-sidebar");
+      event.preventDefault();
+    };
+
+    const onPointerMove = (event: PointerEvent) => {
+      if (!resizer.hasPointerCapture(event.pointerId)) return;
+      // Sidebar is on the right edge — dragging *left* widens it.
+      const next = startW - (event.clientX - startX);
+      applyWidth(next);
+    };
+
+    const onPointerUp = (event: PointerEvent) => {
+      if (!resizer.hasPointerCapture(event.pointerId)) return;
+      resizer.releasePointerCapture(event.pointerId);
+      resizer.classList.remove("is-active");
+      document.body.classList.remove("resizing-sidebar");
+      const current = Number.parseInt(workspace.style.getPropertyValue("--sidebar-w"), 10);
+      if (Number.isFinite(current)) localStorage.setItem(STORAGE_KEY, String(current));
+    };
+
+    const onDoubleClick = () => {
+      workspace.style.removeProperty("--sidebar-w");
+      localStorage.removeItem(STORAGE_KEY);
+    };
+
+    resizer.addEventListener("pointerdown", onPointerDown);
+    resizer.addEventListener("pointermove", onPointerMove);
+    resizer.addEventListener("pointerup", onPointerUp);
+    resizer.addEventListener("pointercancel", onPointerUp);
+    resizer.addEventListener("dblclick", onDoubleClick);
   }
 
   private renderEverything(): void {

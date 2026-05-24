@@ -151,6 +151,49 @@ a:focus-visible {
   grid-template-areas:
     "title   title"
     "editor  sidebar";
+  position: relative;
+}
+
+/* Sidebar resizer — a thin draggable splitter on the seam between
+   editor and sidebar. Centred on the boundary line, 6px wide for
+   a comfortable hit target, no visible chrome until hovered. */
+.sidebar-resizer {
+  position: absolute;
+  top: var(--titlebar-h);
+  bottom: 0;
+  right: calc(var(--sidebar-w) - 3px);
+  width: 6px;
+  z-index: 10;
+  cursor: col-resize;
+  background: transparent;
+  transition: background 160ms var(--easing) 120ms;
+  touch-action: none;
+}
+.sidebar-resizer::before {
+  content: "";
+  position: absolute;
+  inset: 0 2px;
+  background: transparent;
+  transition: background 160ms var(--easing) 120ms;
+}
+.sidebar-resizer:hover::before,
+.sidebar-resizer.is-active::before {
+  background: var(--accent);
+  transition-delay: 0s;
+}
+.sidebar-resizer:focus-visible::before {
+  background: var(--accent);
+}
+
+body.resizing-sidebar {
+  cursor: col-resize;
+  user-select: none;
+}
+body.resizing-sidebar * {
+  pointer-events: none;
+}
+body.resizing-sidebar [data-resize-sidebar] {
+  pointer-events: auto;
 }
 
 .sidebar-backdrop {
@@ -1150,6 +1193,9 @@ code.lang-text {
 
   .sidebar {
     grid-area: unset;
+  }
+  .sidebar-resizer {
+    display: none;
   }
 
   .bottom-nav {
