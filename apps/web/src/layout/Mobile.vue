@@ -7,7 +7,7 @@
  */
 import BottomNav from "../features/shell/BottomNav.vue";
 import SidebarExplorer from "../features/shell/SidebarExplorer.vue";
-import TabBar from "../features/shell/TabBar.vue";
+import EditorTabs from "../features/shell/EditorTabs.vue";
 import TitleBar from "../features/shell/TitleBar.vue";
 import { sidebar } from "../features/shell/useSidebar.ts";
 
@@ -25,7 +25,7 @@ function closeMenu(): void {
   <div class="workspace" :class="{ 'menu-open': sidebar.menuOpen }">
     <TitleBar />
     <main class="editor">
-      <TabBar />
+      <EditorTabs />
       <div class="editor-content">
         <slot />
       </div>

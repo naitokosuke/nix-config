@@ -9,10 +9,18 @@
  */
 import { computed } from "vue";
 import SidebarExplorer from "../features/shell/SidebarExplorer.vue";
-import SidebarResizer from "../features/shell/SidebarResizer.vue";
-import TabBar from "../features/shell/TabBar.vue";
+import EditorTabs from "../features/shell/EditorTabs.vue";
 import TitleBar from "../features/shell/TitleBar.vue";
-import { sidebar } from "../features/shell/useSidebar.ts";
+import {
+  DEFAULT_W,
+  resetWidth,
+  setCollapsed,
+  setRawWidth,
+  settleWidth,
+  sidebar,
+  SNAP_W,
+} from "../features/shell/useSidebar.ts";
+import SidebarResizer from "../primitives/SidebarResizer.vue";
 
 defineProps<{
   activePath: string | null;
@@ -31,13 +39,22 @@ const workspaceStyle = computed(() => ({
   <div class="workspace" :class="workspaceClasses" :style="workspaceStyle">
     <TitleBar />
     <main class="editor">
-      <TabBar />
+      <EditorTabs />
       <div class="editor-content">
         <slot />
       </div>
     </main>
     <SidebarExplorer :active-path="activePath" />
-    <SidebarResizer />
+    <SidebarResizer
+      :width="sidebar.width"
+      :collapsed="sidebar.collapsed"
+      :snap-at="SNAP_W"
+      :default-width="DEFAULT_W"
+      @update:width="setRawWidth"
+      @update:collapsed="setCollapsed"
+      @settle="settleWidth"
+      @reset="resetWidth"
+    />
   </div>
 </template>
 
@@ -73,35 +90,41 @@ const workspaceStyle = computed(() => ({
       position: relative;
     }
   }
-}
 
-/* `:deep()` rules MUST live outside CSS nesting — Vue's scoped
-   CSS compiler combined with native nesting otherwise emits a
-   bogus `.workspace [data-v-xxx] .sidebar` selector that never
-   matches the primitive's aside (the aside *is* the data-v
-   element, not a descendant of one). Keeping these flat compiles
-   to `.workspace[data-v-xxx] .sidebar`, which matches as
-   intended. */
-.workspace :deep(.sidebar) {
-  grid-area: sidebar;
-}
-.workspace.sidebar-collapsed {
-  grid-template-columns: 1fr 0px;
-}
-.workspace.sidebar-collapsed :deep(.sidebar-resizer) {
-  right: 0;
-  width: 10px;
-}
-.workspace.sidebar-collapsed :deep(.sidebar-resizer::before) {
-  inset: 0 4px;
-  background: var(--border-2);
-}
-.workspace.sidebar-collapsed :deep(.sidebar-resizer:hover::before) {
-  background: var(--accent);
-}
+  /* Position the (position-agnostic) splitter primitive at the
+     editor/sidebar seam, and assign the sidebar primitive its
+     grid area. Wrapped in `&` to keep the chain anchored to the
+     workspace's own data-v attribute (otherwise Vue scoped CSS
+     would emit a `.workspace [data-v-xxx] .selector` with an
+     extra descendant combinator that never matches). */
+  & :deep(.sidebar) {
+    grid-area: sidebar;
+  }
+  & :deep(.sidebar-resizer) {
+    position: absolute;
+    top: var(--titlebar-h);
+    bottom: 0;
+    right: calc(var(--sidebar-w) - 3px);
+    z-index: 10;
+  }
 
-@media (max-width: 860px) {
-  .workspace {
+  &.sidebar-collapsed {
+    grid-template-columns: 1fr 0px;
+
+    & :deep(.sidebar-resizer) {
+      right: 0;
+      width: 10px;
+    }
+    & :deep(.sidebar-resizer::before) {
+      inset: 0 4px;
+      background: var(--border-2);
+    }
+    & :deep(.sidebar-resizer:hover::before) {
+      background: var(--accent);
+    }
+  }
+
+  @media (max-width: 860px) {
     --sidebar-w: 240px;
   }
 }

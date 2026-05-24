@@ -1,14 +1,50 @@
 <script setup lang="ts">
+/**
+ * Drag-to-resize splitter. Pure UI — knows nothing about *this*
+ * app's sidebar; it just emits events as the user drags. Wire
+ * them to whatever state owns the width.
+ *
+ * Position the splitter from the parent's stylesheet (e.g. a
+ * `:deep(.sidebar-resizer)` rule that sets `position: absolute`,
+ * `top`, `bottom`, and `right: calc(var(--your-w) - 3px)`).
+ *
+ * Behaviour:
+ *   * Pointer-capture follows the cursor outside the 6px strip.
+ *   * Mid-drag, intended width below `snapAt` emits
+ *     `update:collapsed=true`; above it emits `update:width`.
+ *   * On release the splitter emits `settle` with the final
+ *     width so the caller can clamp + persist.
+ *   * A click (no movement) toggles `update:collapsed`.
+ *   * Double-click emits `reset`.
+ */
 import { useTemplateRef } from "vue";
-import {
-  DEFAULT_W,
-  resetWidth,
-  setCollapsed,
-  setRawWidth,
-  settleWidth,
-  sidebar,
-  SNAP_W,
-} from "./useSidebar.ts";
+
+const props = withDefaults(
+  defineProps<{
+    /** Current width in pixels. */
+    width: number;
+    /** Whether the panel is currently collapsed. */
+    collapsed?: boolean;
+    /** Width below which the panel snaps closed. */
+    snapAt?: number;
+    /** Width restored when no stored value is available. */
+    defaultWidth?: number;
+  }>(),
+  {
+    collapsed: false,
+    snapAt: 140,
+    defaultWidth: 280,
+  },
+);
+
+const emit = defineEmits<{
+  "update:width": [value: number];
+  "update:collapsed": [value: boolean];
+  /** Drag has ended; caller should clamp / persist. */
+  settle: [value: number];
+  /** Double-click — caller should restore defaults. */
+  reset: [];
+}>();
 
 const resizerRef = useTemplateRef<HTMLDivElement>("resizerRef");
 
@@ -23,12 +59,12 @@ function onPointerDown(event: PointerEvent): void {
   if (!resizer) return;
   dragging = true;
   startX = event.clientX;
-  startW = sidebar.collapsed ? 0 : sidebar.width || DEFAULT_W;
+  startW = props.collapsed ? 0 : props.width || props.defaultWidth;
   dragMoved = false;
   try {
     resizer.setPointerCapture(event.pointerId);
   } catch {
-    /* setPointerCapture can throw if the pointer is already lost. */
+    /* setPointerCapture can throw on an orphan pointer id. */
   }
   resizer.classList.add("is-active");
   document.body.classList.add("resizing-sidebar");
@@ -42,14 +78,11 @@ function onPointerMove(event: PointerEvent): void {
   if (Math.abs(dx) > 2) dragMoved = true;
   if (!dragMoved) return;
 
-  // Single threshold: below SNAP_W → closed, otherwise the
-  // sidebar follows the pointer's intended width 1:1 so the
-  // splitter never appears stranded mid-drag.
-  if (intended < SNAP_W) {
-    if (!sidebar.collapsed) setCollapsed(true);
+  if (intended < props.snapAt) {
+    if (!props.collapsed) emit("update:collapsed", true);
   } else {
-    if (sidebar.collapsed) setCollapsed(false);
-    setRawWidth(intended);
+    if (props.collapsed) emit("update:collapsed", false);
+    emit("update:width", intended);
   }
 }
 
@@ -64,21 +97,21 @@ function endDrag(event: PointerEvent): void {
         resizer.releasePointerCapture(event.pointerId);
       }
     } catch {
-      /* Capture may already be released — that's fine. */
+      /* Capture may have already been released. */
     }
     resizer.classList.remove("is-active");
   }
   document.body.classList.remove("resizing-sidebar");
 
   if (!dragMoved) {
-    setCollapsed(!sidebar.collapsed);
+    emit("update:collapsed", !props.collapsed);
     return;
   }
-  if (!sidebar.collapsed) settleWidth(sidebar.width);
+  if (!props.collapsed) emit("settle", props.width);
 }
 
 function onDoubleClick(): void {
-  resetWidth();
+  emit("reset");
 }
 </script>
 
@@ -89,7 +122,7 @@ function onDoubleClick(): void {
     data-resize-sidebar
     role="separator"
     aria-orientation="vertical"
-    aria-label="Resize sidebar"
+    aria-label="Resize"
     title="Drag to resize · double-click to reset"
     @pointerdown="onPointerDown"
     @pointermove="onPointerMove"
@@ -102,12 +135,11 @@ function onDoubleClick(): void {
 
 <style scoped>
 .sidebar-resizer {
-  position: absolute;
-  top: var(--titlebar-h);
-  bottom: 0;
-  right: calc(var(--sidebar-w) - 3px);
+  /* `position: relative` gives `::before` a containing block.
+     Layouts typically override this with `position: absolute`
+     to pin the splitter to the panel seam. */
+  position: relative;
   width: 6px;
-  z-index: 10;
   cursor: col-resize;
   background: transparent;
   transition: background 160ms var(--easing) 120ms;
