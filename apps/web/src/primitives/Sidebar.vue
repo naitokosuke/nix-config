@@ -103,6 +103,12 @@ defineProps<{
     transition: translate 280ms var(--easing);
     overscroll-behavior: contain;
 
+    /* On mobile the sidebar is a bottom-sheet drawer; the desktop
+       `collapsed` flag (used as a "hide" toggle) is meaningless. */
+    &.collapsed {
+      display: flex;
+    }
+
     &.open {
       translate: 0 0;
     }

@@ -1,7 +1,7 @@
 import { computed, reactive, type ComputedRef } from "vue";
 import { useRouter } from "@void/vue";
-import { filesByPath } from "../data.ts";
-import { iconForFile, icons } from "../icons.ts";
+import { filesByPath } from "../../data.ts";
+import { iconForFile, icons } from "../../icons.ts";
 
 export const WELCOME_KEY = "__welcome__";
 

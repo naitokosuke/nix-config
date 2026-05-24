@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { tree } from "../data.ts";
-import { icons } from "../icons.ts";
+import { tree } from "../../data.ts";
+import { icons } from "../../icons.ts";
 import TreeNode from "./TreeNode.vue";
 
 defineProps<{

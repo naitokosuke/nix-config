@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { icons } from "../icons.ts";
+import { icons } from "../../icons.ts";
 import { sidebar, toggleCollapsed } from "./useSidebar.ts";
 
 const githubIcon = icons.github();

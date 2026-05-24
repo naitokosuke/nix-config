@@ -2,7 +2,6 @@
 import { useTemplateRef } from "vue";
 import {
   DEFAULT_W,
-  MIN_W,
   resetWidth,
   setCollapsed,
   setRawWidth,
@@ -13,6 +12,7 @@ import {
 
 const resizerRef = useTemplateRef<HTMLDivElement>("resizerRef");
 
+let dragging = false;
 let startX = 0;
 let startW = 0;
 let dragMoved = false;
@@ -21,36 +21,53 @@ function onPointerDown(event: PointerEvent): void {
   if (event.button !== 0) return;
   const resizer = resizerRef.value;
   if (!resizer) return;
+  dragging = true;
   startX = event.clientX;
   startW = sidebar.collapsed ? 0 : sidebar.width || DEFAULT_W;
   dragMoved = false;
-  resizer.setPointerCapture(event.pointerId);
+  try {
+    resizer.setPointerCapture(event.pointerId);
+  } catch {
+    /* setPointerCapture can throw if the pointer is already lost. */
+  }
   resizer.classList.add("is-active");
   document.body.classList.add("resizing-sidebar");
   event.preventDefault();
 }
 
 function onPointerMove(event: PointerEvent): void {
-  const resizer = resizerRef.value;
-  if (!resizer || !resizer.hasPointerCapture(event.pointerId)) return;
+  if (!dragging) return;
   const dx = event.clientX - startX;
   const intended = startW - dx;
   if (Math.abs(dx) > 2) dragMoved = true;
   if (!dragMoved) return;
 
+  // Single threshold: below SNAP_W → closed, otherwise the
+  // sidebar follows the pointer's intended width 1:1 so the
+  // splitter never appears stranded mid-drag.
   if (intended < SNAP_W) {
     if (!sidebar.collapsed) setCollapsed(true);
   } else {
     if (sidebar.collapsed) setCollapsed(false);
-    setRawWidth(Math.max(intended, MIN_W));
+    setRawWidth(intended);
   }
 }
 
-function onPointerUp(event: PointerEvent): void {
+function endDrag(event: PointerEvent): void {
+  if (!dragging) return;
+  dragging = false;
+
   const resizer = resizerRef.value;
-  if (!resizer || !resizer.hasPointerCapture(event.pointerId)) return;
-  resizer.releasePointerCapture(event.pointerId);
-  resizer.classList.remove("is-active");
+  if (resizer) {
+    try {
+      if (resizer.hasPointerCapture(event.pointerId)) {
+        resizer.releasePointerCapture(event.pointerId);
+      }
+    } catch {
+      /* Capture may already be released — that's fine. */
+    }
+    resizer.classList.remove("is-active");
+  }
   document.body.classList.remove("resizing-sidebar");
 
   if (!dragMoved) {
@@ -76,8 +93,9 @@ function onDoubleClick(): void {
     title="Drag to resize · double-click to reset"
     @pointerdown="onPointerDown"
     @pointermove="onPointerMove"
-    @pointerup="onPointerUp"
-    @pointercancel="onPointerUp"
+    @pointerup="endDrag"
+    @pointercancel="endDrag"
+    @lostpointercapture="endDrag"
     @dblclick="onDoubleClick"
   />
 </template>

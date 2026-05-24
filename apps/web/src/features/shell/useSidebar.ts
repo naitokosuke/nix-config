@@ -3,8 +3,12 @@ import { reactive } from "vue";
 const STORAGE_WIDTH = "naitokosuke-dotfiles:sidebar-w";
 const STORAGE_COLLAPSED = "naitokosuke-dotfiles:sidebar-collapsed";
 
-export const SNAP_W = 80;
-export const MIN_W = 200;
+// Single threshold for both directions: cross outward to open at
+// this width, cross inward to snap closed. Keeping SNAP_W equal
+// to MIN_W eliminates the "decoupled" zone where the cursor moved
+// but the sidebar's edge (and therefore the splitter) stayed put.
+export const SNAP_W = 140;
+export const MIN_W = SNAP_W;
 export const DEFAULT_W = 280;
 
 const inBrowser = typeof window !== "undefined" && typeof window.localStorage !== "undefined";

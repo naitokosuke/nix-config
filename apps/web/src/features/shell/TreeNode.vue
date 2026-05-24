@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Link } from "@void/vue";
 import { computed } from "vue";
-import { iconForFile, icons } from "../icons.ts";
-import type { TreeNode as TreeNodeType } from "../types.ts";
+import { iconForFile, icons } from "../../icons.ts";
+import type { TreeNode as TreeNodeType } from "../../types.ts";
 import { useDirs } from "./useDirs.ts";
 import { sidebar } from "./useSidebar.ts";
 

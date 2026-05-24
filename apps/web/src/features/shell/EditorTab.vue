@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link } from "@void/vue";
-import { icons } from "../icons.ts";
+import { icons } from "../../icons.ts";
 import type { TabModel } from "./useTabs.ts";
 
 const props = defineProps<{

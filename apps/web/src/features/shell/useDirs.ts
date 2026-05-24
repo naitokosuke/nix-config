@@ -1,5 +1,5 @@
 import { reactive } from "vue";
-import { ancestorsOf } from "../data.ts";
+import { ancestorsOf } from "../../data.ts";
 
 const open = reactive(new Set<string>());
 

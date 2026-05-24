@@ -1,66 +1,104 @@
 <script setup lang="ts">
 /**
- * Right-edge Explorer sidebar. Composes the generic
- * `primitives/Sidebar` shell with this workspace's actual content
- * (the file tree, the close-button for the mobile sheet) and
- * wires it to the `useSidebar` state composable.
+ * Desktop layout — title bar across the top, editor on the left,
+ * a resizable Explorer sidebar pinned to the right edge.
+ *
+ * The sidebar's width is bound to `useSidebar`'s reactive ref via
+ * `--sidebar-w` on the workspace element so the grid template
+ * column re-evaluates as the user drags the splitter.
  */
-import Sidebar from "../primitives/Sidebar.vue";
-import { icons } from "../icons.ts";
-import SidebarTree from "./SidebarTree.vue";
-import { sidebar } from "./useSidebar.ts";
+import { computed } from "vue";
+import SidebarExplorer from "../features/shell/SidebarExplorer.vue";
+import SidebarResizer from "../features/shell/SidebarResizer.vue";
+import TabBar from "../features/shell/TabBar.vue";
+import TitleBar from "../features/shell/TitleBar.vue";
+import { sidebar } from "../features/shell/useSidebar.ts";
 
 defineProps<{
   activePath: string | null;
 }>();
 
-const closeIcon = icons.close({ size: 14 });
+const workspaceClasses = computed(() => ({
+  "sidebar-collapsed": sidebar.collapsed,
+}));
 
-function closeMenu(): void {
-  sidebar.menuOpen = false;
-}
+const workspaceStyle = computed(() => ({
+  "--sidebar-w": `${sidebar.width}px`,
+}));
 </script>
 
 <template>
-  <Sidebar id="sidebar" side="right" :collapsed="sidebar.collapsed" :open="sidebar.menuOpen">
-    <template #handle>
-      <span aria-hidden="true" />
-    </template>
-    <template #head>
-      <span>Explorer</span>
-      <button
-        class="sidebar-close"
-        type="button"
-        aria-label="Close menu"
-        @click="closeMenu"
-        v-html="closeIcon"
-      />
-    </template>
-    <SidebarTree :active-path="activePath" />
-  </Sidebar>
+  <div class="workspace" :class="workspaceClasses" :style="workspaceStyle">
+    <TitleBar />
+    <main class="editor">
+      <TabBar />
+      <div class="editor-content">
+        <slot />
+      </div>
+    </main>
+    <SidebarExplorer :active-path="activePath" />
+    <SidebarResizer />
+  </div>
 </template>
 
 <style scoped>
-.sidebar-close {
-  display: none;
-  place-items: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
-  color: var(--fg-muted);
-  transition:
-    color 180ms var(--easing),
-    background 180ms var(--easing);
+.workspace {
+  display: grid;
+  height: 100dvh;
+  grid-template-rows: var(--titlebar-h) 1fr;
+  grid-template-columns: 1fr var(--sidebar-w);
+  grid-template-areas:
+    "title   title"
+    "editor  sidebar";
+  position: relative;
 
-  &:hover {
-    color: var(--fg-strong);
-    background: var(--hover);
+  &.sidebar-collapsed {
+    grid-template-columns: 1fr 0px;
+
+    :deep(.sidebar-resizer) {
+      right: 0;
+      width: 10px;
+
+      &::before {
+        inset: 0 4px;
+        background: var(--border-2);
+      }
+      &:hover::before {
+        background: var(--accent);
+      }
+    }
+  }
+
+  :deep(.sidebar) {
+    grid-area: sidebar;
   }
 }
 
-@media (max-width: 640px) {
-  .sidebar-close {
-    display: inline-grid;
+.editor {
+  grid-area: editor;
+  background: var(--bg);
+  display: grid;
+  grid-template-rows: 36px 1fr;
+  grid-template-areas:
+    "tabs"
+    "content";
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  container-type: inline-size;
+}
+
+.editor-content {
+  grid-area: content;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+@media (max-width: 860px) {
+  .workspace {
+    --sidebar-w: 240px;
   }
 }
 </style>
