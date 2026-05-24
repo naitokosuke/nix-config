@@ -322,7 +322,10 @@ function renderShell(): string {
         </div>
         <div class="title-bar-center">naitokosuke · dotfiles</div>
         <div class="title-bar-right">
-          <a class="icon-btn" href="https://github.com/naitokosuke/dotfiles" target="_blank" rel="noopener" aria-label="GitHub">
+          <a class="icon-btn" href="https://twitter.com/naitokosuke" target="_blank" rel="noopener" aria-label="Twitter / @naitokosuke">
+            ${icons.twitter()}
+          </a>
+          <a class="icon-btn" href="https://github.com/naitokosuke/dotfiles" target="_blank" rel="noopener" aria-label="GitHub repository">
             ${icons.github()}
           </a>
         </div>

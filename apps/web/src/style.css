@@ -1135,13 +1135,14 @@ code.lang-text {
       "bottom";
   }
   .title-bar {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr auto;
+    padding-inline: 14px;
   }
-  .title-bar-left,
-  .title-bar-right {
+  .title-bar-left {
     display: none;
   }
   .title-bar-center {
+    text-align: start;
     font-size: 13px;
     letter-spacing: 0.04em;
     color: var(--fg-strong);
