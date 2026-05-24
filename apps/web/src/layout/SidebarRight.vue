@@ -51,27 +51,33 @@ const workspaceStyle = computed(() => ({
     "title   title"
     "editor  sidebar";
   position: relative;
+}
 
-  &.sidebar-collapsed {
-    grid-template-columns: 1fr 0px;
+/* `:deep()` rules MUST live outside CSS nesting — Vue's scoped
+   CSS compiler combined with native nesting otherwise emits a
+   bogus `.workspace [data-v-xxx] .sidebar` selector that never
+   matches the primitive's aside (the aside *is* the data-v
+   element, not a descendant of one). Keeping them flat compiles
+   to `.workspace[data-v-xxx] .sidebar`, which matches as
+   intended. */
+.workspace :deep(.sidebar) {
+  grid-area: sidebar;
+}
 
-    :deep(.sidebar-resizer) {
-      right: 0;
-      width: 10px;
+.workspace.sidebar-collapsed {
+  grid-template-columns: 1fr 0px;
+}
 
-      &::before {
-        inset: 0 4px;
-        background: var(--border-2);
-      }
-      &:hover::before {
-        background: var(--accent);
-      }
-    }
-  }
-
-  :deep(.sidebar) {
-    grid-area: sidebar;
-  }
+.workspace.sidebar-collapsed :deep(.sidebar-resizer) {
+  right: 0;
+  width: 10px;
+}
+.workspace.sidebar-collapsed :deep(.sidebar-resizer::before) {
+  inset: 0 4px;
+  background: var(--border-2);
+}
+.workspace.sidebar-collapsed :deep(.sidebar-resizer:hover::before) {
+  background: var(--accent);
 }
 
 .editor {

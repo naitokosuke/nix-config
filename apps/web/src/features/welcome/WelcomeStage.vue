@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Link } from "@void/vue";
+import Card from "../../primitives/Card.vue";
 import BackgroundCanvas from "./BackgroundCanvas.vue";
 import NixLogo from "./NixLogo.vue";
 
@@ -46,11 +47,13 @@ const entries: ReadonlyArray<Entry> = [
         <Link
           v-for="entry in entries"
           :key="entry.path"
-          class="entry-card"
+          class="entry-link"
           :href="`/file/${entry.path}`"
         >
-          <span class="entry-label">{{ entry.label }}</span>
-          <span class="entry-blurb">{{ entry.blurb }}</span>
+          <Card interactive>
+            <span class="entry-label">{{ entry.label }}</span>
+            <span class="entry-blurb">{{ entry.blurb }}</span>
+          </Card>
         </Link>
       </nav>
       <p class="attribution">
@@ -156,26 +159,9 @@ const entries: ReadonlyArray<Entry> = [
   margin-top: 4px;
 }
 
-.entry-card {
-  display: grid;
-  gap: 6px;
-  padding: 18px 18px 20px;
-  border-radius: 12px;
-  border: 1px solid var(--border-1);
-  background: light-dark(rgba(255, 255, 255, 0.6), rgba(20, 20, 22, 0.4));
-  backdrop-filter: blur(8px);
+.entry-link {
   text-decoration: none;
   color: inherit;
-  transition:
-    background 200ms var(--easing),
-    border-color 200ms var(--easing),
-    translate 200ms var(--easing);
-
-  &:hover {
-    background: light-dark(rgba(255, 255, 255, 0.9), rgba(28, 28, 32, 0.6));
-    border-color: var(--border-2);
-    translate: 0 -2px;
-  }
 }
 
 .entry-label {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { icons } from "../../icons.ts";
+import IconButton from "../../primitives/IconButton.vue";
 import { sidebar, toggleCollapsed } from "./useSidebar.ts";
 
 const githubIcon = icons.github();
@@ -19,32 +20,29 @@ const isCollapsed = computed(() => sidebar.collapsed);
     </div>
     <div class="title-bar-center">naitokosuke · dotfiles</div>
     <div class="title-bar-right">
-      <a
-        class="icon-btn"
+      <IconButton
         href="https://twitter.com/naitokosuke"
         target="_blank"
-        rel="noopener"
         aria-label="Twitter / @naitokosuke"
-        v-html="twitterIcon"
-      />
-      <a
-        class="icon-btn"
+      >
+        <span v-html="twitterIcon" />
+      </IconButton>
+      <IconButton
         href="https://github.com/naitokosuke/dotfiles"
         target="_blank"
-        rel="noopener"
         aria-label="GitHub repository"
-        v-html="githubIcon"
-      />
-      <button
-        class="icon-btn"
-        type="button"
+      >
+        <span v-html="githubIcon" />
+      </IconButton>
+      <IconButton
         aria-controls="sidebar"
         :aria-pressed="isCollapsed"
         aria-label="Toggle sidebar (⌘B)"
         title="Toggle sidebar (⌘B)"
         @click="toggleCollapsed"
-        v-html="panelIcon"
-      />
+      >
+        <span v-html="panelIcon" />
+      </IconButton>
     </div>
   </header>
 </template>
@@ -103,27 +101,5 @@ const isCollapsed = computed(() => sidebar.collapsed);
   border-radius: 999px;
   background: var(--border-2);
   transition: background 200ms var(--easing);
-}
-
-.icon-btn {
-  display: grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  color: var(--fg-muted);
-  transition:
-    color 200ms var(--easing),
-    background 200ms var(--easing);
-
-  &:hover {
-    background: var(--hover);
-    color: var(--fg-strong);
-  }
-
-  &[aria-pressed="true"] {
-    color: var(--fg-subtle);
-    background: var(--hover);
-  }
 }
 </style>
