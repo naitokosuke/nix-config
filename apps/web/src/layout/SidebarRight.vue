@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { icons } from "../../icons.ts";
+/**
+ * Right-edge Explorer sidebar. Composes the generic
+ * `primitives/Sidebar` shell with this workspace's actual content
+ * (the file tree, the close-button for the mobile sheet) and
+ * wires it to the `useSidebar` state composable.
+ */
+import Sidebar from "../primitives/Sidebar.vue";
+import { icons } from "../icons.ts";
 import SidebarTree from "./SidebarTree.vue";
 import { sidebar } from "./useSidebar.ts";
 
@@ -15,9 +22,11 @@ function closeMenu(): void {
 </script>
 
 <template>
-  <aside id="sidebar" class="sidebar" aria-label="explorer">
-    <span class="sheet-handle" aria-hidden="true" />
-    <header class="sidebar-head">
+  <Sidebar id="sidebar" side="right" :collapsed="sidebar.collapsed" :open="sidebar.menuOpen">
+    <template #handle>
+      <span aria-hidden="true" />
+    </template>
+    <template #head>
       <span>Explorer</span>
       <button
         class="sidebar-close"
@@ -26,35 +35,12 @@ function closeMenu(): void {
         @click="closeMenu"
         v-html="closeIcon"
       />
-    </header>
+    </template>
     <SidebarTree :active-path="activePath" />
-  </aside>
+  </Sidebar>
 </template>
 
 <style scoped>
-.sidebar {
-  grid-area: sidebar;
-  background: var(--bg);
-  border-left: 1px solid var(--border-1);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.sidebar-head {
-  height: 36px;
-  padding-inline: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
-  border-bottom: 1px solid transparent;
-}
-
 .sidebar-close {
   display: none;
   place-items: center;
@@ -72,12 +58,9 @@ function closeMenu(): void {
   }
 }
 
-.sheet-handle {
-  display: none;
-  width: 36px;
-  height: 4px;
-  border-radius: 999px;
-  background: var(--border-2);
-  margin: 8px auto 4px;
+@media (max-width: 640px) {
+  .sidebar-close {
+    display: inline-grid;
+  }
 }
 </style>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Link } from "@void/vue";
 import { computed } from "vue";
-import { icons } from "../../icons.ts";
+import { icons } from "../icons.ts";
 import { sidebar, toggleCollapsed } from "./useSidebar.ts";
 
 defineProps<{

@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { useRouter } from "@void/vue";
 import { computed, onBeforeUnmount, onMounted, watch } from "vue";
-import BottomNav from "../features/shell/BottomNav.vue";
-import Sidebar from "../features/shell/Sidebar.vue";
-import SidebarResizer from "../features/shell/SidebarResizer.vue";
-import TabBar from "../features/shell/TabBar.vue";
-import TitleBar from "../features/shell/TitleBar.vue";
-import { useDirs } from "../features/shell/useDirs.ts";
-import { sidebar, toggleCollapsed } from "../features/shell/useSidebar.ts";
-import { useTabs } from "../features/shell/useTabs.ts";
+import BottomNav from "../layout/BottomNav.vue";
+import SidebarResizer from "../layout/SidebarResizer.vue";
+import SidebarRight from "../layout/SidebarRight.vue";
+import TabBar from "../layout/TabBar.vue";
+import TitleBar from "../layout/TitleBar.vue";
+import { useDirs } from "../layout/useDirs.ts";
+import { sidebar, toggleCollapsed } from "../layout/useSidebar.ts";
+import { useTabs } from "../layout/useTabs.ts";
 import "../style.css";
 
 const router = useRouter();
@@ -27,6 +27,16 @@ const isHome = computed(() => activeFilePath.value === null);
 const workspaceClasses = computed(() => ({
   "sidebar-collapsed": sidebar.collapsed,
   "menu-open": sidebar.menuOpen,
+}));
+
+/**
+ * The grid template column and the splitter's `right` position
+ * both read `--sidebar-w`. Binding the reactive width here keeps
+ * them in sync — drag-to-resize would otherwise update the ref
+ * but never the CSS, so the column would refuse to budge.
+ */
+const workspaceStyle = computed(() => ({
+  "--sidebar-w": `${sidebar.width}px`,
 }));
 
 watch(
@@ -70,7 +80,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="workspace" :class="workspaceClasses">
+  <div class="workspace" :class="workspaceClasses" :style="workspaceStyle">
     <TitleBar />
     <main class="editor">
       <TabBar />
@@ -78,7 +88,7 @@ onBeforeUnmount(() => {
         <slot />
       </div>
     </main>
-    <Sidebar :active-path="activeFilePath" />
+    <SidebarRight :active-path="activeFilePath" />
     <button
       class="sidebar-backdrop"
       type="button"
@@ -105,10 +115,6 @@ onBeforeUnmount(() => {
   &.sidebar-collapsed {
     grid-template-columns: 1fr 0px;
 
-    :deep(.sidebar) {
-      display: none;
-    }
-
     :deep(.sidebar-resizer) {
       right: 0;
       width: 10px;
@@ -123,13 +129,13 @@ onBeforeUnmount(() => {
     }
   }
 
-  &.menu-open {
-    :deep(.sidebar) {
-      translate: 0 0;
-    }
-    .sidebar-backdrop {
-      display: block;
-    }
+  &.menu-open .sidebar-backdrop {
+    display: block;
+  }
+
+  /* Hand the sidebar primitive its grid slot. */
+  :deep(.sidebar) {
+    grid-area: sidebar;
   }
 }
 
@@ -192,40 +198,14 @@ onBeforeUnmount(() => {
       "editor"
       "bottom";
 
+    /* On mobile the sidebar escapes the grid as a fixed bottom-sheet
+       (the Sidebar primitive owns those styles); we just unset the
+       grid-area override so it doesn't reserve a row/column. */
     :deep(.sidebar) {
       grid-area: unset;
-      position: fixed;
-      left: 0;
-      right: 0;
-      top: auto;
-      bottom: 0;
-      width: 100%;
-      height: min(80dvh, 640px);
-      z-index: 19;
-      border-left: 0;
-      border-top: 1px solid var(--border-1);
-      border-radius: 18px 18px 0 0;
-      background: var(--bg);
-      box-shadow: 0 -16px 50px -10px light-dark(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7));
-      padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
-      translate: 0 110%;
-      transition: translate 280ms var(--easing);
-      overscroll-behavior: contain;
-    }
-    :deep(.sidebar .sidebar-head) {
-      padding-inline: 18px;
     }
     :deep(.sidebar-resizer) {
       display: none;
-    }
-    :deep(.sidebar-close) {
-      display: inline-grid;
-    }
-    :deep(.sheet-handle) {
-      display: block;
-    }
-    :deep(.bottom-nav) {
-      display: grid;
     }
   }
 }
