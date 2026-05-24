@@ -51,23 +51,43 @@ const workspaceStyle = computed(() => ({
     "title   title"
     "editor  sidebar";
   position: relative;
+
+  .editor {
+    grid-area: editor;
+    background: var(--bg);
+    display: grid;
+    grid-template-rows: 36px 1fr;
+    grid-template-areas:
+      "tabs"
+      "content";
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    container-type: inline-size;
+
+    .editor-content {
+      grid-area: content;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      position: relative;
+    }
+  }
 }
 
 /* `:deep()` rules MUST live outside CSS nesting — Vue's scoped
    CSS compiler combined with native nesting otherwise emits a
    bogus `.workspace [data-v-xxx] .sidebar` selector that never
    matches the primitive's aside (the aside *is* the data-v
-   element, not a descendant of one). Keeping them flat compiles
+   element, not a descendant of one). Keeping these flat compiles
    to `.workspace[data-v-xxx] .sidebar`, which matches as
    intended. */
 .workspace :deep(.sidebar) {
   grid-area: sidebar;
 }
-
 .workspace.sidebar-collapsed {
   grid-template-columns: 1fr 0px;
 }
-
 .workspace.sidebar-collapsed :deep(.sidebar-resizer) {
   right: 0;
   width: 10px;
@@ -78,28 +98,6 @@ const workspaceStyle = computed(() => ({
 }
 .workspace.sidebar-collapsed :deep(.sidebar-resizer:hover::before) {
   background: var(--accent);
-}
-
-.editor {
-  grid-area: editor;
-  background: var(--bg);
-  display: grid;
-  grid-template-rows: 36px 1fr;
-  grid-template-areas:
-    "tabs"
-    "content";
-  min-width: 0;
-  min-height: 0;
-  overflow: hidden;
-  container-type: inline-size;
-}
-
-.editor-content {
-  grid-area: content;
-  min-width: 0;
-  min-height: 0;
-  overflow: hidden;
-  position: relative;
 }
 
 @media (max-width: 860px) {

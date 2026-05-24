@@ -33,33 +33,33 @@ const chevron = icons.chevronRight({ size: 12 });
   flex: 1 1 auto;
   overflow: auto;
   padding-block: 4px 32px;
-}
 
-.sidebar-section-head {
-  width: 100%;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding-inline: 8px;
-  color: var(--fg-strong);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
+  .sidebar-section-head {
+    width: 100%;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding-inline: 8px;
+    color: var(--fg-strong);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 
-.tree {
-  padding-block: 4px;
-}
+    .tree-chevron {
+      display: grid;
+      place-items: center;
+      color: var(--fg-subtle);
 
-.tree-chevron {
-  display: grid;
-  place-items: center;
-  color: var(--fg-subtle);
+      &.open {
+        rotate: 90deg;
+      }
+    }
+  }
 
-  &.open {
-    rotate: 90deg;
+  .tree {
+    padding-block: 4px;
   }
 }
 </style>

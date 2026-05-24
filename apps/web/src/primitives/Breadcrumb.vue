@@ -41,26 +41,24 @@ defineProps<{
   color: var(--fg-muted);
   background: var(--bg);
   border-bottom: 1px solid var(--border-1);
-}
 
-.bc-part {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+  .bc-part {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
 
-  &.last {
-    color: var(--fg-strong);
+    &.last {
+      color: var(--fg-strong);
+    }
   }
-}
 
-.bc-sep {
-  display: inline-flex;
-  align-items: center;
-  color: var(--fg-subtle);
-}
+  .bc-sep {
+    display: inline-flex;
+    align-items: center;
+    color: var(--fg-subtle);
+  }
 
-@media (max-width: 640px) {
-  .breadcrumb {
+  @media (max-width: 640px) {
     padding-inline: 14px;
     font-size: 11.5px;
     overflow-x: auto;

@@ -54,41 +54,41 @@ function openSidebarSheet(): void {
   background: var(--bg-titlebar);
   border-top: 1px solid var(--border-1);
   z-index: 17;
-}
 
-.bn-btn {
-  display: grid;
-  place-items: center;
-  align-content: center;
-  gap: 4px;
-  padding: 8px 4px;
-  border-radius: 12px;
-  font-family: var(--font-ui);
-  font-size: 10.5px;
-  letter-spacing: 0.04em;
-  color: var(--fg-muted);
-  text-decoration: none;
-  transition:
-    color 180ms var(--easing),
-    background 180ms var(--easing),
-    scale 180ms var(--easing);
-
-  &:hover {
-    background: var(--hover);
-  }
-  &:active {
-    scale: 0.96;
-  }
-
-  svg {
-    transition: stroke-width 180ms var(--easing);
-  }
-
-  &.active {
-    color: var(--fg-strong);
+  .bn-btn {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 4px;
+    padding: 8px 4px;
+    border-radius: 12px;
+    font-family: var(--font-ui);
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    color: var(--fg-muted);
+    text-decoration: none;
+    transition:
+      color 180ms var(--easing),
+      background 180ms var(--easing),
+      scale 180ms var(--easing);
 
     svg {
-      stroke-width: 1.8;
+      transition: stroke-width 180ms var(--easing);
+    }
+
+    &:hover {
+      background: var(--hover);
+    }
+    &:active {
+      scale: 0.96;
+    }
+
+    &.active {
+      color: var(--fg-strong);
+
+      svg {
+        stroke-width: 1.8;
+      }
     }
   }
 }

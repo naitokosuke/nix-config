@@ -32,12 +32,12 @@ const { tabs, activeKey, closeTab } = useTabs();
   &::-webkit-scrollbar {
     display: none;
   }
-}
 
-.tabs-spacer {
-  flex: 1 1 auto;
-  border-bottom: 1px solid var(--border-1);
-  background: var(--bg-elev-1);
-  margin-bottom: -1px;
+  .tabs-spacer {
+    flex: 1 1 auto;
+    border-bottom: 1px solid var(--border-1);
+    background: var(--bg-elev-1);
+    margin-bottom: -1px;
+  }
 }
 </style>

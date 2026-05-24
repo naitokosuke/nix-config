@@ -48,10 +48,30 @@ const html = computed(() => highlight(props.file.content, props.file.lang));
     &:hover {
       background: var(--hover);
     }
-  }
 
-  &[open] .full-source-summary::before {
-    rotate: 90deg;
+    .full-source-summary {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: var(--fg-strong);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+
+      &::before {
+        content: "▸";
+        display: inline-block;
+        font-size: 10px;
+        color: var(--fg-muted);
+        transition: rotate 180ms var(--easing);
+      }
+    }
+
+    .full-source-meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--fg-muted);
+    }
   }
 
   .code-scroller {
@@ -60,29 +80,9 @@ const html = computed(() => highlight(props.file.content, props.file.lang));
     max-height: 70dvh;
     overflow: auto;
   }
-}
 
-.full-source-summary {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.04em;
-  color: var(--fg-strong);
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-
-  &::before {
-    content: "▸";
-    display: inline-block;
-    font-size: 10px;
-    color: var(--fg-muted);
-    transition: rotate 180ms var(--easing);
+  &[open] summary .full-source-summary::before {
+    rotate: 90deg;
   }
-}
-
-.full-source-meta {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--fg-muted);
 }
 </style>

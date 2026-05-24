@@ -59,6 +59,37 @@ const isCollapsed = computed(() => sidebar.collapsed);
   user-select: none;
   -webkit-app-region: drag;
 
+  .title-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-inline-end: 18px;
+
+    .dot {
+      display: block;
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      background: var(--border-2);
+      transition: background 200ms var(--easing);
+    }
+  }
+
+  .title-bar-center {
+    text-align: center;
+    color: var(--fg-muted);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-wrap: balance;
+  }
+
+  .title-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    -webkit-app-region: no-drag;
+  }
+
   &:hover .dot {
     &.dot-r {
       background: #ff5f57;
@@ -70,36 +101,5 @@ const isCollapsed = computed(() => sidebar.collapsed);
       background: #28c840;
     }
   }
-}
-
-.title-bar-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding-inline-end: 18px;
-}
-
-.title-bar-center {
-  text-align: center;
-  color: var(--fg-muted);
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  text-wrap: balance;
-}
-
-.title-bar-right {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  -webkit-app-region: no-drag;
-}
-
-.dot {
-  display: block;
-  width: 11px;
-  height: 11px;
-  border-radius: 999px;
-  background: var(--border-2);
-  transition: background 200ms var(--easing);
 }
 </style>

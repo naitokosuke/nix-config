@@ -53,21 +53,21 @@ const caption = computed(() =>
     background: var(--bg-elev-1);
     border-bottom: 1px solid var(--border-1);
   }
-}
 
-.excerpt-body {
-  background: var(--bg);
-  overflow-x: auto;
+  .excerpt-body {
+    background: var(--bg);
+    overflow-x: auto;
 
-  :deep(pre.code) {
-    padding: 14px;
-  }
-}
+    :deep(pre.code) {
+      padding: 14px;
+    }
 
-@media (max-width: 640px) {
-  .excerpt-body :deep(pre.code) {
-    padding: 12px;
-    font-size: 12px;
+    @media (max-width: 640px) {
+      :deep(pre.code) {
+        padding: 12px;
+        font-size: 12px;
+      }
+    }
   }
 }
 </style>

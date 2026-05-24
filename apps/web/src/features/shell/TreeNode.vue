@@ -66,6 +66,61 @@ function onFileClick(): void {
   display: flex;
   flex-direction: column;
 
+  .tree-row {
+    display: grid;
+    grid-template-columns: 16px 16px 1fr;
+    gap: 4px;
+    align-items: center;
+    height: 24px;
+    padding-inline-start: calc(8px + var(--depth, 0px));
+    padding-inline-end: 8px;
+    color: var(--fg);
+    font-size: 13px;
+    white-space: nowrap;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    transition:
+      background 140ms var(--easing),
+      color 140ms var(--easing);
+
+    &:hover {
+      background: var(--hover);
+    }
+
+    .tree-chevron {
+      display: grid;
+      place-items: center;
+      color: var(--fg-subtle);
+      transition: rotate 200ms var(--easing);
+
+      &.open {
+        rotate: 90deg;
+      }
+    }
+
+    .tree-icon {
+      display: grid;
+      place-items: center;
+      color: var(--fg-muted);
+    }
+
+    .tree-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .tree-children {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &.tree-dir > .tree-row > .tree-icon {
+    color: var(--fg-strong);
+    opacity: 0.85;
+  }
+
   &:has(> .tree-row:focus-visible) {
     outline: none;
   }
@@ -74,60 +129,5 @@ function onFileClick(): void {
     background: var(--active);
     color: var(--fg-strong);
   }
-}
-
-.tree-row {
-  display: grid;
-  grid-template-columns: 16px 16px 1fr;
-  gap: 4px;
-  align-items: center;
-  height: 24px;
-  padding-inline-start: calc(8px + var(--depth, 0px));
-  padding-inline-end: 8px;
-  color: var(--fg);
-  font-size: 13px;
-  white-space: nowrap;
-  cursor: pointer;
-  width: 100%;
-  text-align: left;
-  transition:
-    background 140ms var(--easing),
-    color 140ms var(--easing);
-
-  &:hover {
-    background: var(--hover);
-  }
-}
-
-.tree-chevron {
-  display: grid;
-  place-items: center;
-  color: var(--fg-subtle);
-  transition: rotate 200ms var(--easing);
-
-  &.open {
-    rotate: 90deg;
-  }
-}
-
-.tree-icon {
-  display: grid;
-  place-items: center;
-  color: var(--fg-muted);
-
-  .tree-dir > .tree-row > & {
-    color: var(--fg-strong);
-    opacity: 0.85;
-  }
-}
-
-.tree-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.tree-children {
-  display: flex;
-  flex-direction: column;
 }
 </style>

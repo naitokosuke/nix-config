@@ -57,44 +57,44 @@ function closeMenu(): void {
     "bottom";
   position: relative;
 
+  .editor {
+    grid-area: editor;
+    background: var(--bg);
+    display: grid;
+    grid-template-rows: 36px 1fr;
+    grid-template-areas:
+      "tabs"
+      "content";
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    container-type: inline-size;
+
+    .editor-content {
+      grid-area: content;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      position: relative;
+    }
+  }
+
+  .sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: light-dark(rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.6));
+    backdrop-filter: blur(4px);
+    z-index: 18;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    animation: backdrop-in 200ms var(--easing);
+  }
+
   &.menu-open .sidebar-backdrop {
     display: block;
   }
-}
-
-.editor {
-  grid-area: editor;
-  background: var(--bg);
-  display: grid;
-  grid-template-rows: 36px 1fr;
-  grid-template-areas:
-    "tabs"
-    "content";
-  min-width: 0;
-  min-height: 0;
-  overflow: hidden;
-  container-type: inline-size;
-}
-
-.editor-content {
-  grid-area: content;
-  min-width: 0;
-  min-height: 0;
-  overflow: hidden;
-  position: relative;
-}
-
-.sidebar-backdrop {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: light-dark(rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.6));
-  backdrop-filter: blur(4px);
-  z-index: 18;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-  animation: backdrop-in 200ms var(--easing);
 }
 
 @keyframes backdrop-in {

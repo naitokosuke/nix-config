@@ -48,6 +48,29 @@ defineProps<{
   overflow: hidden;
   min-width: 0;
 
+  .sidebar-handle {
+    display: none;
+  }
+
+  .sidebar-head {
+    height: 36px;
+    padding-inline: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    border-bottom: 1px solid transparent;
+  }
+
+  .sidebar-body {
+    flex: 1 1 auto;
+    overflow: auto;
+    min-height: 0;
+  }
+
   &.left {
     border-right: 1px solid var(--border-1);
   }
@@ -59,33 +82,8 @@ defineProps<{
   &.collapsed {
     display: none;
   }
-}
 
-.sidebar-handle {
-  display: none;
-}
-
-.sidebar-head {
-  height: 36px;
-  padding-inline: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
-  border-bottom: 1px solid transparent;
-}
-
-.sidebar-body {
-  flex: 1 1 auto;
-  overflow: auto;
-  min-height: 0;
-}
-
-@media (max-width: 640px) {
-  .sidebar {
+  @media (max-width: 640px) {
     position: fixed;
     left: 0;
     right: 0;
@@ -103,6 +101,19 @@ defineProps<{
     transition: translate 280ms var(--easing);
     overscroll-behavior: contain;
 
+    .sidebar-handle {
+      display: block;
+      width: 36px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--border-2);
+      margin: 8px auto 4px;
+    }
+
+    .sidebar-head {
+      padding-inline: 18px;
+    }
+
     /* On mobile the sidebar is a bottom-sheet drawer; the desktop
        `collapsed` flag (used as a "hide" toggle) is meaningless. */
     &.collapsed {
@@ -112,19 +123,6 @@ defineProps<{
     &.open {
       translate: 0 0;
     }
-  }
-
-  .sidebar-handle {
-    display: block;
-    width: 36px;
-    height: 4px;
-    border-radius: 999px;
-    background: var(--border-2);
-    margin: 8px auto 4px;
-  }
-
-  .sidebar-head {
-    padding-inline: 18px;
   }
 }
 </style>
