@@ -1061,27 +1061,44 @@ code.lang-text {
 /* ============================================================
    View Transitions
    ============================================================ */
-::view-transition-old(editor),
-::view-transition-new(editor) {
-  animation-duration: 240ms;
+
+/* Everything outside the named `editor` group falls into the root
+   group, which would otherwise cross-fade on every navigation —
+   the cause of the sidebar / title-bar / status-bar flicker.
+   Disabling the root pair keeps the chrome perfectly still while
+   only the editor content animates. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-group(editor) {
+  animation-duration: 280ms;
   animation-timing-function: var(--easing);
 }
+::view-transition-old(editor),
+::view-transition-new(editor) {
+  animation-duration: 280ms;
+  animation-timing-function: var(--easing);
+  mix-blend-mode: normal;
+}
 ::view-transition-old(editor) {
-  animation-name: fade-out-up;
+  animation-name: editor-out;
 }
 ::view-transition-new(editor) {
-  animation-name: fade-in-up;
+  animation-name: editor-in;
 }
-@keyframes fade-out-up {
+@keyframes editor-out {
   to {
     opacity: 0;
-    translate: 0 -6px;
+    translate: 0 -4px;
   }
 }
-@keyframes fade-in-up {
+@keyframes editor-in {
   from {
     opacity: 0;
-    translate: 0 8px;
+    translate: 0 6px;
   }
 }
 
