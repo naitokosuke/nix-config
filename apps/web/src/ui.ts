@@ -447,16 +447,28 @@ export class App {
     const WIDTH_KEY = "naitokosuke-dotfiles:sidebar-w";
     const COLLAPSED_KEY = "naitokosuke-dotfiles:sidebar-collapsed";
     const MIN_W = 200;
-    const COLLAPSE_AT = 140; // drag below this on release → collapse
     const DEFAULT_W = 280;
+    // VS Code-style: collapse fires when the user lets go below this width.
+    // The width itself is allowed to drag all the way to 0 — clamping only
+    // applies at release time, not during the drag.
+    const COLLAPSE_AT = 160;
     const MAX_W = () => Math.min(680, Math.max(MIN_W, Math.round(window.innerWidth * 0.55)));
 
     const isCollapsed = () => workspace.classList.contains("sidebar-collapsed");
 
-    const applyWidth = (value: number): number => {
-      const clamped = Math.max(MIN_W, Math.min(MAX_W(), Math.round(value)));
-      workspace.style.setProperty("--sidebar-w", `${clamped}px`);
-      return clamped;
+    /** Write the width as-is (no MIN clamp). Used live, during drag. */
+    const setRawWidth = (value: number): number => {
+      const v = Math.max(0, Math.min(MAX_W(), Math.round(value)));
+      workspace.style.setProperty("--sidebar-w", `${v}px`);
+      return v;
+    };
+
+    /** Settle the width into the valid [MIN_W, MAX_W] range and persist. */
+    const settleWidth = (value: number): number => {
+      const v = Math.max(MIN_W, Math.min(MAX_W(), Math.round(value)));
+      workspace.style.setProperty("--sidebar-w", `${v}px`);
+      localStorage.setItem(WIDTH_KEY, String(v));
+      return v;
     };
 
     const setCollapsed = (collapsed: boolean): void => {
@@ -467,9 +479,9 @@ export class App {
 
     this.toggleSidebar = () => setCollapsed(!isCollapsed());
 
-    // Restore persisted state.
+    // Restore persisted state on boot.
     const storedWidth = Number.parseInt(localStorage.getItem(WIDTH_KEY) ?? "", 10);
-    if (Number.isFinite(storedWidth)) applyWidth(storedWidth);
+    if (Number.isFinite(storedWidth)) settleWidth(storedWidth);
     if (localStorage.getItem(COLLAPSED_KEY) === "1") {
       workspace.classList.add("sidebar-collapsed");
       this.syncSidebarToggleAria();
@@ -478,18 +490,19 @@ export class App {
     let startX = 0;
     let startW = 0;
     let dragMoved = false;
+    let startedCollapsed = false;
 
     const onPointerDown = (event: PointerEvent) => {
       if (event.button !== 0) return;
-      if (isCollapsed()) {
-        // Expanding from a closed state — seed width before measuring.
-        setCollapsed(false);
-        applyWidth(DEFAULT_W);
-      }
-      const sidebar = this.root.querySelector<HTMLElement>(".sidebar");
-      if (!sidebar) return;
       startX = event.clientX;
-      startW = sidebar.getBoundingClientRect().width || DEFAULT_W;
+      startedCollapsed = isCollapsed();
+      if (startedCollapsed) {
+        // Drag starts from a fully-collapsed width — dragging left widens.
+        startW = 0;
+      } else {
+        const sidebar = this.root.querySelector<HTMLElement>(".sidebar");
+        startW = sidebar?.getBoundingClientRect().width ?? DEFAULT_W;
+      }
       dragMoved = false;
       resizer.setPointerCapture(event.pointerId);
       resizer.classList.add("is-active");
@@ -499,11 +512,23 @@ export class App {
 
     const onPointerMove = (event: PointerEvent) => {
       if (!resizer.hasPointerCapture(event.pointerId)) return;
-      const next = startW - (event.clientX - startX);
-      if (Math.abs(event.clientX - startX) > 2) dragMoved = true;
-      // Visually preview the collapse threshold while dragging.
-      workspace.classList.toggle("sidebar-collapse-preview", next < COLLAPSE_AT);
-      applyWidth(next);
+      const dx = event.clientX - startX;
+      // Sidebar is on the right edge — dragging *left* widens it.
+      const intended = startW - dx;
+      if (Math.abs(dx) > 2) dragMoved = true;
+      if (!dragMoved) return;
+
+      // First moved-frame after starting collapsed: drop the collapse
+      // class so the grid column can expand.
+      if (startedCollapsed && intended > 0) {
+        workspace.classList.remove("sidebar-collapsed");
+        startedCollapsed = false;
+      }
+
+      // Show the "will collapse on release" hint while in the danger zone.
+      workspace.classList.toggle("sidebar-collapse-preview", intended < COLLAPSE_AT);
+      // Live preview — allow shrinking all the way to 0.
+      setRawWidth(intended);
     };
 
     const onPointerUp = (event: PointerEvent) => {
@@ -513,16 +538,22 @@ export class App {
       document.body.classList.remove("resizing-sidebar");
       workspace.classList.remove("sidebar-collapse-preview");
 
-      const current = Number.parseInt(workspace.style.getPropertyValue("--sidebar-w"), 10);
-      // No movement at all → treat as a click. Toggle collapse.
+      // No movement → treat as a click. Toggle.
       if (!dragMoved) {
         this.toggleSidebar?.();
         return;
       }
-      if (Number.isFinite(current) && current < COLLAPSE_AT) {
+
+      const current = Number.parseInt(workspace.style.getPropertyValue("--sidebar-w"), 10);
+      if (!Number.isFinite(current)) return;
+
+      if (current < COLLAPSE_AT) {
         setCollapsed(true);
-      } else if (Number.isFinite(current)) {
-        localStorage.setItem(WIDTH_KEY, String(current));
+      } else {
+        // Snap back inside [MIN_W, MAX_W] if the user released just shy of
+        // a sane width, and persist.
+        settleWidth(current);
+        if (isCollapsed()) setCollapsed(false);
       }
     };
 
