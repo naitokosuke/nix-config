@@ -53,7 +53,7 @@ function onFileClick(): void {
     :class="{ active: isActive }"
     :style="{ '--depth': depthPx }"
   >
-    <Link class="tree-row" :href="`/file/${node.path}`" @click="onFileClick">
+    <Link class="tree-row" :href="`/${node.path}`" @click="onFileClick">
       <span class="tree-chevron" />
       <span class="tree-icon" v-html="iconForFile(node.name)" />
       <span class="tree-label">{{ node.name }}</span>

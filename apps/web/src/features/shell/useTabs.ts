@@ -19,25 +19,26 @@ const state = reactive({
 });
 
 function hrefForFile(path: string): string {
-  return `/file/${path}`;
+  return `/${path}`;
 }
 
 function activeKeyFromPath(pathname: string): string {
   const trimmed = pathname.replace(/^\/+/, "").replace(/\/+$/, "");
-  if (trimmed === "" || trimmed === "home") return WELCOME_KEY;
-  if (trimmed.startsWith("file/")) return trimmed.slice("file/".length);
-  return WELCOME_KEY;
+  if (trimmed === "") return WELCOME_KEY;
+  return trimmed;
 }
 
 export function useTabs(): {
   tabs: ComputedRef<TabModel[]>;
   activeKey: ComputedRef<string>;
+  welcomeOpen: ComputedRef<boolean>;
   syncFromPath: (pathname: string) => void;
   closeTab: (key: string) => void;
 } {
   const router = useRouter();
 
   const activeKey = computed(() => activeKeyFromPath(router.path));
+  const welcomeOpen = computed(() => state.welcomeOpen);
 
   const tabs = computed<TabModel[]>(() => {
     const list: TabModel[] = [];
@@ -66,10 +67,7 @@ export function useTabs(): {
 
   const syncFromPath = (pathname: string) => {
     const key = activeKeyFromPath(pathname);
-    if (key === WELCOME_KEY) {
-      state.welcomeOpen = true;
-      return;
-    }
+    if (key === WELCOME_KEY) return;
     if (!filesByPath.has(key)) return;
     if (!state.openFiles.includes(key)) state.openFiles.push(key);
   };
@@ -103,9 +101,8 @@ export function useTabs(): {
         return;
       }
     }
-    if (!state.welcomeOpen) state.welcomeOpen = true;
     void router.visit("/");
   };
 
-  return { tabs, activeKey, syncFromPath, closeTab };
+  return { tabs, activeKey, welcomeOpen, syncFromPath, closeTab };
 }

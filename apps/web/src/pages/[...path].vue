@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useParams } from "@void/vue";
 import { computed } from "vue";
-import { filesByPath } from "../../data.ts";
-import FileWalkthrough from "../../features/walkthrough/FileWalkthrough.vue";
+import { filesByPath } from "../data.ts";
+import FileWalkthrough from "../features/walkthrough/FileWalkthrough.vue";
 
 const params = useParams<{ path: string | string[] }>();
 

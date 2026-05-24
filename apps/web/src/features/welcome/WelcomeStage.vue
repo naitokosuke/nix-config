@@ -48,7 +48,7 @@ const entries: ReadonlyArray<Entry> = [
           v-for="entry in entries"
           :key="entry.path"
           class="entry-link"
-          :href="`/file/${entry.path}`"
+          :href="`/${entry.path}`"
         >
           <Card interactive>
             <span class="entry-label">{{ entry.label }}</span>
