@@ -1060,44 +1060,48 @@ code.lang-text {
 
 /* ============================================================
    View Transitions
-   ============================================================ */
 
-/* Everything outside the named `editor` group falls into the root
-   group, which would otherwise cross-fade on every navigation —
-   the cause of the sidebar / title-bar / status-bar flicker.
-   Disabling the root pair keeps the chrome perfectly still while
-   only the editor content animates. */
+   IMPORTANT: never override the default `mix-blend-mode: plus-lighter`
+   on the old/new pseudo-elements. That blend mode is what keeps the
+   crossfade additively opaque mid-transition — replacing it with
+   `normal` lets the editor background show through and shows up as
+   flicker.
+
+   Strategy:
+   * Disable animation entirely on the root pair so the chrome
+     (sidebar, title bar, status bar, bottom nav) snaps instead of
+     fading.
+   * Keep the named `editor` group with a translate-only animation
+     so the slide is visible without an explicit opacity keyframe —
+     opacity is interpolated through the default plus-lighter
+     crossfade for free.
+   ============================================================ */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
-  mix-blend-mode: normal;
 }
 
 ::view-transition-group(editor) {
-  animation-duration: 280ms;
+  animation-duration: 260ms;
   animation-timing-function: var(--easing);
-}
-::view-transition-old(editor),
-::view-transition-new(editor) {
-  animation-duration: 280ms;
-  animation-timing-function: var(--easing);
-  mix-blend-mode: normal;
 }
 ::view-transition-old(editor) {
   animation-name: editor-out;
+  animation-duration: 260ms;
+  animation-timing-function: var(--easing);
 }
 ::view-transition-new(editor) {
   animation-name: editor-in;
+  animation-duration: 260ms;
+  animation-timing-function: var(--easing);
 }
 @keyframes editor-out {
   to {
-    opacity: 0;
     translate: 0 -4px;
   }
 }
 @keyframes editor-in {
   from {
-    opacity: 0;
     translate: 0 6px;
   }
 }
