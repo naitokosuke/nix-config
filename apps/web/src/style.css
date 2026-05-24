@@ -442,7 +442,7 @@ a:focus-visible {
 
 .editor-shell {
   display: grid;
-  grid-template-rows: 36px auto auto auto 1fr 24px;
+  grid-template-rows: 36px 28px 1fr 24px;
   height: 100%;
   min-height: 0;
   min-width: 0;
@@ -524,27 +524,24 @@ a:focus-visible {
   margin-inline-end: 2px;
 }
 
-.about {
+/* ============================================================
+   Walkthrough — file detail page
+   ============================================================ */
+.walkthrough-scroller {
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  background: var(--bg);
+  min-height: 0;
+}
+
+.walkthrough {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: clamp(28px, 4cqi, 64px) clamp(20px, 4cqi, 48px) clamp(40px, 5cqi, 80px);
   display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 12px 16px;
-  margin-block-start: 0;
-  border-bottom: 1px solid var(--border-1);
-  background: linear-gradient(to right, transparent, var(--accent-bg) 50%, transparent), var(--bg);
-  background-blend-mode: normal;
-}
-.about p {
-  margin: 0;
-  font-size: 13px;
-  color: var(--fg);
-  text-wrap: pretty;
-  max-width: 80ch;
-}
-.about-icon {
-  display: inline-flex;
-  margin-top: 2px;
-  color: var(--fg-muted);
+  flex-direction: column;
+  gap: clamp(28px, 3cqi, 40px);
 }
 
 .tags {
@@ -553,20 +550,181 @@ a:focus-visible {
   flex-wrap: wrap;
   gap: 6px;
   margin: 0;
-  padding: 8px 16px;
-  border-bottom: 1px solid var(--border-1);
-  background: var(--bg);
+  padding: 0;
 }
 .tags li {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
-  padding: 2px 6px;
+  gap: 3px;
+  padding: 3px 8px 3px 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--fg-muted);
+  border: 1px solid var(--border-1);
+  border-radius: 999px;
+  background: var(--bg-elev-1);
+}
+
+.walkthrough-intro {
+  font-size: clamp(15px, 1.45cqi, 18px);
+  line-height: 1.7;
+  color: var(--fg);
+  text-wrap: pretty;
+  max-width: 64ch;
+  border-left: 2px solid var(--border-2);
+  padding-inline-start: clamp(14px, 1.8cqi, 22px);
+  margin-block: clamp(-4px, -0.5cqi, 0px) 0;
+}
+.walkthrough-intro p {
+  margin: 0 0 0.9em;
+}
+.walkthrough-intro p:last-child {
+  margin-bottom: 0;
+}
+.walkthrough-intro strong {
+  color: var(--fg-strong);
+  font-weight: 600;
+}
+.walkthrough-intro code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  padding: 1px 6px;
+  border: 1px solid var(--border-1);
+  border-radius: 4px;
+  background: var(--bg-elev-1);
+  color: var(--fg-strong);
+  overflow-wrap: anywhere;
+}
+
+.walkthrough-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: clamp(16px, 1.6cqi, 22px);
+  border-top: 1px solid var(--border-1);
+}
+
+.section-title {
+  margin: 0;
+  font-size: clamp(18px, 1.9cqi, 22px);
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--fg-strong);
+  text-wrap: balance;
+}
+
+.section-prose {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--fg);
+  text-wrap: pretty;
+  max-width: 68ch;
+}
+.section-prose p {
+  margin: 0 0 0.85em;
+}
+.section-prose p:last-child {
+  margin-bottom: 0;
+}
+.section-prose strong {
+  color: var(--fg-strong);
+  font-weight: 600;
+}
+.section-prose code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  padding: 1px 5px;
+  border: 1px solid var(--border-1);
+  border-radius: 4px;
+  background: var(--bg-elev-1);
+  color: var(--fg-strong);
+  overflow-wrap: anywhere;
+}
+.section-prose a {
+  color: var(--fg-strong);
+  border-bottom: 1px solid var(--border-2);
+  transition: border-color 180ms var(--easing);
+}
+.section-prose a:hover {
+  border-bottom-color: currentColor;
+}
+
+.excerpt {
+  margin: 0;
+  border: 1px solid var(--border-1);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg-elev-1);
+}
+.excerpt figcaption {
+  padding: 8px 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--fg-muted);
+  background: var(--bg-elev-1);
+  border-bottom: 1px solid var(--border-1);
+}
+pre.code.excerpt-code {
+  margin: 0;
+  padding: 14px;
+  background: var(--bg);
+  overflow-x: auto;
+}
+
+.full-source {
+  border: 1px solid var(--border-1);
+  border-radius: 10px;
+  background: var(--bg-elev-1);
+  overflow: hidden;
+}
+.full-source summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  user-select: none;
+  transition: background 180ms var(--easing);
+}
+.full-source summary::-webkit-details-marker {
+  display: none;
+}
+.full-source summary:hover {
+  background: var(--hover);
+}
+.full-source-summary {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--fg-strong);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.full-source-summary::before {
+  content: "▸";
+  display: inline-block;
+  font-size: 10px;
+  color: var(--fg-muted);
+  transition: rotate 180ms var(--easing);
+}
+.full-source[open] .full-source-summary::before {
+  rotate: 90deg;
+}
+.full-source-meta {
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--fg-muted);
-  border: 1px solid var(--border-1);
-  border-radius: 4px;
+}
+.full-source .code-scroller {
+  border-top: 1px solid var(--border-1);
+  background: var(--bg);
+  max-height: 70dvh;
 }
 
 .code-scroller {
@@ -709,7 +867,11 @@ code.lang-text {
 .welcome-inner {
   position: relative;
   z-index: 1;
-  padding: clamp(40px, 7vw, 80px) clamp(24px, 6vw, 64px) clamp(48px, 8vw, 96px);
+  /* cqi = 1% of the editor container's inline width — keeps padding
+     proportional to the *actual* available width, not the viewport
+     (which is wider because of the sidebar). */
+  padding-block: clamp(36px, 6cqi, 80px);
+  padding-inline: clamp(20px, 5.5cqi, 56px);
   overflow-y: auto;
   overflow-x: hidden;
   max-width: 1040px;
@@ -719,7 +881,7 @@ code.lang-text {
   display: flex;
   flex-direction: column;
   justify-content: safe center;
-  gap: clamp(20px, 3vw, 36px);
+  gap: clamp(18px, 2.6cqi, 32px);
   box-sizing: border-box;
   overscroll-behavior: contain;
 }
@@ -1091,16 +1253,14 @@ code.lang-text {
     overflow-x: auto;
     white-space: nowrap;
   }
-  .about {
-    padding: 12px 14px;
-  }
-  .tags {
-    padding: 8px 14px;
-  }
   pre.code {
-    padding: 14px 14px 80px;
+    padding: 14px 14px 40px;
     font-size: 12.5px;
     gap: 12px;
+  }
+  pre.code.excerpt-code {
+    padding: 12px;
+    font-size: 12px;
   }
   .editor-foot {
     padding-inline: 14px;

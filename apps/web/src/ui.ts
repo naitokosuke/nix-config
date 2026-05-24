@@ -1,9 +1,61 @@
-import type { DirNode, FileEntry, Route, TreeNode } from "./types.ts";
+import type { DirNode, FileEntry, Route, TreeNode, WalkthroughSection } from "./types.ts";
 import { ancestorsOf, files, filesByPath, tree } from "./data.ts";
 import { highlight, escapeHtml } from "./syntax.ts";
 import { iconForFile, icons } from "./icons.ts";
 import { Router, routeToHref } from "./router.ts";
 import { mountWelcomeCanvas } from "./canvas-bg.ts";
+
+/**
+ * Tiny inline-Markdown renderer for prose copy. Handles paragraph splits on
+ * blank lines, and inline `code`, **bold**, and [text](url). Everything else
+ * is HTML-escaped.
+ */
+function renderProse(text: string): string {
+  const escaped = escapeHtml(text.trim());
+  return escaped
+    .split(/\n\s*\n/)
+    .map((paragraph) => {
+      const inline = paragraph
+        .replace(/\s+/g, " ")
+        .replace(/`([^`]+)`/g, "<code>$1</code>")
+        .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+        .replace(
+          /\[([^\]]+)\]\(([^)]+)\)/g,
+          '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>',
+        );
+      return `<p>${inline}</p>`;
+    })
+    .join("");
+}
+
+function renderCodeExcerpt(file: FileEntry, range: readonly [number, number]): string {
+  const allLines = file.content.split("\n");
+  const start = Math.max(1, range[0]);
+  const end = Math.min(allLines.length, range[1]);
+  if (end < start) return "";
+  const chunk = allLines.slice(start - 1, end).join("\n");
+  const lineNumbers = Array.from(
+    { length: end - start + 1 },
+    (_, i) => `<span class="ln">${start + i}</span>`,
+  ).join("");
+  const code = highlight(chunk, file.lang);
+  const meta = start === end ? `line ${start}` : `lines ${start}–${end}`;
+  return `
+    <figure class="excerpt">
+      <figcaption>${escapeHtml(meta)}</figcaption>
+      <pre class="code excerpt-code"><span class="line-numbers">${lineNumbers}</span><code class="lang-${file.lang}">${code}</code></pre>
+    </figure>
+  `;
+}
+
+function renderWalkthroughSection(section: WalkthroughSection, file: FileEntry): string {
+  const heading = section.title
+    ? `<h2 class="section-title">${escapeHtml(section.title)}</h2>`
+    : "";
+  const prose = `<div class="section-prose">${renderProse(section.prose)}</div>`;
+  const excerpt = section.lines ? renderCodeExcerpt(file, section.lines) : "";
+  return `<section class="walkthrough-section">${heading}${prose}${excerpt}</section>`;
+}
 
 const SUPPORTS_VIEW_TRANSITIONS =
   typeof document !== "undefined" && typeof document.startViewTransition === "function";
@@ -80,22 +132,44 @@ function renderBreadcrumb(filePath: string): string {
     .join("");
 }
 
-function renderEditor(file: FileEntry): string {
+function renderFullSource(file: FileEntry): string {
   const lines = file.content.split("\n");
   const lineNumbers = lines.map((_, idx) => `<span class="ln">${idx + 1}</span>`).join("");
   const code = highlight(file.content, file.lang);
+  return `<pre class="code"><span class="line-numbers">${lineNumbers}</span><code class="lang-${file.lang}">${code}</code></pre>`;
+}
+
+function renderEditor(file: FileEntry): string {
+  const lines = file.content.split("\n");
   const langLabel = file.lang.toUpperCase();
-  const about = file.about
-    ? `<aside class="about" aria-label="About this file">
-        <span class="about-icon">${icons.sparkle({ size: 14 })}</span>
-        <p>${escapeHtml(file.about)}</p>
-      </aside>`
-    : "";
   const tagsHtml = file.tags?.length
     ? `<ul class="tags">${file.tags
         .map((tag) => `<li>${icons.hash({ size: 10 })}<span>${escapeHtml(tag)}</span></li>`)
         .join("")}</ul>`
     : "";
+
+  const walkthrough = file.walkthrough;
+  const introHtml = walkthrough
+    ? `<div class="walkthrough-intro">${renderProse(walkthrough.intro)}</div>`
+    : file.about
+      ? `<div class="walkthrough-intro">${renderProse(file.about)}</div>`
+      : "";
+
+  const sectionsHtml = walkthrough?.sections?.length
+    ? walkthrough.sections.map((section) => renderWalkthroughSection(section, file)).join("")
+    : "";
+
+  const fullSource = renderFullSource(file);
+  const fullSourceBlock = walkthrough?.sections?.length
+    ? `<details class="full-source">
+        <summary>
+          <span class="full-source-summary">View the complete file</span>
+          <span class="full-source-meta">${lines.length} lines · ${escapeHtml(file.name)}</span>
+        </summary>
+        <div class="code-scroller">${fullSource}</div>
+      </details>`
+    : `<div class="code-scroller">${fullSource}</div>`;
+
   return `
     <div class="editor-shell" style="view-transition-name: editor;">
       <header class="tabs">
@@ -106,10 +180,13 @@ function renderEditor(file: FileEntry): string {
         <div class="tabs-spacer"></div>
       </header>
       <div class="breadcrumb">${renderBreadcrumb(file.path)}</div>
-      ${about}
-      ${tagsHtml}
-      <div class="code-scroller">
-        <pre class="code"><span class="line-numbers">${lineNumbers}</span><code class="lang-${file.lang}">${code}</code></pre>
+      <div class="walkthrough-scroller">
+        <article class="walkthrough">
+          ${tagsHtml}
+          ${introHtml}
+          ${sectionsHtml}
+          ${fullSourceBlock}
+        </article>
       </div>
       <footer class="editor-foot">
         <span>${lines.length} lines</span>
@@ -408,8 +485,8 @@ export class App {
       return;
     }
     editorEl.innerHTML = renderEditor(file);
-    const codeScroller = editorEl.querySelector<HTMLElement>(".code-scroller");
-    codeScroller?.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+    const scroller = editorEl.querySelector<HTMLElement>(".walkthrough-scroller, .code-scroller");
+    scroller?.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
   }
 
   private renderStatus(): void {

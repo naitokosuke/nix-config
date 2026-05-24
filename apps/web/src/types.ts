@@ -1,5 +1,16 @@
 export type Lang = "nix" | "md" | "ts" | "json" | "lock" | "yaml" | "toml" | "text";
 
+export interface WalkthroughSection {
+  readonly title?: string;
+  readonly prose: string;
+  readonly lines?: readonly [number, number];
+}
+
+export interface Walkthrough {
+  readonly intro: string;
+  readonly sections?: readonly WalkthroughSection[];
+}
+
 export interface FileEntry {
   readonly path: string;
   readonly name: string;
@@ -8,6 +19,7 @@ export interface FileEntry {
   readonly content: string;
   readonly about?: string;
   readonly tags?: readonly string[];
+  readonly walkthrough?: Walkthrough;
 }
 
 export interface DirNode {

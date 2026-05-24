@@ -66,6 +66,7 @@ function makeEntry(repoPath: string, content: string): FileEntry {
     content,
     about: meta?.about,
     tags: meta?.tags,
+    walkthrough: meta?.walkthrough,
   };
 }
 
