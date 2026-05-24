@@ -201,7 +201,7 @@ function renderWelcome(): string {
           ${nixLogoSvg()}
         </div>
         <div class="welcome-inner">
-          <h1><span class="user">naitokosuke</span><span class="slash">/</span>dotfiles</h1>
+          <h1><span class="user">naitokosuke</span><span class="slash">/</span><wbr />dotfiles</h1>
           <p class="lede">
             An Apple Silicon macOS, declared end-to-end in <strong>Nix</strong>.
             <strong>nix-darwin</strong> owns the system layer and <strong>home-manager</strong> owns the user layer —
