@@ -196,12 +196,6 @@ a:focus-visible {
   background: var(--accent);
 }
 
-/* While dragging the splitter into the collapse zone, show the
-   "danger / collapse" tint instead of the regular accent. */
-.workspace.sidebar-collapse-preview .sidebar-resizer::before {
-  background: var(--fg-muted);
-}
-
 /* Collapsed: pin the resizer to the right edge as a wider grab
    target. Always show a faint hairline so users notice it. */
 .workspace.sidebar-collapsed .sidebar-resizer {

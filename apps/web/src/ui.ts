@@ -448,10 +448,14 @@ export class App {
     const COLLAPSED_KEY = "naitokosuke-dotfiles:sidebar-collapsed";
     const MIN_W = 200;
     const DEFAULT_W = 280;
-    // VS Code-style: collapse fires when the user lets go below this width.
-    // The width itself is allowed to drag all the way to 0 — clamping only
-    // applies at release time, not during the drag.
-    const COLLAPSE_AT = 160;
+    // VS Code-style magnetic snap with hysteresis:
+    //   * starting expanded, drag inward → snap closed at SNAP_CLOSE.
+    //   * once snap-closed, you have to drag outward past SNAP_OPEN
+    //     before the sidebar will re-expand mid-drag.
+    //   * starting collapsed, the drag follows the pointer immediately
+    //     (no hysteresis penalty when the user is clearly opening).
+    const SNAP_CLOSE = 140;
+    const SNAP_OPEN = 210;
     const MAX_W = () => Math.min(680, Math.max(MIN_W, Math.round(window.innerWidth * 0.55)));
 
     const isCollapsed = () => workspace.classList.contains("sidebar-collapsed");
@@ -510,6 +514,12 @@ export class App {
       event.preventDefault();
     };
 
+    /** Visual collapse without persisting — used during live drag. */
+    const applyCollapsed = (collapsed: boolean): void => {
+      workspace.classList.toggle("sidebar-collapsed", collapsed);
+      this.syncSidebarToggleAria();
+    };
+
     const onPointerMove = (event: PointerEvent) => {
       if (!resizer.hasPointerCapture(event.pointerId)) return;
       const dx = event.clientX - startX;
@@ -518,17 +528,31 @@ export class App {
       if (Math.abs(dx) > 2) dragMoved = true;
       if (!dragMoved) return;
 
-      // First moved-frame after starting collapsed: drop the collapse
-      // class so the grid column can expand.
-      if (startedCollapsed && intended > 0) {
-        workspace.classList.remove("sidebar-collapsed");
-        startedCollapsed = false;
+      if (startedCollapsed) {
+        // Free expansion from a collapsed start — no hysteresis penalty.
+        if (intended > 0) {
+          if (isCollapsed()) applyCollapsed(false);
+          setRawWidth(intended);
+        }
+        return;
       }
 
-      // Show the "will collapse on release" hint while in the danger zone.
-      workspace.classList.toggle("sidebar-collapse-preview", intended < COLLAPSE_AT);
-      // Live preview — allow shrinking all the way to 0.
-      setRawWidth(intended);
+      // Started expanded — snap with hysteresis.
+      if (isCollapsed()) {
+        // Mid-drag re-open needs to clear SNAP_OPEN so the sidebar
+        // doesn't flicker around the threshold.
+        if (intended > SNAP_OPEN) {
+          applyCollapsed(false);
+          setRawWidth(intended);
+        }
+      } else {
+        if (intended < SNAP_CLOSE) {
+          // Magnetic snap — close immediately, mid-drag.
+          applyCollapsed(true);
+        } else {
+          setRawWidth(intended);
+        }
+      }
     };
 
     const onPointerUp = (event: PointerEvent) => {
@@ -536,7 +560,6 @@ export class App {
       resizer.releasePointerCapture(event.pointerId);
       resizer.classList.remove("is-active");
       document.body.classList.remove("resizing-sidebar");
-      workspace.classList.remove("sidebar-collapse-preview");
 
       // No movement → treat as a click. Toggle.
       if (!dragMoved) {
@@ -544,16 +567,12 @@ export class App {
         return;
       }
 
-      const current = Number.parseInt(workspace.style.getPropertyValue("--sidebar-w"), 10);
-      if (!Number.isFinite(current)) return;
-
-      if (current < COLLAPSE_AT) {
-        setCollapsed(true);
-      } else {
-        // Snap back inside [MIN_W, MAX_W] if the user released just shy of
-        // a sane width, and persist.
-        settleWidth(current);
-        if (isCollapsed()) setCollapsed(false);
+      // Persist whichever state the drag ended in.
+      const finallyCollapsed = isCollapsed();
+      localStorage.setItem(COLLAPSED_KEY, finallyCollapsed ? "1" : "0");
+      if (!finallyCollapsed) {
+        const current = Number.parseInt(workspace.style.getPropertyValue("--sidebar-w"), 10);
+        if (Number.isFinite(current)) settleWidth(current);
       }
     };
 
