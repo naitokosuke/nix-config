@@ -1,0 +1,234 @@
+<script setup lang="ts">
+import { Link } from "@void/vue";
+import BackgroundCanvas from "./BackgroundCanvas.vue";
+import NixLogo from "./NixLogo.vue";
+
+interface Entry {
+  readonly label: string;
+  readonly path: string;
+  readonly blurb: string;
+}
+
+const entries: ReadonlyArray<Entry> = [
+  {
+    label: "flake.nix",
+    path: "flake.nix",
+    blurb: "Entry point — composes inputs and per-host darwinConfigurations.",
+  },
+  {
+    label: "hosts/",
+    path: "hosts/common/default.nix",
+    blurb: "System declaration layer via nix-darwin.",
+  },
+  {
+    label: "home/",
+    path: "home/naitokosuke/home.nix",
+    blurb: "User declaration layer via home-manager.",
+  },
+];
+</script>
+
+<template>
+  <div class="welcome-stage">
+    <div class="welcome-bg" aria-hidden="true">
+      <BackgroundCanvas />
+      <NixLogo />
+    </div>
+    <div class="welcome-inner">
+      <h1><span class="user">naitokosuke</span><span class="slash">/</span>dotfiles</h1>
+      <p class="lede">
+        An Apple Silicon macOS, declared end-to-end in
+        <strong>Nix</strong>. <strong>nix-darwin</strong> owns the system layer and
+        <strong>home-manager</strong> owns the user layer — the whole environment rebuilds from
+        <code>flake.nix</code> with <code>darwin-rebuild switch --flake .#&lt;host&gt;</code>.
+      </p>
+      <nav class="entry-row" aria-label="entry points">
+        <Link
+          v-for="entry in entries"
+          :key="entry.path"
+          class="entry-card"
+          :href="`/file/${entry.path}`"
+        >
+          <span class="entry-label">{{ entry.label }}</span>
+          <span class="entry-blurb">{{ entry.blurb }}</span>
+        </Link>
+      </nav>
+      <p class="attribution">
+        Nix logo by Simon Frankau (revised by Tim Cuthbertson) ·
+        <a
+          href="https://creativecommons.org/licenses/by/4.0/"
+          target="_blank"
+          rel="noopener noreferrer"
+          >CC BY 4.0</a
+        >
+      </p>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.welcome-stage {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+}
+
+.welcome-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.welcome-inner {
+  position: relative;
+  z-index: 1;
+  padding-block: clamp(36px, 6cqi, 80px);
+  padding-inline: clamp(20px, 5.5cqi, 56px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-width: 1040px;
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
+  gap: clamp(18px, 2.6cqi, 32px);
+  box-sizing: border-box;
+  overscroll-behavior: contain;
+
+  h1 {
+    margin: 0;
+    font-size: clamp(22px, 8.2vw, 84px);
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    white-space: nowrap;
+    color: var(--fg-strong);
+
+    .slash {
+      color: var(--fg-subtle);
+      margin-inline: 0.04em;
+      font-weight: 200;
+    }
+
+    .user {
+      font-weight: 300;
+      color: var(--fg-muted);
+    }
+  }
+}
+
+.lede {
+  margin: 0;
+  font-size: clamp(15px, 1.4vw, 18px);
+  line-height: 1.7;
+  color: var(--fg);
+  max-width: 62ch;
+  text-wrap: pretty;
+
+  strong {
+    color: var(--fg-strong);
+    font-weight: 600;
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    padding: 1px 6px;
+    border: 1px solid var(--border-1);
+    border-radius: 4px;
+    background: light-dark(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.03));
+    color: var(--fg-strong);
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+}
+
+.entry-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.entry-card {
+  display: grid;
+  gap: 6px;
+  padding: 18px 18px 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border-1);
+  background: light-dark(rgba(255, 255, 255, 0.6), rgba(20, 20, 22, 0.4));
+  backdrop-filter: blur(8px);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    background 200ms var(--easing),
+    border-color 200ms var(--easing),
+    translate 200ms var(--easing);
+
+  &:hover {
+    background: light-dark(rgba(255, 255, 255, 0.9), rgba(28, 28, 32, 0.6));
+    border-color: var(--border-2);
+    translate: 0 -2px;
+  }
+}
+
+.entry-label {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--fg-strong);
+}
+
+.entry-blurb {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--fg-muted);
+  text-wrap: pretty;
+}
+
+.attribution {
+  margin: 36px 0 0;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--fg-subtle);
+
+  a {
+    color: var(--fg-muted);
+    border-bottom: 1px solid transparent;
+    transition:
+      color 180ms var(--easing),
+      border-color 180ms var(--easing);
+
+    &:hover {
+      color: var(--fg-strong);
+      border-bottom-color: currentColor;
+    }
+  }
+}
+
+@media (max-width: 860px) {
+  .entry-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .welcome-inner {
+    padding: 28px 22px 24px;
+    justify-content: flex-start;
+    gap: 24px;
+  }
+
+  .lede {
+    font-size: 14px;
+  }
+}
+</style>

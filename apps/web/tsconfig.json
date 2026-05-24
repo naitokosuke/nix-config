@@ -5,6 +5,7 @@
     "lib": ["ES2023", "DOM"],
     "types": ["vite-plus/client"],
     "skipLibCheck": true,
+    "jsx": "preserve",
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -16,8 +17,7 @@
     /* Linting */
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": ["src", "src/**/*.vue"]
 }

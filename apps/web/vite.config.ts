@@ -1,3 +1,4 @@
+import { voidVue } from "@void/vue/plugin";
 import { defineConfig } from "vite-plus";
 import { voidPlugin } from "void";
 
@@ -8,7 +9,7 @@ export default defineConfig({
     rules: { "vite-plus/prefer-vite-plus-imports": "error" },
     options: { typeAware: true, typeCheck: true },
   },
-  plugins: [voidPlugin()],
+  plugins: [voidPlugin(), voidVue()],
   server: {
     fs: {
       allow: ["../.."],
