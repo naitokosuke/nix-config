@@ -10,7 +10,6 @@
 
   /* Spacing */
   --titlebar-h: 32px;
-  --statusbar-h: 22px;
   --sidebar-w: 280px;
 
   /* Monochrome surfaces — light by default; dark via light-dark() below */
@@ -20,7 +19,6 @@
   --bg-elev-1: light-dark(#f4f4f5, #111113);
   --bg-elev-2: light-dark(#ececee, #161618);
   --bg-titlebar: light-dark(#ececee, #0d0d0f);
-  --bg-statusbar: light-dark(#1a1a1c, #0d0d0f);
 
   --hover: light-dark(rgba(0, 0, 0, 0.04), rgba(255, 255, 255, 0.04));
   --active: light-dark(rgba(0, 0, 0, 0.07), rgba(255, 255, 255, 0.08));
@@ -33,7 +31,6 @@
   --fg-strong: light-dark(#08080a, #f7f7f8);
   --fg-muted: light-dark(#6f6f78, #8e8e95);
   --fg-subtle: light-dark(#9a9aa3, #5e5e66);
-  --fg-on-dark: #e8e8ea;
 
   /* Syntax — monochrome with weight + opacity */
   --syn-kw: light-dark(#08080a, #f7f7f8);
@@ -149,12 +146,11 @@ a:focus-visible {
 .workspace {
   display: grid;
   height: 100dvh;
-  grid-template-rows: var(--titlebar-h) 1fr var(--statusbar-h);
+  grid-template-rows: var(--titlebar-h) 1fr;
   grid-template-columns: 1fr var(--sidebar-w);
   grid-template-areas:
     "title   title"
-    "editor  sidebar"
-    "status  status";
+    "editor  sidebar";
 }
 
 .sidebar-backdrop {
@@ -459,9 +455,10 @@ a:focus-visible {
   background: var(--bg);
 }
 .tab-link {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  gap: 8px;
+  column-gap: 8px;
   padding: 0 6px 0 12px;
   min-width: 0;
   flex: 1 1 auto;
@@ -1045,36 +1042,6 @@ code.lang-text {
 }
 
 /* ============================================================
-   Status bar
-   ============================================================ */
-.status-bar {
-  grid-area: status;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-inline: 12px;
-  height: var(--statusbar-h);
-  background: var(--bg-statusbar);
-  color: var(--fg-on-dark);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.02em;
-}
-.status-left,
-.status-right {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.status-cell {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 0 6px;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-/* ============================================================
    Accessibility — honour the OS reduced-motion preference.
    No view transitions are used; navigation is intentionally snap.
    ============================================================ */
@@ -1093,14 +1060,14 @@ code.lang-text {
 .bottom-nav {
   display: none;
   grid-area: bottom;
-  align-items: stretch;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
   padding: 4px 6px calc(4px + env(safe-area-inset-bottom, 0px));
   background: var(--bg-titlebar);
   border-top: 1px solid var(--border-1);
   z-index: 17;
 }
 .bn-btn {
-  flex: 1 1 0;
   display: grid;
   place-items: center;
   align-content: center;
@@ -1161,11 +1128,10 @@ code.lang-text {
   }
   .workspace {
     grid-template-columns: 1fr;
-    grid-template-rows: var(--titlebar-h) 1fr var(--statusbar-h) var(--bottomnav-h);
+    grid-template-rows: var(--titlebar-h) 1fr var(--bottomnav-h);
     grid-template-areas:
       "title"
       "editor"
-      "status"
       "bottom";
   }
   .title-bar {
@@ -1186,7 +1152,7 @@ code.lang-text {
   }
 
   .bottom-nav {
-    display: flex;
+    display: grid;
   }
   .sidebar-close {
     display: inline-grid;
@@ -1251,9 +1217,6 @@ code.lang-text {
     font-size: 12px;
   }
   .editor-foot {
-    padding-inline: 14px;
-  }
-  .status-bar {
     padding-inline: 14px;
   }
 }

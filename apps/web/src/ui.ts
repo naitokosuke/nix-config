@@ -1,5 +1,5 @@
-import type { DirNode, FileEntry, Route, TreeNode, WalkthroughSection } from "./types.ts";
-import { ancestorsOf, files, filesByPath, tree } from "./data.ts";
+import type { DirNode, FileEntry, TreeNode, WalkthroughSection } from "./types.ts";
+import { ancestorsOf, filesByPath, tree } from "./data.ts";
 import { highlight, escapeHtml } from "./syntax.ts";
 import { iconForFile, icons } from "./icons.ts";
 import { Router, routeToHref } from "./router.ts";
@@ -267,31 +267,6 @@ function renderWelcomeContent(): string {
   `;
 }
 
-function renderStatusBar(route: Route): string {
-  const fileBit =
-    route.kind === "file"
-      ? (() => {
-          const file = filesByPath.get(route.path);
-          if (!file) return "";
-          return `
-            <span class="status-cell">${icons.hash({ size: 12 })}<span>${file.lang}</span></span>
-            <span class="status-cell">${file.content.split("\n").length} lines</span>
-          `;
-        })()
-      : `<span class="status-cell">${files.length} files indexed</span>`;
-  return `
-    <div class="status-left">
-      <span class="status-cell">${icons.branch({ size: 12 })}<span>main</span></span>
-      <span class="status-cell">naitokosuke / dotfiles</span>
-    </div>
-    <div class="status-right">
-      ${fileBit}
-      <span class="status-cell">UTF-8</span>
-      <span class="status-cell">LF</span>
-    </div>
-  `;
-}
-
 interface TabModel {
   readonly key: string; // file path or WELCOME_KEY
   readonly name: string;
@@ -373,7 +348,6 @@ function renderShell(): string {
         </div>
       </aside>
       <button class="sidebar-backdrop" type="button" data-action="close-menu" aria-label="Close menu" tabindex="-1"></button>
-      <footer class="status-bar" data-status></footer>
       <nav class="bottom-nav" aria-label="mobile primary" data-bottom-nav>
         <button class="bn-btn" type="button" data-action="toggle-menu" aria-controls="sidebar" aria-expanded="false" data-bn="files">
           ${icons.explorer({ size: 20 })}
@@ -428,7 +402,6 @@ export class App {
     this.renderSidebar();
     this.renderTabs();
     this.renderContent();
-    this.renderStatus();
     this.updateBottomNav();
   }
 
@@ -544,12 +517,6 @@ export class App {
     contentEl.innerHTML = renderFileContent(file);
     const scroller = contentEl.querySelector<HTMLElement>(".walkthrough-scroller");
     scroller?.scrollTo({ top: 0, behavior: "instant" });
-  }
-
-  private renderStatus(): void {
-    const statusEl = this.root.querySelector<HTMLElement>("[data-status]");
-    if (!statusEl) return;
-    statusEl.innerHTML = renderStatusBar(this.router.route);
   }
 
   private closeTab(key: string): void {
