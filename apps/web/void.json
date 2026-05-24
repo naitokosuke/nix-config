@@ -52,6 +52,7 @@
       }
     ],
     "link": [
+      { "rel": "icon", "href": "/favicon.ico", "sizes": "32x32" },
       { "rel": "icon", "type": "image/svg+xml", "href": "/favicon.svg" },
       { "rel": "canonical", "href": "https://naitokosuke-dotfiles.void.app/" }
     ]
