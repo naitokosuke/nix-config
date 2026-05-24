@@ -3,11 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>web</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
+    <meta
+      name="description"
+      content="An interactive, VS Code-flavoured walkthrough of @naitokosuke's dotfiles — an Apple Silicon macOS environment declared with Nix, nix-darwin, and home-manager."
+    />
+    <title>naitokosuke / dotfiles</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app" aria-busy="true">
+      <div class="boot">loading…</div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

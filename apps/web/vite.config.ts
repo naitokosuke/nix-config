@@ -9,4 +9,9 @@ export default defineConfig({
     options: { typeAware: true, typeCheck: true },
   },
   plugins: [voidPlugin()],
+  server: {
+    fs: {
+      allow: ["../.."],
+    },
+  },
 });
