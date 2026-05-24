@@ -446,17 +446,14 @@ export class App {
 
     const WIDTH_KEY = "naitokosuke-dotfiles:sidebar-w";
     const COLLAPSED_KEY = "naitokosuke-dotfiles:sidebar-collapsed";
-    const MIN_W = 200;
+    // Single snap threshold for both directions. Below this width the
+    // sidebar is closed regardless of pointer position; the moment the
+    // pointer crosses outward the sidebar pops in at this width and
+    // then tracks the pointer normally. There's no hysteresis "dead
+    // zone" — opening is symmetric with closing.
+    const SNAP_W = 140;
     const DEFAULT_W = 280;
-    // VS Code-style magnetic snap with hysteresis:
-    //   * starting expanded, drag inward → snap closed at SNAP_CLOSE.
-    //   * once snap-closed, you have to drag outward past SNAP_OPEN
-    //     before the sidebar will re-expand mid-drag.
-    //   * starting collapsed, the drag follows the pointer immediately
-    //     (no hysteresis penalty when the user is clearly opening).
-    const SNAP_CLOSE = 140;
-    const SNAP_OPEN = 210;
-    const MAX_W = () => Math.min(680, Math.max(MIN_W, Math.round(window.innerWidth * 0.55)));
+    const MAX_W = () => Math.min(680, Math.max(SNAP_W, Math.round(window.innerWidth * 0.55)));
 
     const isCollapsed = () => workspace.classList.contains("sidebar-collapsed");
 
@@ -467,9 +464,9 @@ export class App {
       return v;
     };
 
-    /** Settle the width into the valid [MIN_W, MAX_W] range and persist. */
+    /** Settle the width into the valid [SNAP_W, MAX_W] range and persist. */
     const settleWidth = (value: number): number => {
-      const v = Math.max(MIN_W, Math.min(MAX_W(), Math.round(value)));
+      const v = Math.max(SNAP_W, Math.min(MAX_W(), Math.round(value)));
       workspace.style.setProperty("--sidebar-w", `${v}px`);
       localStorage.setItem(WIDTH_KEY, String(v));
       return v;
@@ -494,14 +491,12 @@ export class App {
     let startX = 0;
     let startW = 0;
     let dragMoved = false;
-    let startedCollapsed = false;
 
     const onPointerDown = (event: PointerEvent) => {
       if (event.button !== 0) return;
       startX = event.clientX;
-      startedCollapsed = isCollapsed();
-      if (startedCollapsed) {
-        // Drag starts from a fully-collapsed width — dragging left widens.
+      if (isCollapsed()) {
+        // Drag starts from a fully-collapsed width.
         startW = 0;
       } else {
         const sidebar = this.root.querySelector<HTMLElement>(".sidebar");
@@ -528,30 +523,14 @@ export class App {
       if (Math.abs(dx) > 2) dragMoved = true;
       if (!dragMoved) return;
 
-      if (startedCollapsed) {
-        // Free expansion from a collapsed start — no hysteresis penalty.
-        if (intended > 0) {
-          if (isCollapsed()) applyCollapsed(false);
-          setRawWidth(intended);
-        }
-        return;
-      }
-
-      // Started expanded — snap with hysteresis.
-      if (isCollapsed()) {
-        // Mid-drag re-open needs to clear SNAP_OPEN so the sidebar
-        // doesn't flicker around the threshold.
-        if (intended > SNAP_OPEN) {
-          applyCollapsed(false);
-          setRawWidth(intended);
-        }
+      // Single threshold, symmetric in both directions.
+      //   intended <  SNAP_W → closed (no matter how the drag started)
+      //   intended >= SNAP_W → open at the pointer's intended width
+      if (intended < SNAP_W) {
+        if (!isCollapsed()) applyCollapsed(true);
       } else {
-        if (intended < SNAP_CLOSE) {
-          // Magnetic snap — close immediately, mid-drag.
-          applyCollapsed(true);
-        } else {
-          setRawWidth(intended);
-        }
+        if (isCollapsed()) applyCollapsed(false);
+        setRawWidth(intended);
       }
     };
 
