@@ -446,14 +446,19 @@ export class App {
 
     const WIDTH_KEY = "naitokosuke-dotfiles:sidebar-w";
     const COLLAPSED_KEY = "naitokosuke-dotfiles:sidebar-collapsed";
-    // Single snap threshold for both directions. Below this width the
-    // sidebar is closed regardless of pointer position; the moment the
-    // pointer crosses outward the sidebar pops in at this width and
-    // then tracks the pointer normally. There's no hysteresis "dead
-    // zone" — opening is symmetric with closing.
-    const SNAP_W = 140;
+    // VS Code-style two-value snap:
+    //   SNAP_W — the *trigger* boundary. Cross outward to open, drop
+    //            below to close. Kept small so opening from a closed
+    //            sidebar feels instant.
+    //   MIN_W  — the *display* minimum. While open the sidebar is
+    //            always at least this wide; the pointer can drag
+    //            below the display minimum but the sidebar visually
+    //            stays at MIN_W until the pointer reaches SNAP_W
+    //            and snaps closed.
+    const SNAP_W = 80;
+    const MIN_W = 200;
     const DEFAULT_W = 280;
-    const MAX_W = () => Math.min(680, Math.max(SNAP_W, Math.round(window.innerWidth * 0.55)));
+    const MAX_W = () => Math.min(680, Math.max(MIN_W, Math.round(window.innerWidth * 0.55)));
 
     const isCollapsed = () => workspace.classList.contains("sidebar-collapsed");
 
@@ -464,9 +469,9 @@ export class App {
       return v;
     };
 
-    /** Settle the width into the valid [SNAP_W, MAX_W] range and persist. */
+    /** Settle the width into the valid [MIN_W, MAX_W] range and persist. */
     const settleWidth = (value: number): number => {
-      const v = Math.max(SNAP_W, Math.min(MAX_W(), Math.round(value)));
+      const v = Math.max(MIN_W, Math.min(MAX_W(), Math.round(value)));
       workspace.style.setProperty("--sidebar-w", `${v}px`);
       localStorage.setItem(WIDTH_KEY, String(v));
       return v;
@@ -523,14 +528,20 @@ export class App {
       if (Math.abs(dx) > 2) dragMoved = true;
       if (!dragMoved) return;
 
-      // Single threshold, symmetric in both directions.
-      //   intended <  SNAP_W → closed (no matter how the drag started)
-      //   intended >= SNAP_W → open at the pointer's intended width
+      // Two-value snap:
+      //   intended <  SNAP_W → closed (regardless of which way the
+      //                        drag started). Crosses outward and
+      //                        the sidebar snaps in at MIN_W.
+      //   intended >= SNAP_W → open at max(intended, MIN_W). Below
+      //                        MIN_W the sidebar stays clamped at
+      //                        MIN_W until the pointer either keeps
+      //                        going outward (width starts to grow)
+      //                        or falls back through SNAP_W (close).
       if (intended < SNAP_W) {
         if (!isCollapsed()) applyCollapsed(true);
       } else {
         if (isCollapsed()) applyCollapsed(false);
-        setRawWidth(intended);
+        setRawWidth(Math.max(intended, MIN_W));
       }
     };
 
