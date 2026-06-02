@@ -54,6 +54,11 @@ defineProps<{
   }
 
   .rotor {
+    /* Rotate about the snowflake's own geometric center, not the
+       viewBox center — the mark is drawn off-center within the
+       viewBox, so the default `view-box` reference would make it
+       orbit instead of spin in place. */
+    transform-box: fill-box;
     transform-origin: center;
   }
 }
