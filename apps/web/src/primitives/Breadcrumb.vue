@@ -30,6 +30,8 @@ defineProps<{
 </template>
 
 <style scoped>
+@import "../breakpoints.css";
+
 .breadcrumb {
   height: 28px;
   display: flex;
@@ -58,7 +60,7 @@ defineProps<{
     color: var(--fg-subtle);
   }
 
-  @media (max-width: 640px) {
+  @media (--phone) {
     padding-inline: 14px;
     font-size: 11.5px;
     overflow-x: auto;

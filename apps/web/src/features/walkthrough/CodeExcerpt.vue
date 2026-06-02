@@ -37,6 +37,8 @@ const caption = computed(() =>
 </template>
 
 <style scoped>
+@import "../../breakpoints.css";
+
 .excerpt {
   margin: 0;
   border: 1px solid var(--border-1);
@@ -62,7 +64,7 @@ const caption = computed(() =>
       padding: 14px;
     }
 
-    @media (max-width: 640px) {
+    @media (--phone) {
       :deep(pre.code) {
         padding: 12px;
         font-size: 12px;

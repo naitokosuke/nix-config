@@ -18,9 +18,10 @@ const isCollapsed = computed(() => sidebar.collapsed);
       <span class="dot dot-y" aria-hidden="true" />
       <span class="dot dot-g" aria-hidden="true" />
     </div>
-    <div class="title-bar-center">naitokosuke · dotfiles</div>
+    <a class="title-bar-center" href="/">naitokosuke · dotfiles</a>
     <div class="title-bar-right">
       <IconButton
+        class="hide-mobile"
         href="https://twitter.com/naitokosuke"
         target="_blank"
         aria-label="Twitter / @naitokosuke"
@@ -28,6 +29,7 @@ const isCollapsed = computed(() => sidebar.collapsed);
         <span v-html="twitterIcon" />
       </IconButton>
       <IconButton
+        class="hide-mobile"
         href="https://github.com/naitokosuke/dotfiles"
         target="_blank"
         aria-label="GitHub repository"
@@ -35,6 +37,7 @@ const isCollapsed = computed(() => sidebar.collapsed);
         <span v-html="githubIcon" />
       </IconButton>
       <IconButton
+        class="hide-mobile"
         aria-controls="sidebar"
         :aria-pressed="isCollapsed"
         aria-label="Toggle sidebar (⌘B)"
@@ -48,6 +51,8 @@ const isCollapsed = computed(() => sidebar.collapsed);
 </template>
 
 <style scoped>
+@import "../../breakpoints.css";
+
 .title-bar {
   grid-area: title;
   display: grid;
@@ -81,6 +86,8 @@ const isCollapsed = computed(() => sidebar.collapsed);
     font-size: 12px;
     letter-spacing: 0.06em;
     text-wrap: balance;
+    text-decoration: none;
+    -webkit-app-region: no-drag;
   }
 
   .title-bar-right {
@@ -99,6 +106,30 @@ const isCollapsed = computed(() => sidebar.collapsed);
     }
     &.dot-g {
       background: #28c840;
+    }
+  }
+
+  /* Phone — drop the desktop window chrome (traffic-light dots,
+     sidebar/social buttons) and turn the bar into a plain mobile
+     app bar with the repo name left-aligned. */
+  @media (--phone) {
+    grid-template-columns: 1fr auto;
+    padding-inline: 16px;
+
+    .title-bar-left {
+      display: none;
+    }
+
+    .title-bar-center {
+      text-align: left;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      color: var(--fg-strong);
+    }
+
+    .hide-mobile {
+      display: none;
     }
   }
 }

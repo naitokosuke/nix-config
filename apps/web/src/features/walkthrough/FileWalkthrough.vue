@@ -63,6 +63,8 @@ const hashIcon = icons.hash({ size: 10 });
 </template>
 
 <style scoped>
+@import "../../breakpoints.css";
+
 .file-view {
   display: grid;
   grid-template-rows: 28px 1fr 24px;
@@ -162,7 +164,7 @@ const hashIcon = icons.hash({ size: 10 });
     font-size: 11px;
     color: var(--fg-muted);
 
-    @media (max-width: 640px) {
+    @media (--phone) {
       padding-inline: 14px;
     }
   }

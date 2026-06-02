@@ -29,6 +29,8 @@ const lineNumbers = computed(() =>
 </template>
 
 <style scoped>
+@import "../breakpoints.css";
+
 pre.code {
   margin: 0;
   padding: 16px 16px 80px;
@@ -61,7 +63,7 @@ pre.code {
     overflow-x: auto;
   }
 
-  @media (max-width: 640px) {
+  @media (--phone) {
     padding: 14px 14px 40px;
     font-size: 12.5px;
     gap: 12px;

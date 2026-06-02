@@ -41,6 +41,8 @@ defineProps<{
 </template>
 
 <style scoped>
+@import "../breakpoints.css";
+
 .sidebar {
   background: var(--bg);
   display: flex;
@@ -83,7 +85,7 @@ defineProps<{
     display: none;
   }
 
-  @media (max-width: 640px) {
+  @media (--phone) {
     position: fixed;
     left: 0;
     right: 0;

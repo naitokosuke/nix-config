@@ -1,19 +1,41 @@
 <script setup lang="ts">
 /**
- * Top-level app shell. Picks Mobile vs Desktop based on viewport
- * and owns cross-cutting side effects (tab sync on URL change,
- * sidebar ancestor expansion, mobile sheet close, global
- * keyboard shortcuts). The Void `pages/layout.vue` is a thin
+ * Top-level app shell. A single layout tree that adapts purely
+ * through CSS: on desktop it is an editor with a resizable
+ * Explorer pinned to the right edge; on narrow viewports the
+ * grid reflows to a title bar / editor / bottom-nav stack and the
+ * Explorer becomes a bottom-sheet drawer.
+ *
+ * Rendering one tree (rather than swapping between a desktop and a
+ * mobile component) keeps the page `<slot />` mounted across the
+ * breakpoint — swapping the wrapper used to tear the page content
+ * down and never remount it, leaving mobile viewports blank.
+ *
+ * Owns cross-cutting side effects too: tab sync on URL change,
+ * sidebar ancestor expansion, mobile sheet close, and the global
+ * keyboard shortcuts. The Void `pages/layout.vue` is a thin
  * passthrough into this component.
  */
 import { useRouter } from "@void/vue";
-import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, watch } from "vue";
+import BottomNav from "../features/shell/BottomNav.vue";
+import EditorTabs from "../features/shell/EditorTabs.vue";
+import SidebarExplorer from "../features/shell/SidebarExplorer.vue";
+import TitleBar from "../features/shell/TitleBar.vue";
 import { useDirs } from "../features/shell/useDirs.ts";
-import { sidebar, toggleCollapsed } from "../features/shell/useSidebar.ts";
+import {
+  DEFAULT_W,
+  resetWidth,
+  setCollapsed,
+  setRawWidth,
+  settleWidth,
+  sidebar,
+  SNAP_W,
+  toggleCollapsed,
+} from "../features/shell/useSidebar.ts";
 import { useTabs } from "../features/shell/useTabs.ts";
+import SidebarResizer from "../primitives/SidebarResizer.vue";
 import "../style.css";
-import Mobile from "./Mobile.vue";
-import SidebarRight from "./SidebarRight.vue";
 
 const router = useRouter();
 const dirs = useDirs();
@@ -28,16 +50,17 @@ const activeFilePath = computed(() => {
 });
 const isHome = computed(() => activeFilePath.value === null);
 
-/**
- * Pick the layout based on viewport. Defaults to desktop on the
- * server (no `window`); on the client we hot-swap once we know.
- */
-const MOBILE_QUERY = "(max-width: 640px)";
-const isMobile = ref(false);
-let mql: MediaQueryList | null = null;
+const workspaceClasses = computed(() => ({
+  "sidebar-collapsed": sidebar.collapsed,
+  "menu-open": sidebar.menuOpen,
+}));
 
-function syncIsMobile(): void {
-  if (mql) isMobile.value = mql.matches;
+const workspaceStyle = computed(() => ({
+  "--sidebar-w": `${sidebar.width}px`,
+}));
+
+function closeMenu(): void {
+  sidebar.menuOpen = false;
 }
 
 watch(
@@ -68,23 +91,181 @@ function onKey(event: KeyboardEvent): void {
 }
 
 onMounted(() => {
-  mql = window.matchMedia(MOBILE_QUERY);
-  syncIsMobile();
-  mql.addEventListener("change", syncIsMobile);
   document.addEventListener("keydown", onKey);
 });
 
 onBeforeUnmount(() => {
-  mql?.removeEventListener("change", syncIsMobile);
   document.removeEventListener("keydown", onKey);
 });
 </script>
 
 <template>
-  <Mobile v-if="isMobile" :active-path="activeFilePath" :is-home="isHome">
-    <slot />
-  </Mobile>
-  <SidebarRight v-else :active-path="activeFilePath">
-    <slot />
-  </SidebarRight>
+  <div class="workspace" :class="workspaceClasses" :style="workspaceStyle">
+    <TitleBar />
+    <main class="editor">
+      <EditorTabs />
+      <div class="editor-content">
+        <slot />
+      </div>
+    </main>
+    <SidebarExplorer :active-path="activeFilePath" />
+
+    <!-- Desktop: drag-to-resize splitter at the editor/sidebar seam. -->
+    <SidebarResizer
+      class="desktop-only"
+      :width="sidebar.width"
+      :collapsed="sidebar.collapsed"
+      :snap-at="SNAP_W"
+      :default-width="DEFAULT_W"
+      @update:width="setRawWidth"
+      @update:collapsed="setCollapsed"
+      @settle="settleWidth"
+      @reset="resetWidth"
+    />
+
+    <!-- Mobile: backdrop behind the Explorer bottom-sheet + bottom nav. -->
+    <button
+      class="sidebar-backdrop"
+      type="button"
+      aria-label="Close menu"
+      tabindex="-1"
+      @click="closeMenu"
+    />
+    <BottomNav :is-home="isHome" />
+  </div>
 </template>
+
+<style scoped>
+@import "../breakpoints.css";
+
+.workspace {
+  display: grid;
+  height: 100dvh;
+  grid-template-rows: var(--titlebar-h) 1fr;
+  grid-template-columns: 1fr var(--sidebar-w);
+  grid-template-areas:
+    "title   title"
+    "editor  sidebar";
+  position: relative;
+
+  .editor {
+    grid-area: editor;
+    background: var(--bg);
+    display: grid;
+    grid-template-rows: 36px 1fr;
+    grid-template-areas:
+      "tabs"
+      "content";
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    container-type: inline-size;
+
+    .editor-content {
+      grid-area: content;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      position: relative;
+    }
+  }
+
+  /* Position the (position-agnostic) splitter primitive at the
+     editor/sidebar seam, and assign the sidebar primitive its
+     grid area. Wrapped in `&` to keep the chain anchored to the
+     workspace's own data-v attribute (otherwise Vue scoped CSS
+     would emit a `.workspace [data-v-xxx] .selector` with an
+     extra descendant combinator that never matches). */
+  & :deep(.sidebar) {
+    grid-area: sidebar;
+  }
+  & :deep(.sidebar-resizer) {
+    position: absolute;
+    top: var(--titlebar-h);
+    bottom: 0;
+    right: calc(var(--sidebar-w) - 3px);
+    z-index: 10;
+  }
+
+  &.sidebar-collapsed {
+    grid-template-columns: 1fr 0px;
+
+    & :deep(.sidebar-resizer) {
+      right: 0;
+      width: 10px;
+    }
+    & :deep(.sidebar-resizer::before) {
+      inset: 0 4px;
+      background: var(--border-2);
+    }
+    & :deep(.sidebar-resizer:hover::before) {
+      background: var(--accent);
+    }
+  }
+
+  /* The bottom-sheet backdrop and bottom nav are mobile-only; keep
+     them out of the way on wider viewports. */
+  .sidebar-backdrop {
+    display: none;
+  }
+
+  /* Tablet — keep the editor layout but give the sidebar less room. */
+  @media (--tablet) {
+    --sidebar-w: 240px;
+  }
+
+  /* Phone — reflow to a vertical stack with a bottom nav; the
+     Explorer becomes a bottom-sheet drawer (positioned by the
+     Sidebar primitive itself, so it leaves the grid flow). */
+  @media (--phone) {
+    --titlebar-h: 52px;
+    --bottomnav-h: 64px;
+
+    grid-template-columns: 1fr;
+    grid-template-rows: var(--titlebar-h) 1fr var(--bottomnav-h);
+    grid-template-areas:
+      "title"
+      "editor"
+      "bottom";
+
+    /* Drop the editor tab strip on phones — multi-document tabs are
+       a desktop metaphor; mobile navigates via the bottom nav and
+       the file sheet, and each page carries its own breadcrumb. The
+       content then fills the whole editor column. */
+    .editor {
+      grid-template-rows: 1fr;
+      grid-template-areas: "content";
+    }
+    & :deep(.editor > .tabs) {
+      display: none;
+    }
+
+    /* The drag-resizer is meaningless once the sidebar is a sheet. */
+    & :deep(.sidebar-resizer.desktop-only) {
+      display: none;
+    }
+
+    .sidebar-backdrop {
+      position: fixed;
+      inset: 0;
+      background: light-dark(rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.6));
+      backdrop-filter: blur(4px);
+      z-index: 18;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    &.menu-open .sidebar-backdrop {
+      display: block;
+      animation: backdrop-in 200ms var(--easing);
+    }
+  }
+}
+
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+</style>

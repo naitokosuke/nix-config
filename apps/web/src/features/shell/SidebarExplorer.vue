@@ -41,6 +41,8 @@ function closeMenu(): void {
 </template>
 
 <style scoped>
+@import "../../breakpoints.css";
+
 .sidebar-close {
   display: none;
   place-items: center;
@@ -58,7 +60,7 @@ function closeMenu(): void {
   }
 }
 
-@media (max-width: 640px) {
+@media (--phone) {
   .sidebar-close {
     display: inline-grid;
   }

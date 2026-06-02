@@ -3,6 +3,12 @@ import { defineConfig } from "vite-plus";
 import { voidPlugin } from "void";
 
 export default defineConfig({
+  css: {
+    transformer: "lightningcss",
+    lightningcss: {
+      drafts: { customMedia: true },
+    },
+  },
   fmt: {},
   lint: {
     jsPlugins: [{ name: "vite-plus", specifier: "vite-plus/oxlint-plugin" }],

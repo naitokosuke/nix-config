@@ -45,7 +45,11 @@ function openSidebarSheet(): void {
 </template>
 
 <style scoped>
+@import "../../breakpoints.css";
+
 .bottom-nav {
+  /* Hidden on desktop; the workspace grid only allots a `bottom`
+     row at the phone breakpoint, where this flips to `grid`. */
   display: none;
   grid-area: bottom;
   grid-auto-flow: column;
@@ -90,6 +94,10 @@ function openSidebarSheet(): void {
         stroke-width: 1.8;
       }
     }
+  }
+
+  @media (--phone) {
+    display: grid;
   }
 }
 </style>

@@ -70,6 +70,8 @@ const entries: ReadonlyArray<Entry> = [
 </template>
 
 <style scoped>
+@import "../../breakpoints.css";
+
 .welcome-stage {
   position: relative;
   overflow: hidden;
@@ -218,13 +220,13 @@ const entries: ReadonlyArray<Entry> = [
     }
   }
 
-  @media (max-width: 860px) {
+  @media (--tablet) {
     .welcome-inner .entry-row {
       grid-template-columns: 1fr;
     }
   }
 
-  @media (max-width: 640px) {
+  @media (--phone) {
     .welcome-inner {
       padding: 28px 22px 24px;
       justify-content: flex-start;
