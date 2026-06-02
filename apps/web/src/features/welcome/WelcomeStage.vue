@@ -174,12 +174,22 @@ const entries: ReadonlyArray<Entry> = [
     .entry-row {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-auto-rows: 1fr;
       gap: 8px;
       margin-top: 4px;
 
       .entry-link {
+        display: grid;
+        height: 100%;
         text-decoration: none;
         color: inherit;
+      }
+
+      /* Stretch the card primitive to fill the row so every card in the
+         row shares the tallest card's height regardless of blurb length. */
+      :deep(.card) {
+        height: 100%;
+        align-content: start;
       }
 
       .entry-label {
