@@ -17,6 +17,11 @@ const rawModules: Record<string, string> = {
     query: "?raw",
     import: "default",
   }),
+  ...import.meta.glob("../../../modules/**/*.nix", {
+    eager: true,
+    query: "?raw",
+    import: "default",
+  }),
   ...import.meta.glob("../../../home/**/*.nix", {
     eager: true,
     query: "?raw",
