@@ -66,41 +66,50 @@
         localSystem = system;
       };
 
+      hosts = [
+        "Mac-big"
+        "Macbook-heavy"
+      ];
+
       mkDarwinConfig =
-        { hostName }:
+        hostName:
         nix-darwin.lib.darwinSystem {
           specialArgs = {
             inherit inputs;
           };
           modules = [
-            {
-              networking.hostName = hostName;
-              networking.computerName = hostName;
-              system.primaryUser = "naitokosuke";
-              nixpkgs.config.allowUnfree = true;
-              nixpkgs.hostPlatform = system;
-              nixpkgs.overlays = [
-                llm-agents.overlays.default
-                # TODO: Remove after nixpkgs fixes nushell test failures in sandbox
-                # https://github.com/NixOS/nixpkgs/issues (nushell 0.112.1 SHLVL tests fail with "Operation not permitted")
-                (final: prev: {
-                  nushell = prev.nushell.overrideAttrs (old: {
-                    doCheck = false;
-                  });
-                })
-                # FIXME: Remove once nixpkgs ships a fix for direnv checkPhase hang on Darwin.
-                # cache.nixos.org serves fish/zsh binaries with broken code signatures, so
-                # macOS Gatekeeper SIGKILLs them during `zsh ./test/direnv-test.zsh`, causing
-                # the build to hang indefinitely.
-                # https://github.com/NixOS/nixpkgs/issues/513019
-                # https://github.com/NixOS/nixpkgs/pull/513081 (proposed fix, not merged)
-                (final: prev: {
-                  direnv = prev.direnv.overrideAttrs (old: {
-                    doCheck = false;
-                  });
-                })
-              ];
-            }
+            ./modules/naitokosuke
+            (
+              { config, ... }:
+              {
+                networking.hostName = hostName;
+                networking.computerName = hostName;
+                system.primaryUser = config.naitokosuke.username;
+                nixpkgs.config.allowUnfree = true;
+                nixpkgs.hostPlatform = system;
+                nixpkgs.overlays = [
+                  llm-agents.overlays.default
+                  # TODO: Remove after nixpkgs fixes nushell test failures in sandbox
+                  # https://github.com/NixOS/nixpkgs/issues (nushell 0.112.1 SHLVL tests fail with "Operation not permitted")
+                  (final: prev: {
+                    nushell = prev.nushell.overrideAttrs (old: {
+                      doCheck = false;
+                    });
+                  })
+                  # FIXME: Remove once nixpkgs ships a fix for direnv checkPhase hang on Darwin.
+                  # cache.nixos.org serves fish/zsh binaries with broken code signatures, so
+                  # macOS Gatekeeper SIGKILLs them during `zsh ./test/direnv-test.zsh`, causing
+                  # the build to hang indefinitely.
+                  # https://github.com/NixOS/nixpkgs/issues/513019
+                  # https://github.com/NixOS/nixpkgs/pull/513081 (proposed fix, not merged)
+                  (final: prev: {
+                    direnv = prev.direnv.overrideAttrs (old: {
+                      doCheck = false;
+                    });
+                  })
+                ];
+              }
+            )
             home-manager.darwinModules.home-manager
             nix-homebrew.darwinModules.nix-homebrew
             ./hosts/common
@@ -109,8 +118,7 @@
         };
     in
     {
-      darwinConfigurations."Mac-big" = mkDarwinConfig { hostName = "Mac-big"; };
-      darwinConfigurations."Macbook-heavy" = mkDarwinConfig { hostName = "Macbook-heavy"; };
+      darwinConfigurations = nixpkgs.lib.genAttrs hosts mkDarwinConfig;
 
       formatter.${system} = treefmt-nix.lib.mkWrapper pkgs {
         projectRootFile = "flake.nix";
