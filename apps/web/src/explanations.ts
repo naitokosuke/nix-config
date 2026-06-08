@@ -46,14 +46,37 @@ export const explanations: Readonly<Record<string, Explanation>> = {
         {
           title: "mkDarwinConfig",
           prose:
-            "A small helper that builds one `darwinSystem` per host. It hard-codes `aarch64-darwin`, the user, and Nixpkgs config (`allowUnfree` plus a few overlays for `nushell` and `direnv` that disable broken sandbox tests). Then it stitches `hosts/common`, `hosts/<hostName>`, and `home-manager` together.",
-          lines: [69, 110],
+            "A small helper that builds one `darwinSystem` per host. It pins `aarch64-darwin` and Nixpkgs config (`allowUnfree` plus a few overlays for `nushell` and `direnv` that disable broken sandbox tests) inside an inline module — now a `{ config, ... }:` function so `system.primaryUser` derives from `config.naitokosuke.username` rather than a hardcoded literal. It loads `./modules/naitokosuke` for those constants, then stitches `hosts/common`, `hosts/<hostName>`, and `home-manager` together.",
+          lines: [74, 118],
         },
         {
           title: "Per-host configurations",
           prose:
-            "Two darwinConfigurations are derived from the same helper — only `hostName` changes. Adding a new Mac is a one-line append plus a `hosts/<host>/default.nix` for the diff.",
-          lines: [111, 119],
+            "`darwinConfigurations` is built by mapping the `hosts` list (defined just above) through `mkDarwinConfig` with `nixpkgs.lib.genAttrs`. Adding a new Mac is a one-line append to that list — plus a `hosts/<host>/default.nix` for the diff — with no per-host `darwinConfigurations` attribute to hand-write.",
+          lines: [120, 121],
+        },
+      ],
+    },
+  },
+
+  "modules/naitokosuke/default.nix": {
+    about: "Typed personal-constants module — username, full name, email, home directory.",
+    tags: ["module", "config"],
+    walkthrough: {
+      intro:
+        "A small NixOS-module-style namespace that centralizes the personal literals that used to be scattered across the tree. It declares typed `naitokosuke.{username,fullName,email,homeDirectory}` options and sets their defaults, so every other module reads `config.naitokosuke.*` instead of hardcoding `naitokosuke`. It's loaded into both nix-darwin (via the flake `modules` list) and home-manager (via `home-manager.sharedModules`), so both trees resolve the same values — and a host can override any of them in one place.",
+      sections: [
+        {
+          title: "Typed options",
+          prose:
+            "Each constant is an `mkOption` with `type = types.str` and a description, so the values are self-documenting and type-checked rather than bare strings copied around the repo.",
+          lines: [13, 30],
+        },
+        {
+          title: "Defaults",
+          prose:
+            "`config.naitokosuke` sets the defaults for this user. Because they're module options, a per-host module can override any field without touching the call sites that consume them.",
+          lines: [32, 37],
         },
       ],
     },
@@ -121,7 +144,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     tags: ["bridge", "home-manager"],
     walkthrough: {
       intro:
-        "Wires `home-manager` into nix-darwin so the user-side configuration ships alongside the system. `useGlobalPkgs` and `useUserPackages` keep both layers on the same nixpkgs instance, and `home/naitokosuke/home.nix` is imported as `naitokosuke`'s home configuration.",
+        "Wires `home-manager` into nix-darwin so the user-side configuration ships alongside the system. `useGlobalPkgs` and `useUserPackages` keep both layers on the same nixpkgs instance, `sharedModules` injects the `modules/naitokosuke` personal-constants module into the home-manager tree, and `home/` (its `default.nix`) is imported as the user's home configuration.",
     },
   },
 
@@ -261,7 +284,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     },
   },
 
-  "home/naitokosuke/home.nix": {
+  "home/default.nix": {
     about: "Root of the user-side configuration — loads every tool module.",
     tags: ["home-manager", "index"],
     walkthrough: {
@@ -271,20 +294,20 @@ export const explanations: Readonly<Record<string, Explanation>> = {
         {
           title: "Tool modules",
           prose:
-            "Each tool gets its own file under `home/naitokosuke/`. Composing them as a flat list keeps every concern shallow — opening `git.nix` shows the full git story, opening `claude.nix` shows the full Claude Code story.",
-          lines: [7, 22],
+            "Each tool gets its own file directly under `home/`. Composing them as a flat list keeps every concern shallow — opening `git.nix` shows the full git story, opening `claude.nix` shows the full Claude Code story.",
+          lines: [8, 23],
         },
         {
           title: "Identity",
           prose:
-            "`home.username` and `home.homeDirectory` (with `lib.mkForce` so the path always wins over inferences) tie this user config to `naitokosuke`. `home.stateVersion` is pinned at the version this config was first written for — never bump casually.",
-          lines: [24, 27],
+            "`home.username` and `home.homeDirectory` are derived from `config.naitokosuke.*` — the typed personal-constants module — instead of being hardcoded, with `lib.mkForce` so the home path always wins over inferences. `home.stateVersion` is pinned at the version this config was first written for — never bump casually.",
+          lines: [25, 28],
         },
       ],
     },
   },
 
-  "home/naitokosuke/atuin.nix": {
+  "home/atuin.nix": {
     about: "atuin (synced fuzzy shell history) with Zsh + Nushell integration.",
     tags: ["shell", "history"],
     walkthrough: {
@@ -293,7 +316,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     },
   },
 
-  "home/naitokosuke/claude.nix": {
+  "home/claude.nix": {
     about: "Claude Code module — writable configs, settings.json, hooks, permissions.",
     tags: ["ai", "claude"],
     walkthrough: {
@@ -314,7 +337,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     },
   },
 
-  "home/naitokosuke/direnv.nix": {
+  "home/direnv.nix": {
     about: "direnv + nix-direnv with a CGO_ENABLED-forced patched build.",
     tags: ["dev-env"],
     walkthrough: {
@@ -323,7 +346,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     },
   },
 
-  "home/naitokosuke/gh.nix": {
+  "home/gh.nix": {
     about: "GitHub CLI config plus the gh-sub-issue extension built via buildGoModule.",
     tags: ["github", "cli"],
     walkthrough: {
@@ -332,7 +355,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     },
   },
 
-  "home/naitokosuke/ghostty.nix": {
+  "home/ghostty.nix": {
     about: "Ghostty terminal — Nushell shell, Catppuccin Mocha theme.",
     tags: ["terminal"],
     walkthrough: {
@@ -341,7 +364,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     },
   },
 
-  "home/naitokosuke/git.nix": {
+  "home/git.nix": {
     about: "Global git config — ignores, aliases, delta diffs, commit signing.",
     tags: ["git"],
     walkthrough: {
@@ -350,7 +373,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     },
   },
 
-  "home/naitokosuke/gwq.nix": {
+  "home/gwq.nix": {
     about: "gwq (worktree-flavoured ghq) configured via xdg.configFile-generated TOML.",
     tags: ["git", "workflow"],
     walkthrough: {
@@ -359,7 +382,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     },
   },
 
-  "home/naitokosuke/mcp.nix": {
+  "home/mcp.nix": {
     about: "MCP servers via natsukium/mcp-servers-nix — exposed to Claude Code.",
     tags: ["ai", "mcp"],
     walkthrough: {
@@ -368,7 +391,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     },
   },
 
-  "home/naitokosuke/octorus.nix": {
+  "home/octorus.nix": {
     about: "Octorus (GitHub review TUI) config — editor, diff theme, key bindings.",
     tags: ["github", "review"],
     walkthrough: {
@@ -377,7 +400,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     },
   },
 
-  "home/naitokosuke/playwright.nix": {
+  "home/playwright.nix": {
     about: "Temporary npm-global Playwright CLI install via home.activation.",
     tags: ["test"],
     walkthrough: {
@@ -386,7 +409,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     },
   },
 
-  "home/naitokosuke/starship.nix": {
+  "home/starship.nix": {
     about: "Starship prompt — Nushell integration, newline and module-ordering tweaks.",
     tags: ["shell", "prompt"],
     walkthrough: {
@@ -395,7 +418,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     },
   },
 
-  "home/naitokosuke/vscode.nix": {
+  "home/vscode.nix": {
     about: "VS Code settings + keybindings synced from the vscode-settings repo.",
     tags: ["editor"],
     walkthrough: {
@@ -411,7 +434,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     },
   },
 
-  "home/naitokosuke/zoxide.nix": {
+  "home/zoxide.nix": {
     about: "zoxide — a learning `cd`. Integrated into Zsh and Nushell.",
     tags: ["shell", "navigation"],
     walkthrough: {
@@ -420,7 +443,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     },
   },
 
-  "home/naitokosuke/shell/default.nix": {
+  "home/shell/default.nix": {
     about: "Aggregator that pulls in Nushell (interactive) and Zsh (login).",
     tags: ["shell", "index"],
     walkthrough: {
@@ -429,7 +452,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     },
   },
 
-  "home/naitokosuke/shell/common.nix": {
+  "home/shell/common.nix": {
     about: "Shared shell config — PATH, env vars, aliases, Homebrew-forbidden formulae.",
     tags: ["shell", "common"],
     walkthrough: {
@@ -438,7 +461,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     },
   },
 
-  "home/naitokosuke/shell/nushell.nix": {
+  "home/shell/nushell.nix": {
     about: "Nushell — interactive shell inside Ghostty.",
     tags: ["shell"],
     walkthrough: {
@@ -447,7 +470,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     },
   },
 
-  "home/naitokosuke/shell/zsh.nix": {
+  "home/shell/zsh.nix": {
     about: "Zsh — login shell for VS Code extensions, SSH, and Claude Code.",
     tags: ["shell"],
     walkthrough: {

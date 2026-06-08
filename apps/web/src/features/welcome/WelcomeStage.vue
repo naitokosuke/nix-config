@@ -23,7 +23,7 @@ const entries: ReadonlyArray<Entry> = [
   },
   {
     label: "home/",
-    path: "home/naitokosuke/home.nix",
+    path: "home/default.nix",
     blurb: "User declaration layer via home-manager.",
   },
 ];
