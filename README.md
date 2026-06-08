@@ -2,6 +2,9 @@
 
 Personal Nix configuration for macOS using [nix-darwin](https://github.com/LnL7/nix-darwin) and [home-manager](https://github.com/nix-community/home-manager).
 
+An interactive, VS Code-flavoured walkthrough of this repository is published at
+**[naitokosuke-dotfiles.void.app](https://naitokosuke-dotfiles.void.app/)** (source in [`docs/`](docs/)).
+
 ## Prerequisites
 
 - macOS on Apple Silicon
@@ -35,18 +38,27 @@ Personal Nix configuration for macOS using [nix-darwin](https://github.com/LnL7/
 
 ```
 .
-├── flake.nix          # Entry point and flake inputs
+├── flake.nix          # Entry point: flake inputs and darwinConfigurations
+├── modules/
+│   └── naitokosuke/   # Shared module: personal constants (username, email, …)
+│                      #   exposed as `config.naitokosuke.*` to both nix-darwin and home-manager
 ├── hosts/             # System-level macOS settings (nix-darwin)
-│   ├── common/        # Shared settings for all hosts (Dock, Finder, keyboard, etc.)
-│   ├── Mac-big/       # Mac mini specific settings
-│   └── Macbook-heavy/ # MacBook Air specific settings
-└── home/              # User-specific configurations (home-manager)
-    └── naitokosuke/
-        ├── home.nix   # Main entry point
-        └── shell/     # Shell configurations (Nushell, Zsh)
+│   ├── common/        # Shared settings — Dock, Finder, keyboard, Homebrew,
+│   │                  #   packages, Nix daemon, and home-manager wiring
+│   ├── Mac-big/       # Mac mini host
+│   └── Macbook-heavy/ # MacBook host (Touch ID for sudo)
+├── home/              # User-level settings (home-manager), one module per program
+│   ├── shell/         # Shell configurations (Nushell, Zsh)
+│   ├── git.nix        # Git, gh, gwq, …
+│   ├── claude.nix     # Claude Code settings, rules, skills
+│   ├── ghostty.nix    # Terminal
+│   ├── starship.nix   # Prompt
+│   └── …              # atuin, direnv, mcp, octorus, playwright, vscode, zoxide, …
+└── docs/              # Interactive walkthrough web app (Vite+ / void)
+                       #   deployed to https://naitokosuke-dotfiles.void.app/
 ```
 
-See each directory for the full list of modules.
+Each `default.nix` aggregates the modules in its directory — see them for the full list.
 
 ### CLI Packages
 
@@ -56,11 +68,21 @@ Managed via nixpkgs. See [`hosts/common/packages.nix`](hosts/common/packages.nix
 
 Managed via Homebrew Casks. See [`hosts/common/homebrew.nix`](hosts/common/homebrew.nix).
 
+### Hosts
+
+The flake builds one `darwinConfiguration` per host listed in [`flake.nix`](flake.nix):
+
+| Host            | Machine     |
+| --------------- | ----------- |
+| `Mac-big`       | Mac mini    |
+| `Macbook-heavy` | MacBook     |
+
 ## Customization
 
 1. Update `hosts/common/packages.nix`: Add or remove CLI packages
 2. Update `hosts/common/`: Add or modify system settings
-3. Update `home/naitokosuke/`: Add or modify user configurations
+3. Update `home/`: Add or modify user (home-manager) configurations
+4. Update `modules/naitokosuke/`: Change personal constants (username, email, …)
 
 ## Usage
 
@@ -83,3 +105,19 @@ VSCode settings are automatically synchronized from the [vscode-settings](https:
 - Existing settings are automatically backed up with `.backup` extension
 - JSONC keybindings are converted to JSON format automatically
 - Changes to the settings repository are applied with `darwin-rebuild switch`
+
+## Walkthrough Site (`docs/`)
+
+[`docs/`](docs/) is a [Vite+](https://viteplus.dev/) / [void](https://void.app/) single-page app that renders this
+repository as an interactive, VS Code-flavoured walkthrough. It reads the actual `*.nix`, `README.md`, and `flake.nix`
+files at build time, so the published site always mirrors the real configuration.
+
+```bash
+cd docs
+vp install   # install dependencies
+vp dev       # local dev server
+vp build     # production build
+vp check     # format, lint, and type-check
+```
+
+It is deployed to <https://naitokosuke-dotfiles.void.app/>.

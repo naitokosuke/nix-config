@@ -2,32 +2,32 @@ import type { DirNode, FileEntry, Lang, TreeNode } from "./types.ts";
 import { explanations } from "./explanations.ts";
 
 const rawModules: Record<string, string> = {
-  ...import.meta.glob("../../../README.md", {
+  ...import.meta.glob("../../README.md", {
     eager: true,
     query: "?raw",
     import: "default",
   }),
-  ...import.meta.glob("../../../flake.nix", {
+  ...import.meta.glob("../../flake.nix", {
     eager: true,
     query: "?raw",
     import: "default",
   }),
-  ...import.meta.glob("../../../hosts/**/*.nix", {
+  ...import.meta.glob("../../hosts/**/*.nix", {
     eager: true,
     query: "?raw",
     import: "default",
   }),
-  ...import.meta.glob("../../../modules/**/*.nix", {
+  ...import.meta.glob("../../modules/**/*.nix", {
     eager: true,
     query: "?raw",
     import: "default",
   }),
-  ...import.meta.glob("../../../home/**/*.nix", {
+  ...import.meta.glob("../../home/**/*.nix", {
     eager: true,
     query: "?raw",
     import: "default",
   }),
-  ...import.meta.glob("../../AGENTS.md", {
+  ...import.meta.glob("../AGENTS.md", {
     eager: true,
     query: "?raw",
     import: "default",
@@ -53,8 +53,8 @@ function langFromName(name: string): Lang {
 }
 
 function toRepoPath(viteKey: string): string {
-  if (viteKey.startsWith("../../../")) return viteKey.slice("../../../".length);
-  if (viteKey.startsWith("../../")) return `apps/web/${viteKey.slice("../../".length)}`;
+  if (viteKey.startsWith("../../")) return viteKey.slice("../../".length);
+  if (viteKey.startsWith("../")) return `docs/${viteKey.slice("../".length)}`;
   return viteKey;
 }
 
