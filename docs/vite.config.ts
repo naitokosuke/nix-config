@@ -18,7 +18,7 @@ export default defineConfig({
   plugins: [voidPlugin(), voidVue()],
   server: {
     fs: {
-      allow: ["../.."],
+      allow: [".."],
     },
   },
 });

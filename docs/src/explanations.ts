@@ -479,7 +479,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     },
   },
 
-  "apps/web/AGENTS.md": {
+  "docs/AGENTS.md": {
     about: "Agent operating guide for the Vite+ frontend.",
     tags: ["docs", "web"],
     walkthrough: {
