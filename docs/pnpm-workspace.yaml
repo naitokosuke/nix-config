@@ -10,6 +10,7 @@ catalog:
 overrides:
   vite: "catalog:"
   vitest: "catalog:"
+  esbuild: ">=0.28.1"
 peerDependencyRules:
   allowAny:
     - vite
