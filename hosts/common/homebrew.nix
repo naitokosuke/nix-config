@@ -26,13 +26,6 @@
     onActivation = {
       autoUpdate = true;
       upgrade = true;
-      # NOTE: "zap"/"uninstall" を指定すると nix-darwin のモジュールが
-      # `brew bundle ... --force-cleanup` を生成するが、このフラグは現行の
-      # Homebrew (6.x、pin している brew-src 5.1.10 でも) で廃止されており
-      # `Error: invalid option: --force-cleanup` でアクティベーションが失敗する。
-      # upstream (LnL7/nix-darwin・nix-darwin/nix-darwin の master とも) 未修正のため
-      # 自動 cleanup は無効化する。掃除したいときは実際の Brewfile を指定して手動で:
-      #   brew bundle cleanup --zap --force --file=<生成されたBrewfile>
       cleanup = "none";
     };
 
