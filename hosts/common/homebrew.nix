@@ -20,7 +20,10 @@
     enable = true;
 
     taps = [
-      "productdevbook/tap"
+      {
+        name = "productdevbook/tap";
+        trusted = true;
+      }
     ];
 
     onActivation = {
