@@ -47,7 +47,7 @@ in
     git
     gomi
     gwq
-    herdr
+    inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
     ni
     nixd
     nix-output-monitor

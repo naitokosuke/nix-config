@@ -23,6 +23,11 @@
     vscode-settings.url = "github:naitokosuke/vscode-settings";
     vscode-settings.flake = false;
 
+    # TODO: nixpkgs の herdr は Darwin ビルド修正(NixOS/nixpkgs#536015)が
+    # nixpkgs-unstable に降りてきたら pkgs.herdr に戻してこの input を削除する
+    herdr.url = "github:ogulcancelik/herdr";
+    herdr.inputs.nixpkgs.follows = "nixpkgs";
+
     vize.url = "github:naitokosuke/vize-nix";
 
     octorus.url = "github:naitokosuke/octorus-nix";

@@ -96,6 +96,26 @@
         "type": "github"
       }
     },
+    "herdr": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783040565,
+        "narHash": "sha256-RRXcYn3mpQ8EqDoS/uLnnFBXz4t80h4eBj1C1GgbqYA=",
+        "owner": "ogulcancelik",
+        "repo": "herdr",
+        "rev": "ef67a97047c92e4af6b9d69c7292962426109bc1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ogulcancelik",
+        "repo": "herdr",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -119,11 +139,11 @@
     "homebrew-cask": {
       "flake": false,
       "locked": {
-        "lastModified": 1783044659,
-        "narHash": "sha256-VBp8eiTQZOHUOOtPjDVJeqQtlGaOrpxWddkDyS0u5jk=",
+        "lastModified": 1783045420,
+        "narHash": "sha256-05i8+NPEMkdNM099Vg+F+QFACVKGzM6qi0EYCSG8GDw=",
         "owner": "homebrew",
         "repo": "homebrew-cask",
-        "rev": "464720236ac997214932f3d92487f4963542c39c",
+        "rev": "6d885c08ae311cf6a6b4136ac2641f59c2733035",
         "type": "github"
       },
       "original": {
@@ -144,11 +164,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1783031507,
-        "narHash": "sha256-GpKuB8U8j0ca6q51i/enmSzKcjmn3cnrOJjPdU5+kqQ=",
+        "lastModified": 1783050862,
+        "narHash": "sha256-H/LNTRpjsywbzx3HE0n6ODIStrY6Oxm6AIk6ya5G7BE=",
         "owner": "numtide",
         "repo": "llm-agents.nix",
-        "rev": "60b0143d99e01857309b938e6e9b119d67174451",
+        "rev": "6bd046996b057c9d715f60b5438bd1aa18c2bea3",
         "type": "github"
       },
       "original": {
@@ -315,6 +335,7 @@
     },
     "root": {
       "inputs": {
+        "herdr": "herdr",
         "home-manager": "home-manager",
         "homebrew-cask": "homebrew-cask",
         "llm-agents": "llm-agents",
@@ -409,11 +430,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1781842643,
-        "narHash": "sha256-5u9Mlboj4Eesr2iUzF84Yiyqdhqprob0bI4fKBZmvjQ=",
+        "lastModified": 1783046593,
+        "narHash": "sha256-irdv6LzwZyG9tDsTTIoe+hMutlPYrMJHsITDCJWEIbg=",
         "owner": "naitokosuke",
         "repo": "vp-nix",
-        "rev": "6c20d7129372fc8a34cd248fe3e67c8db794731b",
+        "rev": "7fa7438d311a6e49e52d6887df0f9434680ad784",
         "type": "github"
       },
       "original": {
