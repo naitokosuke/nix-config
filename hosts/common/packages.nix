@@ -47,6 +47,7 @@ in
     git
     gomi
     gwq
+    herdr
     ni
     nixd
     nix-output-monitor
