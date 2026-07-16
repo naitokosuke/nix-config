@@ -84,7 +84,7 @@
                 nixpkgs.config.allowUnfree = true;
                 nixpkgs.hostPlatform = system;
                 nixpkgs.overlays = [
-                  llm-agents.overlays.default
+                  llm-agents.overlays.shared-nixpkgs
                   # TODO: Remove after nixpkgs fixes nushell test failures in sandbox
                   # https://github.com/NixOS/nixpkgs/issues (nushell 0.112.1 SHLVL tests fail with "Operation not permitted")
                   (final: prev: {
