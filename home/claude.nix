@@ -136,7 +136,28 @@ in
   home.file.".claude/CLAUDE.md".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/src/github.com/${config.home.username}/rule-rule-rule/CLAUDE.md";
 
-  # Claude Code skills - symlink to skill-skill-skill repository
-  home.file.".claude/skills".source =
-    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/src/github.com/${config.home.username}/skill-skill-skill/.claude/skills";
+  # Claude Code skills - link each skill from the skill-skill-skill repository.
+  # ~/.claude/skills must stay a real directory: programs.claude-code installs
+  # its generated MCP plugin into ~/.claude/skills/claude-code-home-manager,
+  # which fails with "outside $HOME" if the directory is itself a symlink.
+  # Runs before linkGeneration so the old whole-directory symlink is gone
+  # before home-manager links the generated plugin into the directory.
+  home.activation.claudeSkills = lib.hm.dag.entryBefore [ "linkGeneration" ] ''
+    skillsRepo="${config.home.homeDirectory}/src/github.com/${config.home.username}/skill-skill-skill/.claude/skills"
+    skillsDir="$HOME/.claude/skills"
+    # Migrate from the previous whole-directory symlink
+    [ -L "$skillsDir" ] && run rm "$skillsDir"
+    run mkdir -p "$skillsDir"
+    # Drop stale links into the repo, then relink every skill
+    for link in "$skillsDir"/*; do
+      if [ -L "$link" ] && [[ "$(readlink "$link")" == "$skillsRepo"/* ]]; then
+        run rm "$link"
+      fi
+    done
+    if [ -d "$skillsRepo" ]; then
+      for skill in "$skillsRepo"/*/; do
+        run ln -sfn "''${skill%/}" "$skillsDir/$(basename "$skill")"
+      done
+    fi
+  '';
 }
