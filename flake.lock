@@ -320,6 +320,7 @@
         "nixpkgs": "nixpkgs",
         "nu-scripts": "nu-scripts",
         "octorus": "octorus",
+        "skill-skill-skill": "skill-skill-skill",
         "treefmt-nix": "treefmt-nix_2",
         "vize": "vize",
         "vp": "vp",
@@ -345,6 +346,22 @@
         "owner": "oxalica",
         "repo": "rust-overlay",
         "type": "github"
+      }
+    },
+    "skill-skill-skill": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1782006020,
+        "narHash": "sha256-byG6iYnmAR0BXx+7zOvcUoCf1cIHNR/MR+xsW5J5lms=",
+        "ref": "refs/heads/main",
+        "rev": "eadadf3504607e1ba079167df77e24647fc31b25",
+        "revCount": 16,
+        "type": "git",
+        "url": "file:///Users/naitokosuke/src/github.com/naitokosuke/skill-skill-skill"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///Users/naitokosuke/src/github.com/naitokosuke/skill-skill-skill"
       }
     },
     "systems": {

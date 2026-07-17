@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 
@@ -130,34 +131,36 @@ in
       };
   };
 
-  # Claude Code rules and CLAUDE.md - symlink to rule-rule-rule repository
-  home.file.".claude/rules".source =
-    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/src/github.com/${config.home.username}/rule-rule-rule/rules";
-  home.file.".claude/CLAUDE.md".source =
-    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/src/github.com/${config.home.username}/rule-rule-rule/CLAUDE.md";
-
-  # Claude Code skills - link each skill from the skill-skill-skill repository.
-  # ~/.claude/skills must stay a real directory: programs.claude-code installs
-  # its generated MCP plugin into ~/.claude/skills/claude-code-home-manager,
-  # which fails with "outside $HOME" if the directory is itself a symlink.
-  # Runs before linkGeneration so the old whole-directory symlink is gone
-  # before home-manager links the generated plugin into the directory.
-  home.activation.claudeSkills = lib.hm.dag.entryBefore [ "linkGeneration" ] ''
-    skillsRepo="${config.home.homeDirectory}/src/github.com/${config.home.username}/skill-skill-skill/.claude/skills"
-    skillsDir="$HOME/.claude/skills"
-    # Migrate from the previous whole-directory symlink
-    [ -L "$skillsDir" ] && run rm "$skillsDir"
-    run mkdir -p "$skillsDir"
-    # Drop stale links into the repo, then relink every skill
-    for link in "$skillsDir"/*; do
-      if [ -L "$link" ] && [[ "$(readlink "$link")" == "$skillsRepo"/* ]]; then
-        run rm "$link"
-      fi
-    done
-    if [ -d "$skillsRepo" ]; then
-      for skill in "$skillsRepo"/*/; do
-        run ln -sfn "''${skill%/}" "$skillsDir/$(basename "$skill")"
-      done
-    fi
-  '';
+  # Claude Code rules, CLAUDE.md and skills - out-of-store symlinks into the
+  # rule-rule-rule / skill-skill-skill repositories.
+  #
+  # Skills are linked one by one instead of linking ~/.claude/skills itself:
+  # programs.claude-code installs its generated MCP plugin into
+  # ~/.claude/skills/claude-code-home-manager, which fails with
+  # "outside $HOME" when the directory is a symlink.
+  home.file =
+    let
+      ghqRoot = "${config.home.homeDirectory}/src/github.com/${config.home.username}";
+      link = path: { source = config.lib.file.mkOutOfStoreSymlink "${ghqRoot}/${path}"; };
+      # Skill names are discovered from the locked skill-skill-skill input
+      # (pure eval cannot readDir the live working tree). The links themselves
+      # still point at the working tree, so skill *content* stays live.
+      # After adding/removing a skill: commit it, then
+      #   nix flake update skill-skill-skill
+      skillNames = builtins.attrNames (
+        lib.filterAttrs (_: type: type == "directory") (
+          builtins.readDir "${inputs.skill-skill-skill}/.claude/skills"
+        )
+      );
+      skillLinks = lib.listToAttrs (
+        map (
+          name: lib.nameValuePair ".claude/skills/${name}" (link "skill-skill-skill/.claude/skills/${name}")
+        ) skillNames
+      );
+    in
+    {
+      ".claude/rules" = link "rule-rule-rule/rules";
+      ".claude/CLAUDE.md" = link "rule-rule-rule/CLAUDE.md";
+    }
+    // skillLinks;
 }

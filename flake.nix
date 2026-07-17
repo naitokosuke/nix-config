@@ -23,6 +23,14 @@
     vscode-settings.url = "github:naitokosuke/vscode-settings";
     vscode-settings.flake = false;
 
+    # Claude Code skills - non-flake local input; home/claude.nix readDirs the
+    # locked snapshot to discover skill names in pure eval.
+    # Resync after adding/removing a skill: nix flake update skill-skill-skill
+    skill-skill-skill = {
+      url = "git+file:///Users/naitokosuke/src/github.com/naitokosuke/skill-skill-skill";
+      flake = false;
+    };
+
     # TODO: nixpkgs の herdr は Darwin ビルド修正(NixOS/nixpkgs#536015)が
     # nixpkgs-unstable に降りてきたら pkgs.herdr に戻してこの input を削除する
     herdr.url = "github:ogulcancelik/herdr";
