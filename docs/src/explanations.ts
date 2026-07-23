@@ -40,26 +40,26 @@ export const explanations: Readonly<Record<string, Explanation>> = {
         {
           title: "Inputs",
           prose:
-            "Every upstream is pinned and `follows = nixpkgs` so the world ships one pkgs set. Personal projects (`vize`, `octorus`, `vp`, `vscode-settings`) come in as flakes too, and a few non-flake inputs (`homebrew-cask`, `skill-skill-skill`, `nu-scripts`) are locked snapshots read at eval time.",
-          lines: [4, 55],
+            "Every upstream is pinned and `follows = nixpkgs` so the world ships one pkgs set. `vscode-settings` and a few non-flake inputs (`homebrew-cask`, `skill-skill-skill`, `nu-scripts`) are locked snapshots read at eval time. The personal `*-nix` flakes that used to live here (`vize`, `octorus`, `vp`) have all moved into `./pkgs` under nvfetcher tracking.",
+          lines: [4, 49],
         },
         {
           title: "mkDarwinConfig",
           prose:
             "A small helper that builds one `darwinSystem` per host. It pins `aarch64-darwin` and Nixpkgs config (`allowUnfree` plus overlays: the custom `./pkgs` set tracked by nvfetcher, and `nushell` / `direnv` overrides that disable broken sandbox tests) inside an inline module — a `{ config, ... }:` function so `system.primaryUser` derives from `config.naitokosuke.username` rather than a hardcoded literal. It loads `./modules/naitokosuke` for those constants, then stitches `hosts/common`, `hosts/<hostName>`, and `home-manager` together.",
-          lines: [78, 124],
+          lines: [72, 118],
         },
         {
           title: "Per-host configurations",
           prose:
             "`darwinConfigurations` is built by mapping the `hosts` list (defined just above) through `mkDarwinConfig` with `nixpkgs.lib.genAttrs`. Adding a new Mac is a one-line append to that list — plus a `hosts/<host>/default.nix` for the diff — with no per-host `darwinConfigurations` attribute to hand-write.",
-          lines: [127, 127],
+          lines: [121, 121],
         },
         {
           title: "Custom packages output",
           prose:
             "`packages.<system>` exposes the same `./pkgs` set that the overlay injects, so `nix build .#ax` works standalone — handy for testing a derivation without evaluating a whole darwin configuration.",
-          lines: [129, 129],
+          lines: [123, 123],
         },
       ],
     },
@@ -77,6 +77,12 @@ export const explanations: Readonly<Record<string, Explanation>> = {
           prose:
             "`src.github` watches `yusukebe/ax` releases; `fetch.url` downloads the `ax-darwin-arm64` binary for that tag (`$ver` is substituted). The entry is named after the exact asset it pins, so adding another platform later is a new entry, not a rewrite.",
           lines: [4, 6],
+        },
+        {
+          title: "The vize, octorus, and vite-plus entries",
+          prose:
+            '`vize`, `octorus`, and `vite-plus` (`vp`) follow the same pattern with tar.gz assets — they replaced the standalone `vize-nix` / `octorus-nix` / `vp-nix` flake repos. One wrinkle: the octorus asset name embeds the version without the tag\'s `v` prefix, so `src.prefix = "v"` strips it at the tracker level and the URL re-adds it where needed.',
+          lines: [8, 21],
         },
       ],
     },
@@ -123,12 +129,75 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     },
   },
 
+  "pkgs/vize.nix": {
+    about: "vize (Vue.js toolchain in Rust) — installs the prebuilt darwin-arm64 tarball.",
+    tags: ["packages", "cli"],
+    walkthrough: {
+      intro:
+        "Same story as `ax`: upstream ships prebuilt binaries, so the derivation just installs the `vize-aarch64-apple-darwin.tar.gz` asset that nvfetcher pinned. This replaced the standalone `vize-nix` flake repo — one less repository and update pipeline to maintain.",
+      sections: [
+        {
+          title: "Fetch and install",
+          prose:
+            'The tarball is flat — no top-level directory, just the `vize` binary — so `sourceRoot = "."` keeps the unpacker in place and `install -Dm755` does the rest.',
+          lines: [8, 20],
+        },
+        {
+          title: "Version self-check",
+          prose:
+            "`versionCheckHook` runs `vize --version` after install and fails the build if the output doesn't match the derivation version — a cheap guard against upstream renaming assets or shipping a mislabeled binary.",
+          lines: [22, 23],
+        },
+      ],
+    },
+  },
+
+  "pkgs/octorus.nix": {
+    about: "octorus (AI-powered PR review tool) — installs the prebuilt darwin-arm64 tarball.",
+    tags: ["packages", "cli"],
+    walkthrough: {
+      intro:
+        "This replaced the standalone `octorus-nix` flake repo — and simplified it: octorus-nix compiled the Rust workspace from source on every version bump, but upstream publishes prebuilt binaries, so this derivation just unpacks the pinned tarball. No more rustc runs during `darwin-rebuild switch`.",
+      sections: [
+        {
+          title: "Fetch and install",
+          prose:
+            "The tarball unpacks into a versioned directory containing the `or` binary (yes, the CLI is called `or`, not `octorus` — hence `mainProgram`). stdenv auto-detects the single top-level directory, so no `sourceRoot` juggling is needed.",
+          lines: [7, 16],
+        },
+      ],
+    },
+  },
+
+  "pkgs/vite-plus.nix": {
+    about: "vite-plus (vp) — installs the official prebuilt darwin-arm64 release binary.",
+    tags: ["packages", "cli"],
+    walkthrough: {
+      intro:
+        "The Nix equivalent of upstream's `curl | bash` installer: it installs the same prebuilt `vp-aarch64-apple-darwin.tar.gz` that the official script downloads, pinned by nvfetcher. This replaced the standalone `vp-nix` flake repo. `vp` manages its own JS toolchain at runtime (`vp install` per project), so the binary is all Nix needs to provide. The TODO on top marks the exit plan: once nixpkgs ships vite-plus (NixOS/nixpkgs#533925), this file gives way to `pkgs.vite-plus`.",
+      sections: [
+        {
+          title: "Fetch and install",
+          prose:
+            'Same shape as `vize`: the tarball is flat — just the `vp` binary — so `sourceRoot = "."` keeps the unpacker in place and `install -Dm755` drops it at `$out/bin/vp`.',
+          lines: [9, 21],
+        },
+        {
+          title: "Metadata",
+          prose:
+            '`sourceProvenance = binaryNativeCode` marks the prebuilt binary honestly, `mainProgram = "vp"` names the CLI, and `platforms` pins `aarch64-darwin` — the one asset this entry tracks.',
+          lines: [23, 31],
+        },
+      ],
+    },
+  },
+
   ".github/workflows/nvfetcher.yml": {
-    about: "Weekly CI — reruns nvfetcher and opens an update PR when pins change.",
+    about: "Daily CI — reruns nvfetcher and opens an update PR when pins change.",
     tags: ["ci", "automation"],
     walkthrough: {
       intro:
-        "The automation half of the nvfetcher story. Once a week (or on manual dispatch) CI reruns nvfetcher; if any tracked tool released a new version, the regenerated `_sources/` lands in an auto-created pull request instead of anyone remembering to bump versions. Requires the repo setting that lets Actions create PRs.",
+        "The automation half of the nvfetcher story. Every morning at 08:00 JST (or on manual dispatch) CI reruns nvfetcher; if any tracked tool released a new version, the regenerated `_sources/` lands in an auto-created pull request instead of anyone remembering to bump versions. Requires the repo setting that lets Actions create PRs.",
       sections: [
         {
           title: "Running nvfetcher",
@@ -317,7 +386,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     tags: ["cli", "packages"],
     walkthrough: {
       intro:
-        "The system CLI toolbelt. Everything here is on `$PATH` for every user and login shell. Locally-built tools live alongside nixpkgs: `gwq` (worktree-aware git helper), `darwin-rebuild-nom` (pipes `darwin-rebuild` through `nix-output-monitor`), and `ax` — which comes from the `./pkgs` overlay, version-tracked by nvfetcher.",
+        "The system CLI toolbelt. Everything here is on `$PATH` for every user and login shell. Locally-built tools live alongside nixpkgs: `gwq` (worktree-aware git helper), `darwin-rebuild-nom` (pipes `darwin-rebuild` through `nix-output-monitor`), and the nvfetcher-tracked overlay packages from `./pkgs` (`ax`, `octorus`, `vite-plus`, `vize`).",
       sections: [
         {
           title: "gwq, built from source",
@@ -334,7 +403,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
         {
           title: "The CLI toolbelt",
           prose:
-            "Daily drivers: `gh`, `ghq`, `git`, `fd`, `fzf`, `ripgrep`, `sd`, `bun`, `pnpm`, `nodejs_24`. Nix workflow tools: `nixd`, `devenv`, `nix-output-monitor`, plus the locally-built `darwin-rebuild-nom`. `ax` at the top is the nvfetcher-tracked overlay package from `./pkgs`, and personal projects (`vize`, `octorus`, `vp`, `herdr`) are wired in via flake inputs.",
+            "Daily drivers: `gh`, `ghq`, `git`, `fd`, `fzf`, `ripgrep`, `sd`, `bun`, `pnpm`, `nodejs_24`. Nix workflow tools: `nixd`, `devenv`, `nix-output-monitor`, plus the locally-built `darwin-rebuild-nom`. `ax`, `octorus`, `vite-plus` (`vp`), and `vize` are the nvfetcher-tracked overlay packages from `./pkgs`; only `herdr` is still wired in via a flake input.",
           lines: [38, 67],
         },
       ],

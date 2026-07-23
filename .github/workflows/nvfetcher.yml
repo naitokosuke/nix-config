@@ -3,8 +3,8 @@ name: nvfetcher
 on:
   workflow_dispatch:
   schedule:
-    # Weekly on Monday 09:00 JST
-    - cron: "0 0 * * 1"
+    # Daily at 08:00 JST
+    - cron: "0 23 * * *"
 
 permissions:
   contents: write

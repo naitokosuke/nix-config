@@ -36,12 +36,6 @@
     herdr.url = "github:ogulcancelik/herdr";
     herdr.inputs.nixpkgs.follows = "nixpkgs";
 
-    vize.url = "github:naitokosuke/vize-nix";
-
-    octorus.url = "github:naitokosuke/octorus-nix";
-
-    vp.url = "github:naitokosuke/vp-nix";
-
     llm-agents.url = "github:numtide/llm-agents.nix";
     llm-agents.inputs.nixpkgs.follows = "nixpkgs";
 
