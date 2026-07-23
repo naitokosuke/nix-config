@@ -36,6 +36,7 @@ let
 in
 {
   environment.systemPackages = with pkgs; [
+    ax
     bun
     llm-agents.claude-code
     darwin-rebuild-nom
