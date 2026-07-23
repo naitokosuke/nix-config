@@ -41,7 +41,7 @@ An interactive, VS Code-flavoured walkthrough of this repository is published at
 ├── flake.nix          # Entry point: flake inputs and darwinConfigurations
 ├── nvfetcher.toml     # Version tracker for CLI tools not in nixpkgs (nvfetcher)
 ├── _sources/          # nvfetcher-generated pins (version + URL + hash) — never edit by hand
-├── pkgs/              # Custom package derivations (ax, …) reading from _sources/
+├── pkgs/              # Custom package derivations (ax, octorus, vize, …) reading from _sources/
 ├── modules/
 │   └── naitokosuke/   # Shared module: personal constants (username, email, …)
 │                      #   exposed as `config.naitokosuke.*` to both nix-darwin and home-manager
@@ -67,9 +67,15 @@ Each `default.nix` aggregates the modules in its directory — see them for the 
 
 Managed via nixpkgs. See [`hosts/common/packages.nix`](hosts/common/packages.nix).
 
-Tools not available in nixpkgs (e.g. [`ax`](https://github.com/yusukebe/ax)) are packaged in [`pkgs/`](pkgs/),
+Tools not available in nixpkgs (e.g. [`ax`](https://github.com/yusukebe/ax),
+[`vize`](https://github.com/ubugeeei-prod/vize), [`octorus`](https://github.com/ushironoko/octorus))
+are packaged in [`pkgs/`](pkgs/),
 with versions and hashes tracked by [nvfetcher](https://github.com/berberman/nvfetcher) via
 [`nvfetcher.toml`](nvfetcher.toml). A weekly GitHub Actions workflow regenerates the pins and opens an update PR.
+
+`vp` ([vite-plus](https://github.com/voidzero-dev/vite-plus)) is the exception: it stays on the
+[vp-nix](https://github.com/naitokosuke/vp-nix) flake input until the official nixpkgs packaging
+([NixOS/nixpkgs#533925](https://github.com/NixOS/nixpkgs/pull/533925)) lands.
 
 ### GUI Apps
 

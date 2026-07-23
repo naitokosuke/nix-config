@@ -228,38 +228,6 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1770537093,
-        "narHash": "sha256-pF1quXG5wsgtyuPOHcLfYg/ft/QMr8NnX0i6tW2187s=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "fef9403a3e4d31b0a23f0bacebbec52c248fbb51",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_3": {
-      "locked": {
-        "lastModified": 1781607440,
-        "narHash": "sha256-rxO+uc/KFbSJp+pgyXRuAX6QlG9hJdnt0BXpEQRXY+U=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "3e41b24abd260e8f71dbe2f5737d24122f972158",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_4": {
-      "locked": {
         "lastModified": 1773231277,
         "narHash": "sha256-Xy3WEpUAbpsz8ydgvVAQAGGB/WB+8cNA5cshiL0McTI=",
         "owner": "NixOS",
@@ -290,24 +258,6 @@
         "type": "github"
       }
     },
-    "octorus": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_2"
-      },
-      "locked": {
-        "lastModified": 1784164579,
-        "narHash": "sha256-EUvQuCAHfMqG+4W3iDiqdwBJyAUZWBUwa7qUI7raVMw=",
-        "owner": "naitokosuke",
-        "repo": "octorus-nix",
-        "rev": "d89468e9c91bae0111a95fcc5e91da8eec071dac",
-        "type": "github"
-      },
-      "original": {
-        "owner": "naitokosuke",
-        "repo": "octorus-nix",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "herdr": "herdr",
@@ -319,10 +269,8 @@
         "nix-homebrew": "nix-homebrew",
         "nixpkgs": "nixpkgs",
         "nu-scripts": "nu-scripts",
-        "octorus": "octorus",
         "skill-skill-skill": "skill-skill-skill",
         "treefmt-nix": "treefmt-nix_2",
-        "vize": "vize",
         "vp": "vp",
         "vscode-settings": "vscode-settings"
       }
@@ -420,27 +368,9 @@
         "type": "github"
       }
     },
-    "vize": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_3"
-      },
-      "locked": {
-        "lastModified": 1783903610,
-        "narHash": "sha256-bQRaCuMHLgjB6plcp+KV0bUCZVJVMdGgtPaIKeue06M=",
-        "owner": "naitokosuke",
-        "repo": "vize-nix",
-        "rev": "446bc32e070a16114e6b17abec9cb146d7a02358",
-        "type": "github"
-      },
-      "original": {
-        "owner": "naitokosuke",
-        "repo": "vize-nix",
-        "type": "github"
-      }
-    },
     "vp": {
       "inputs": {
-        "nixpkgs": "nixpkgs_4"
+        "nixpkgs": "nixpkgs_2"
       },
       "locked": {
         "lastModified": 1784293589,

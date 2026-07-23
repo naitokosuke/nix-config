@@ -53,6 +53,7 @@ in
     nixd
     nix-output-monitor
     nodejs_24
+    octorus
     oxfmt
     pnpm
     ripgrep
@@ -61,8 +62,7 @@ in
     tree
     uv
     vim
-    inputs.vize.packages.${pkgs.stdenv.hostPlatform.system}.default
-    inputs.octorus.packages.${pkgs.stdenv.hostPlatform.system}.default
+    vize
     inputs.vp.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 }

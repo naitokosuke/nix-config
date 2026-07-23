@@ -13,5 +13,35 @@
             "url": "https://github.com/yusukebe/ax/releases/download/v0.1.21/ax-darwin-arm64"
         },
         "version": "v0.1.21"
+    },
+    "octorus-darwin-arm64": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "octorus-darwin-arm64",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-fsqnB49TnsPG9waafix0ILJHjslGJEmAPc2EiJS0g+Y=",
+            "type": "url",
+            "url": "https://github.com/ushironoko/octorus/releases/download/v0.6.7/octorus-0.6.7-aarch64-apple-darwin.tar.gz"
+        },
+        "version": "0.6.7"
+    },
+    "vize-darwin-arm64": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "vize-darwin-arm64",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-UnEUAxlmJVUdqwDs6iASlOfC5WAQdH55QCYx9+i/SVQ=",
+            "type": "url",
+            "url": "https://github.com/ubugeeei-prod/vize/releases/download/v0.291.0/vize-aarch64-apple-darwin.tar.gz"
+        },
+        "version": "v0.291.0"
     }
 }

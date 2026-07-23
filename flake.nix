@@ -36,10 +36,10 @@
     herdr.url = "github:ogulcancelik/herdr";
     herdr.inputs.nixpkgs.follows = "nixpkgs";
 
-    vize.url = "github:naitokosuke/vize-nix";
-
-    octorus.url = "github:naitokosuke/octorus-nix";
-
+    # TODO: 公式の nixpkgs 対応(NixOS/nixpkgs#533925)が merge されたら
+    # pkgs.vite-plus に乗り換えてこの input と vp-nix を廃止する
+    # (nixpkgs 版は from-source ビルドで fspy が stub 化されているため、
+    # 縮退が解消されているかを確認してから乗り換えること)
     vp.url = "github:naitokosuke/vp-nix";
 
     llm-agents.url = "github:numtide/llm-agents.nix";

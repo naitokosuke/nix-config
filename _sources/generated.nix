@@ -14,4 +14,20 @@
       sha256 = "sha256-cjLX9MG8lri8nCFp7oL2JpUxxMbJQeNRIXeZoDThj6c=";
     };
   };
+  octorus-darwin-arm64 = {
+    pname = "octorus-darwin-arm64";
+    version = "0.6.7";
+    src = fetchurl {
+      url = "https://github.com/ushironoko/octorus/releases/download/v0.6.7/octorus-0.6.7-aarch64-apple-darwin.tar.gz";
+      sha256 = "sha256-fsqnB49TnsPG9waafix0ILJHjslGJEmAPc2EiJS0g+Y=";
+    };
+  };
+  vize-darwin-arm64 = {
+    pname = "vize-darwin-arm64";
+    version = "v0.291.0";
+    src = fetchurl {
+      url = "https://github.com/ubugeeei-prod/vize/releases/download/v0.291.0/vize-aarch64-apple-darwin.tar.gz";
+      sha256 = "sha256-UnEUAxlmJVUdqwDs6iASlOfC5WAQdH55QCYx9+i/SVQ=";
+    };
+  };
 }

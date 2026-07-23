@@ -40,7 +40,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
         {
           title: "Inputs",
           prose:
-            "Every upstream is pinned and `follows = nixpkgs` so the world ships one pkgs set. Personal projects (`vize`, `octorus`, `vp`, `vscode-settings`) come in as flakes too, and a few non-flake inputs (`homebrew-cask`, `skill-skill-skill`, `nu-scripts`) are locked snapshots read at eval time.",
+            "Every upstream is pinned and `follows = nixpkgs` so the world ships one pkgs set. Personal projects (`vp`, `vscode-settings`) come in as flakes too, and a few non-flake inputs (`homebrew-cask`, `skill-skill-skill`, `nu-scripts`) are locked snapshots read at eval time. `vp` carries a TODO: once the official nixpkgs packaging (NixOS/nixpkgs#533925) lands, it moves to `pkgs.vite-plus` and the input goes away — the same exit `vize` and `octorus` already took into `./pkgs`.",
           lines: [4, 55],
         },
         {
@@ -77,6 +77,12 @@ export const explanations: Readonly<Record<string, Explanation>> = {
           prose:
             "`src.github` watches `yusukebe/ax` releases; `fetch.url` downloads the `ax-darwin-arm64` binary for that tag (`$ver` is substituted). The entry is named after the exact asset it pins, so adding another platform later is a new entry, not a rewrite.",
           lines: [4, 6],
+        },
+        {
+          title: "The vize and octorus entries",
+          prose:
+            '`vize` and `octorus` follow the same pattern with tar.gz assets — they replaced the standalone `vize-nix` / `octorus-nix` flake repos. One wrinkle: the octorus asset name embeds the version without the tag\'s `v` prefix, so `src.prefix = "v"` strips it at the tracker level and the URL re-adds it where needed.',
+          lines: [8, 17],
         },
       ],
     },
@@ -118,6 +124,46 @@ export const explanations: Readonly<Record<string, Explanation>> = {
           prose:
             "`sourceProvenance = binaryNativeCode` honestly marks this as a prebuilt binary, and `platforms` is pinned to `aarch64-darwin` — the only asset we track, and the only system this flake targets.",
           lines: [20, 29],
+        },
+      ],
+    },
+  },
+
+  "pkgs/vize.nix": {
+    about: "vize (Vue.js toolchain in Rust) — installs the prebuilt darwin-arm64 tarball.",
+    tags: ["packages", "cli"],
+    walkthrough: {
+      intro:
+        "Same story as `ax`: upstream ships prebuilt binaries, so the derivation just installs the `vize-aarch64-apple-darwin.tar.gz` asset that nvfetcher pinned. This replaced the standalone `vize-nix` flake repo — one less repository and update pipeline to maintain.",
+      sections: [
+        {
+          title: "Fetch and install",
+          prose:
+            'The tarball is flat — no top-level directory, just the `vize` binary — so `sourceRoot = "."` keeps the unpacker in place and `install -Dm755` does the rest.',
+          lines: [8, 20],
+        },
+        {
+          title: "Version self-check",
+          prose:
+            "`versionCheckHook` runs `vize --version` after install and fails the build if the output doesn't match the derivation version — a cheap guard against upstream renaming assets or shipping a mislabeled binary.",
+          lines: [22, 23],
+        },
+      ],
+    },
+  },
+
+  "pkgs/octorus.nix": {
+    about: "octorus (AI-powered PR review tool) — installs the prebuilt darwin-arm64 tarball.",
+    tags: ["packages", "cli"],
+    walkthrough: {
+      intro:
+        "This replaced the standalone `octorus-nix` flake repo — and simplified it: octorus-nix compiled the Rust workspace from source on every version bump, but upstream publishes prebuilt binaries, so this derivation just unpacks the pinned tarball. No more rustc runs during `darwin-rebuild switch`.",
+      sections: [
+        {
+          title: "Fetch and install",
+          prose:
+            "The tarball unpacks into a versioned directory containing the `or` binary (yes, the CLI is called `or`, not `octorus` — hence `mainProgram`). stdenv auto-detects the single top-level directory, so no `sourceRoot` juggling is needed.",
+          lines: [7, 16],
         },
       ],
     },
@@ -317,7 +363,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     tags: ["cli", "packages"],
     walkthrough: {
       intro:
-        "The system CLI toolbelt. Everything here is on `$PATH` for every user and login shell. Locally-built tools live alongside nixpkgs: `gwq` (worktree-aware git helper), `darwin-rebuild-nom` (pipes `darwin-rebuild` through `nix-output-monitor`), and `ax` — which comes from the `./pkgs` overlay, version-tracked by nvfetcher.",
+        "The system CLI toolbelt. Everything here is on `$PATH` for every user and login shell. Locally-built tools live alongside nixpkgs: `gwq` (worktree-aware git helper), `darwin-rebuild-nom` (pipes `darwin-rebuild` through `nix-output-monitor`), and the nvfetcher-tracked overlay packages from `./pkgs` (`ax`, `octorus`, `vize`).",
       sections: [
         {
           title: "gwq, built from source",
@@ -334,7 +380,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
         {
           title: "The CLI toolbelt",
           prose:
-            "Daily drivers: `gh`, `ghq`, `git`, `fd`, `fzf`, `ripgrep`, `sd`, `bun`, `pnpm`, `nodejs_24`. Nix workflow tools: `nixd`, `devenv`, `nix-output-monitor`, plus the locally-built `darwin-rebuild-nom`. `ax` at the top is the nvfetcher-tracked overlay package from `./pkgs`, and personal projects (`vize`, `octorus`, `vp`, `herdr`) are wired in via flake inputs.",
+            "Daily drivers: `gh`, `ghq`, `git`, `fd`, `fzf`, `ripgrep`, `sd`, `bun`, `pnpm`, `nodejs_24`. Nix workflow tools: `nixd`, `devenv`, `nix-output-monitor`, plus the locally-built `darwin-rebuild-nom`. `ax`, `octorus`, and `vize` are the nvfetcher-tracked overlay packages from `./pkgs`, while `vp` (until nixpkgs ships vite-plus) and `herdr` are still wired in via flake inputs.",
           lines: [38, 67],
         },
       ],
