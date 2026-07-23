@@ -39,6 +39,9 @@ An interactive, VS Code-flavoured walkthrough of this repository is published at
 ```
 .
 ├── flake.nix          # Entry point: flake inputs and darwinConfigurations
+├── nvfetcher.toml     # Version tracker for CLI tools not in nixpkgs (nvfetcher)
+├── _sources/          # nvfetcher-generated pins (version + URL + hash) — never edit by hand
+├── pkgs/              # Custom package derivations (ax, …) reading from _sources/
 ├── modules/
 │   └── naitokosuke/   # Shared module: personal constants (username, email, …)
 │                      #   exposed as `config.naitokosuke.*` to both nix-darwin and home-manager
@@ -63,6 +66,10 @@ Each `default.nix` aggregates the modules in its directory — see them for the 
 ### CLI Packages
 
 Managed via nixpkgs. See [`hosts/common/packages.nix`](hosts/common/packages.nix).
+
+Tools not available in nixpkgs (e.g. [`ax`](https://github.com/yusukebe/ax)) are packaged in [`pkgs/`](pkgs/),
+with versions and hashes tracked by [nvfetcher](https://github.com/berberman/nvfetcher) via
+[`nvfetcher.toml`](nvfetcher.toml). A weekly GitHub Actions workflow regenerates the pins and opens an update PR.
 
 ### GUI Apps
 
@@ -95,6 +102,11 @@ Update flake inputs:
 ```bash
 nix flake update
 darwin-rebuild switch --flake .#Mac-big
+```
+
+Update nvfetcher-tracked tool versions (regenerates `_sources/`):
+```bash
+nix run nixpkgs#nvfetcher
 ```
 
 ## VSCode Settings Sync
