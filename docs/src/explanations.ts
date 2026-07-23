@@ -193,11 +193,11 @@ export const explanations: Readonly<Record<string, Explanation>> = {
   },
 
   ".github/workflows/nvfetcher.yml": {
-    about: "Weekly CI — reruns nvfetcher and opens an update PR when pins change.",
+    about: "Daily CI — reruns nvfetcher and opens an update PR when pins change.",
     tags: ["ci", "automation"],
     walkthrough: {
       intro:
-        "The automation half of the nvfetcher story. Once a week (or on manual dispatch) CI reruns nvfetcher; if any tracked tool released a new version, the regenerated `_sources/` lands in an auto-created pull request instead of anyone remembering to bump versions. Requires the repo setting that lets Actions create PRs.",
+        "The automation half of the nvfetcher story. Every morning at 08:00 JST (or on manual dispatch) CI reruns nvfetcher; if any tracked tool released a new version, the regenerated `_sources/` lands in an auto-created pull request instead of anyone remembering to bump versions. Requires the repo setting that lets Actions create PRs.",
       sections: [
         {
           title: "Running nvfetcher",

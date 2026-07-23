@@ -72,7 +72,7 @@ Tools not available in nixpkgs (e.g. [`ax`](https://github.com/yusukebe/ax),
 [`vite-plus`](https://github.com/voidzero-dev/vite-plus) (`vp`))
 are packaged in [`pkgs/`](pkgs/),
 with versions and hashes tracked by [nvfetcher](https://github.com/berberman/nvfetcher) via
-[`nvfetcher.toml`](nvfetcher.toml). A weekly GitHub Actions workflow regenerates the pins and opens an update PR.
+[`nvfetcher.toml`](nvfetcher.toml). A daily GitHub Actions workflow (08:00 JST) regenerates the pins and opens an update PR.
 
 Once the official nixpkgs packaging of vite-plus ([NixOS/nixpkgs#533925](https://github.com/NixOS/nixpkgs/pull/533925))
 lands, `pkgs/vite-plus.nix` will be replaced by `pkgs.vite-plus` (see the TODO in that file).
