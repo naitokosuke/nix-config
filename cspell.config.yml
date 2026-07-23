@@ -22,6 +22,7 @@ words:
   - nixpkgs
   - Notif
   - numtide
+  - nvfetcher
   - Pathbar
   - pkgs
   - promptinit
@@ -34,6 +35,7 @@ words:
   - swipescrolldirection
   - tilesize
   - treefmt
+  - yusukebe
   - zhaofengli
 ignorePaths:
   - node_modules

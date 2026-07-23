@@ -1,0 +1,35 @@
+name: nvfetcher
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Weekly on Monday 09:00 JST
+    - cron: "0 0 * * 1"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: cachix/install-nix-action@v31
+
+      - name: Run nvfetcher
+        run: |
+          printf '[keys]\ngithub = "%s"\n' "${{ secrets.GITHUB_TOKEN }}" > "$RUNNER_TEMP/keyfile.toml"
+          nix run nixpkgs#nvfetcher -- --keyfile "$RUNNER_TEMP/keyfile.toml"
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: nvfetcher-update
+          commit-message: "chore: update nvfetcher sources"
+          title: "chore: update nvfetcher sources"
+          body: |
+            Automated update of `_sources/generated.nix` by the nvfetcher workflow.
+          add-paths: _sources/
+          delete-branch: true
