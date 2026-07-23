@@ -29,6 +29,21 @@
         },
         "version": "0.6.7"
     },
+    "vite-plus-darwin-arm64": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "vite-plus-darwin-arm64",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-2m07OPIdNyIhrg/jsI4dTRePIkPHlHmim+FzLXZm0eo=",
+            "type": "url",
+            "url": "https://github.com/voidzero-dev/vite-plus/releases/download/v0.2.6/vp-aarch64-apple-darwin.tar.gz"
+        },
+        "version": "v0.2.6"
+    },
     "vize-darwin-arm64": {
         "cargoLock": null,
         "date": null,

@@ -226,22 +226,6 @@
         "type": "github"
       }
     },
-    "nixpkgs_2": {
-      "locked": {
-        "lastModified": 1773231277,
-        "narHash": "sha256-Xy3WEpUAbpsz8ydgvVAQAGGB/WB+8cNA5cshiL0McTI=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "75690239f08f885ca9b0267580101f60d10fbe62",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nu-scripts": {
       "flake": false,
       "locked": {
@@ -271,7 +255,6 @@
         "nu-scripts": "nu-scripts",
         "skill-skill-skill": "skill-skill-skill",
         "treefmt-nix": "treefmt-nix_2",
-        "vp": "vp",
         "vscode-settings": "vscode-settings"
       }
     },
@@ -365,24 +348,6 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
-        "type": "github"
-      }
-    },
-    "vp": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_2"
-      },
-      "locked": {
-        "lastModified": 1784293589,
-        "narHash": "sha256-jOEwG2dLbwpaC8VThLAhjU8VK6n8QoBvydGCJji/Mgs=",
-        "owner": "naitokosuke",
-        "repo": "vp-nix",
-        "rev": "fadcbbcadcb999e531c6cb4730e10e97616fe54a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "naitokosuke",
-        "repo": "vp-nix",
         "type": "github"
       }
     },

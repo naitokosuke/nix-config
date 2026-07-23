@@ -62,7 +62,7 @@ in
     tree
     uv
     vim
+    vite-plus
     vize
-    inputs.vp.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 }

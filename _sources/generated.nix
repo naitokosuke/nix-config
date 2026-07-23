@@ -22,6 +22,14 @@
       sha256 = "sha256-fsqnB49TnsPG9waafix0ILJHjslGJEmAPc2EiJS0g+Y=";
     };
   };
+  vite-plus-darwin-arm64 = {
+    pname = "vite-plus-darwin-arm64";
+    version = "v0.2.6";
+    src = fetchurl {
+      url = "https://github.com/voidzero-dev/vite-plus/releases/download/v0.2.6/vp-aarch64-apple-darwin.tar.gz";
+      sha256 = "sha256-2m07OPIdNyIhrg/jsI4dTRePIkPHlHmim+FzLXZm0eo=";
+    };
+  };
   vize-darwin-arm64 = {
     pname = "vize-darwin-arm64";
     version = "v0.291.0";
