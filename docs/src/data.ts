@@ -12,6 +12,26 @@ const rawModules: Record<string, string> = {
     query: "?raw",
     import: "default",
   }),
+  ...import.meta.glob("../../nvfetcher.toml", {
+    eager: true,
+    query: "?raw",
+    import: "default",
+  }),
+  ...import.meta.glob("../../_sources/*.nix", {
+    eager: true,
+    query: "?raw",
+    import: "default",
+  }),
+  ...import.meta.glob("../../pkgs/**/*.nix", {
+    eager: true,
+    query: "?raw",
+    import: "default",
+  }),
+  ...import.meta.glob("../../.github/workflows/*.yml", {
+    eager: true,
+    query: "?raw",
+    import: "default",
+  }),
   ...import.meta.glob("../../hosts/**/*.nix", {
     eager: true,
     query: "?raw",
