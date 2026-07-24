@@ -40,8 +40,8 @@ An interactive, VS Code-flavoured walkthrough of this repository is published at
 .
 ├── flake.nix          # Entry point: flake inputs and darwinConfigurations
 ├── nvfetcher.toml     # Version tracker for CLI tools not in nixpkgs (nvfetcher)
-├── _sources/          # nvfetcher-generated pins (version + URL + hash) — never edit by hand
-├── pkgs/              # Custom package derivations (ax, octorus, vite-plus, vize, …) reading from _sources/
+├── pkgs/              # Custom package derivations (ax, octorus, vite-plus, vize, …)
+│   └── _sources/      # nvfetcher-generated pins (version + URL + hash) — never edit by hand
 ├── modules/
 │   └── naitokosuke/   # Shared module: personal constants (username, email, …)
 │                      #   exposed as `config.naitokosuke.*` to both nix-darwin and home-manager
@@ -110,9 +110,9 @@ nix flake update
 darwin-rebuild switch --flake .#Mac-big
 ```
 
-Update nvfetcher-tracked tool versions (regenerates `_sources/`):
+Update nvfetcher-tracked tool versions (regenerates `pkgs/_sources/`):
 ```bash
-nix run nixpkgs#nvfetcher
+nix run nixpkgs#nvfetcher -- -o pkgs/_sources
 ```
 
 ## VSCode Settings Sync

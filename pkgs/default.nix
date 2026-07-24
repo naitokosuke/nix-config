@@ -2,7 +2,7 @@
 # Versions and hashes are tracked by nvfetcher — see nvfetcher.toml.
 { pkgs }:
 let
-  sources = pkgs.callPackage ../_sources/generated.nix { };
+  sources = pkgs.callPackage ./_sources/generated.nix { };
 in
 {
   ax = pkgs.callPackage ./ax.nix { inherit sources; };
