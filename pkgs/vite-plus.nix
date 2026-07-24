@@ -1,5 +1,5 @@
-# TODO: 公式の nixpkgs 対応(NixOS/nixpkgs#533925)が merge されたら
-# pkgs.vite-plus に乗り換えてこのファイルと nvfetcher エントリを削除する
+# TODO: Once official nixpkgs support (NixOS/nixpkgs#533925) is merged,
+# switch to pkgs.vite-plus and delete this file and the nvfetcher entry.
 {
   lib,
   stdenvNoCC,
@@ -17,6 +17,13 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     runHook preInstall
     install -Dm755 vp $out/bin/vp
+    # Provide the standalone aliases the official installer creates via
+    # `vp env setup`: vp is a multi-call binary dispatching on argv[0]
+    # (vpr -> `vp run`, vpx -> `vp dlx`). The node/npm/npx/corepack shims
+    # it also creates are deliberately omitted — they belong to the
+    # opt-out-able Node version manager and would conflict with Nix-managed Node.
+    ln -s $out/bin/vp $out/bin/vpr
+    ln -s $out/bin/vp $out/bin/vpx
     runHook postInstall
   '';
 
