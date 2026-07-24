@@ -174,19 +174,25 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     tags: ["packages", "cli"],
     walkthrough: {
       intro:
-        "The Nix equivalent of upstream's `curl | bash` installer: it installs the same prebuilt `vp-aarch64-apple-darwin.tar.gz` that the official script downloads, pinned by nvfetcher. This replaced the standalone `vp-nix` flake repo. `vp` manages its own JS toolchain at runtime (`vp install` per project), so the binary is all Nix needs to provide. The TODO on top marks the exit plan: once nixpkgs ships vite-plus (NixOS/nixpkgs#533925), this file gives way to `pkgs.vite-plus`.",
+        "The Nix equivalent of upstream's `curl | bash` installer: it installs the same prebuilt `vp-aarch64-apple-darwin.tar.gz` that the official script downloads, pinned by nvfetcher, plus the `vpr` / `vpx` aliases the installer would create. This replaced the standalone `vp-nix` flake repo. `vp` manages its own JS toolchain at runtime (`vp install` per project), so the binary and its aliases are all Nix needs to provide. The TODO on top marks the exit plan: once nixpkgs ships vite-plus (NixOS/nixpkgs#533925), this file gives way to `pkgs.vite-plus`.",
       sections: [
         {
           title: "Fetch and install",
           prose:
             'Same shape as `vize`: the tarball is flat — just the `vp` binary — so `sourceRoot = "."` keeps the unpacker in place and `install -Dm755` drops it at `$out/bin/vp`.',
-          lines: [9, 21],
+          lines: [9, 19],
+        },
+        {
+          title: "The vpr/vpx aliases",
+          prose:
+            "The official installer runs `vp env setup`, which symlinks `vpr` and `vpx` next to `vp` — a multi-call binary dispatching on `argv[0]` (`vpr` → `vp run`, `vpx` → `vp dlx`). The derivation reproduces exactly those two links. The `node`/`npm`/`npx`/`corepack` shims the same step creates are deliberately omitted: they belong to the opt-out-able Node version manager and would shadow Nix-managed Node.",
+          lines: [20, 26],
         },
         {
           title: "Metadata",
           prose:
             '`sourceProvenance = binaryNativeCode` marks the prebuilt binary honestly, `mainProgram = "vp"` names the CLI, and `platforms` pins `aarch64-darwin` — the one asset this entry tracks.',
-          lines: [23, 31],
+          lines: [30, 38],
         },
       ],
     },
