@@ -1,6 +1,6 @@
 # Version tracker for CLI tools not available in nixpkgs (issue #342).
-# Regenerate _sources/generated.nix after editing:
-#   nix run nixpkgs#nvfetcher
+# Regenerate pkgs/_sources/generated.nix after editing:
+#   nix run nixpkgs#nvfetcher -- -o pkgs/_sources
 [ax-darwin-arm64]
 src.github = "yusukebe/ax"
 fetch.url = "https://github.com/yusukebe/ax/releases/download/$ver/ax-darwin-arm64"

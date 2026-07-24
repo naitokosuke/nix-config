@@ -21,7 +21,7 @@ jobs:
       - name: Run nvfetcher
         run: |
           printf '[keys]\ngithub = "%s"\n' "${{ secrets.GITHUB_TOKEN }}" > "$RUNNER_TEMP/keyfile.toml"
-          nix run nixpkgs#nvfetcher -- --keyfile "$RUNNER_TEMP/keyfile.toml"
+          nix run nixpkgs#nvfetcher -- --keyfile "$RUNNER_TEMP/keyfile.toml" -o pkgs/_sources
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v7
@@ -30,6 +30,6 @@ jobs:
           commit-message: "chore: update nvfetcher sources"
           title: "chore: update nvfetcher sources"
           body: |
-            Automated update of `_sources/generated.nix` by the nvfetcher workflow.
-          add-paths: _sources/
+            Automated update of `pkgs/_sources/generated.nix` by the nvfetcher workflow.
+          add-paths: pkgs/_sources/
           delete-branch: true

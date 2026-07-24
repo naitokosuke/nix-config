@@ -70,7 +70,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     tags: ["packages", "automation"],
     walkthrough: {
       intro:
-        "The version tracker for CLI tools that nixpkgs doesn't ship. Each entry names an upstream to watch and an asset to fetch; running `nix run nixpkgs#nvfetcher` resolves the latest release and regenerates `_sources/generated.nix` with pinned URLs and hashes. No more hand-editing versions or copy-pasting sha256 values.",
+        "The version tracker for CLI tools that nixpkgs doesn't ship. Each entry names an upstream to watch and an asset to fetch; running `nix run nixpkgs#nvfetcher -- -o pkgs/_sources` resolves the latest release and regenerates `pkgs/_sources/generated.nix` with pinned URLs and hashes. No more hand-editing versions or copy-pasting sha256 values.",
       sections: [
         {
           title: "The ax entry",
@@ -88,7 +88,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     },
   },
 
-  "_sources/generated.nix": {
+  "pkgs/_sources/generated.nix": {
     about: "nvfetcher-generated pins — version, URL, and sha256 per tracked tool.",
     tags: ["packages", "generated"],
     walkthrough: {
@@ -102,7 +102,7 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     tags: ["packages", "index"],
     walkthrough: {
       intro:
-        "The index of the custom package set. It `callPackage`s `_sources/generated.nix` to materialise the pins, then hands them to each derivation. The resulting attrset is consumed twice: injected into `pkgs` via an overlay in `flake.nix`, and exposed as the flake's `packages` output for standalone `nix build .#<name>`.",
+        "The index of the custom package set. It `callPackage`s the colocated `_sources/generated.nix` to materialise the pins, then hands them to each derivation. The resulting attrset is consumed twice: injected into `pkgs` via an overlay in `flake.nix`, and exposed as the flake's `packages` output for standalone `nix build .#<name>`.",
     },
   },
 
@@ -203,18 +203,18 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     tags: ["ci", "automation"],
     walkthrough: {
       intro:
-        "The automation half of the nvfetcher story. Every morning at 08:00 JST (or on manual dispatch) CI reruns nvfetcher; if any tracked tool released a new version, the regenerated `_sources/` lands in an auto-created pull request instead of anyone remembering to bump versions. Requires the repo setting that lets Actions create PRs.",
+        "The automation half of the nvfetcher story. Every morning at 08:00 JST (or on manual dispatch) CI reruns nvfetcher; if any tracked tool released a new version, the regenerated `pkgs/_sources/` lands in an auto-created pull request instead of anyone remembering to bump versions. Requires the repo setting that lets Actions create PRs.",
       sections: [
         {
           title: "Running nvfetcher",
           prose:
-            "A throwaway keyfile passes `GITHUB_TOKEN` to nvfetcher so release lookups aren't rate-limited, then `nix run nixpkgs#nvfetcher` regenerates the pins — the same command used locally, so CI and laptop can never disagree.",
+            "A throwaway keyfile passes `GITHUB_TOKEN` to nvfetcher so release lookups aren't rate-limited, then `nix run nixpkgs#nvfetcher -- -o pkgs/_sources` regenerates the pins — the same command used locally, so CI and laptop can never disagree.",
           lines: [21, 24],
         },
         {
           title: "The update PR",
           prose:
-            "`peter-evans/create-pull-request` commits only `_sources/` to a fixed `nvfetcher-update` branch — repeated runs update the same PR rather than piling up new ones, and the branch deletes itself on merge.",
+            "`peter-evans/create-pull-request` commits only `pkgs/_sources/` to a fixed `nvfetcher-update` branch — repeated runs update the same PR rather than piling up new ones, and the branch deletes itself on merge.",
           lines: [26, 35],
         },
       ],
