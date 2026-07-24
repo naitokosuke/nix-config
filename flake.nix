@@ -31,8 +31,8 @@
       flake = false;
     };
 
-    # TODO: nixpkgs の herdr は Darwin ビルド修正(NixOS/nixpkgs#536015)が
-    # nixpkgs-unstable に降りてきたら pkgs.herdr に戻してこの input を削除する
+    # TODO: Once the herdr Darwin build fix (NixOS/nixpkgs#536015) lands in
+    # nixpkgs-unstable, switch back to pkgs.herdr and delete this input.
     herdr.url = "github:ogulcancelik/herdr";
     herdr.inputs.nixpkgs.follows = "nixpkgs";
 
