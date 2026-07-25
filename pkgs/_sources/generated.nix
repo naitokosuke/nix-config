@@ -8,10 +8,10 @@
 {
   ax-darwin-arm64 = {
     pname = "ax-darwin-arm64";
-    version = "v0.1.21";
+    version = "v0.1.22";
     src = fetchurl {
-      url = "https://github.com/yusukebe/ax/releases/download/v0.1.21/ax-darwin-arm64";
-      sha256 = "sha256-cjLX9MG8lri8nCFp7oL2JpUxxMbJQeNRIXeZoDThj6c=";
+      url = "https://github.com/yusukebe/ax/releases/download/v0.1.22/ax-darwin-arm64";
+      sha256 = "sha256-gZXl4wd6/UzlqwWap+WmjhPeuc1g/7Iwq6Z1HDOeIjQ=";
     };
   };
   octorus-darwin-arm64 = {
