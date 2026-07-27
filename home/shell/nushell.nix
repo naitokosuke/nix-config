@@ -19,6 +19,9 @@ in
   programs.nushell = {
     enable = true;
 
+    # Nushell settings (assigned to $env.config)
+    settings.show_banner = false;
+
     # Shell aliases (inherit common + nushell-specific)
     shellAliases = common.aliases // {
       cl = "^clear"; # External command (nushell syntax)
