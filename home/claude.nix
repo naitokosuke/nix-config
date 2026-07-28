@@ -145,7 +145,7 @@ in
       # Skill names are discovered from the locked skill-skill-skill input
       # (pure eval cannot readDir the live working tree). The links themselves
       # still point at the working tree, so skill *content* stays live.
-      # After adding/removing a skill: commit it, then
+      # After adding/removing a skill: push it, then
       #   nix flake update skill-skill-skill
       skillNames = builtins.attrNames (
         lib.filterAttrs (_: type: type == "directory") (

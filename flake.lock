@@ -284,15 +284,15 @@
       "locked": {
         "lastModified": 1782006020,
         "narHash": "sha256-byG6iYnmAR0BXx+7zOvcUoCf1cIHNR/MR+xsW5J5lms=",
-        "ref": "refs/heads/main",
+        "owner": "naitokosuke",
+        "repo": "skill-skill-skill",
         "rev": "eadadf3504607e1ba079167df77e24647fc31b25",
-        "revCount": 16,
-        "type": "git",
-        "url": "file:///Users/naitokosuke/src/github.com/naitokosuke/skill-skill-skill"
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///Users/naitokosuke/src/github.com/naitokosuke/skill-skill-skill"
+        "owner": "naitokosuke",
+        "repo": "skill-skill-skill",
+        "type": "github"
       }
     },
     "systems": {

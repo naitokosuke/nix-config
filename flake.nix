@@ -23,11 +23,12 @@
     vscode-settings.url = "github:naitokosuke/vscode-settings";
     vscode-settings.flake = false;
 
-    # Claude Code skills - non-flake local input; home/claude.nix readDirs the
+    # Claude Code skills - non-flake input; home/claude.nix readDirs the
     # locked snapshot to discover skill names in pure eval.
-    # Resync after adding/removing a skill: nix flake update skill-skill-skill
+    # Resync after adding/removing a skill: push it, then
+    #   nix flake update skill-skill-skill
     skill-skill-skill = {
-      url = "git+file:///Users/naitokosuke/src/github.com/naitokosuke/skill-skill-skill";
+      url = "github:naitokosuke/skill-skill-skill";
       flake = false;
     };
 
