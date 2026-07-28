@@ -12,7 +12,7 @@ let
   # fails the build instead of silently corrupting the output the way the
   # previous regex-based conversion could (issue #364).
   keybindings-json = pkgs.runCommand "keybindings.json" { } ''
-    ${lib.getExe pkgs.jsonnet} ${inputs.vscode-settings}/keybinding.jsonc -o $out
+    ${lib.getExe' pkgs.jsonnet "jsonnet"} ${inputs.vscode-settings}/keybinding.jsonc -o $out
   '';
 in
 {
