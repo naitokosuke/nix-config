@@ -38,6 +38,9 @@ in
   environment.systemPackages = with pkgs; [
     ax
     bun
+    # Moved from an undeclared brew formula when homebrew went fully
+    # declarative (issue #363)
+    cargo-deny
     llm-agents.claude-code
     darwin-rebuild-nom
     devenv
