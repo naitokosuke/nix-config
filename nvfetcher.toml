@@ -26,3 +26,12 @@ fetch.url = "https://github.com/voidzero-dev/vite-plus/releases/download/$ver/vp
 [playwright-cli]
 src.github = "microsoft/playwright-cli"
 fetch.github = "microsoft/playwright-cli"
+
+# The published npm tarball bundles all dependencies (rollup) and ships the
+# built JS, so it is consumed directly — no npm install, no TypeScript build.
+# Release tags carry a "chrome-devtools-mcp-v" prefix, stripped here so $ver
+# matches the npm version.
+[chrome-devtools-mcp]
+src.github = "ChromeDevTools/chrome-devtools-mcp"
+src.prefix = "chrome-devtools-mcp-v"
+fetch.url = "https://registry.npmjs.org/chrome-devtools-mcp/-/chrome-devtools-mcp-$ver.tgz"

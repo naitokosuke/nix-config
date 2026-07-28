@@ -14,6 +14,14 @@
       sha256 = "sha256-gZXl4wd6/UzlqwWap+WmjhPeuc1g/7Iwq6Z1HDOeIjQ=";
     };
   };
+  chrome-devtools-mcp = {
+    pname = "chrome-devtools-mcp";
+    version = "1.6.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/chrome-devtools-mcp/-/chrome-devtools-mcp-1.6.0.tgz";
+      sha256 = "sha256-HmMsLZcUtPgrTPq077nOV1CFx1/+XpdyODEprwEsnIQ=";
+    };
+  };
   octorus-darwin-arm64 = {
     pname = "octorus-darwin-arm64";
     version = "0.6.7";
