@@ -128,6 +128,38 @@
         "type": "github"
       }
     },
+    "homebrew-core": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1785223996,
+        "narHash": "sha256-biRfPDf0qHz8ht9/wGxhYeVm31oUcJ3KLQ3IG9Yyp7g=",
+        "owner": "homebrew",
+        "repo": "homebrew-core",
+        "rev": "4160c6d98b94f03a9eebd05d90aebe9c035c37c3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "homebrew",
+        "repo": "homebrew-core",
+        "type": "github"
+      }
+    },
+    "homebrew-productdevbook": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783067114,
+        "narHash": "sha256-QxmXaW2VSlk+Bea8AHCu6oErgPY9jLPPkiCt3NKfpcA=",
+        "owner": "productdevbook",
+        "repo": "homebrew-tap",
+        "rev": "01184d042ecbe1a22a9373070b6e6280ecd77b5b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "productdevbook",
+        "repo": "homebrew-tap",
+        "type": "github"
+      }
+    },
     "llm-agents": {
       "inputs": {
         "bun2nix": "bun2nix",
@@ -247,6 +279,8 @@
         "herdr": "herdr",
         "home-manager": "home-manager",
         "homebrew-cask": "homebrew-cask",
+        "homebrew-core": "homebrew-core",
+        "homebrew-productdevbook": "homebrew-productdevbook",
         "llm-agents": "llm-agents",
         "mcp-servers-nix": "mcp-servers-nix",
         "nix-darwin": "nix-darwin",

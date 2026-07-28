@@ -15,8 +15,21 @@
 
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
 
+    # brew bundle unconditionally loads the core tap when
+    # HOMEBREW_NO_INSTALL_FROM_API is set, so it must be pinned even though
+    # no formulae are installed via Homebrew.
+    homebrew-core = {
+      url = "github:homebrew/homebrew-core";
+      flake = false;
+    };
+
     homebrew-cask = {
       url = "github:homebrew/homebrew-cask";
+      flake = false;
+    };
+
+    homebrew-productdevbook = {
+      url = "github:productdevbook/homebrew-tap";
       flake = false;
     };
 
