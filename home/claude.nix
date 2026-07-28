@@ -132,7 +132,6 @@ in
     let
       ghqRoot = "${config.home.homeDirectory}/src/github.com/${config.home.username}";
       link = path: { source = config.lib.file.mkOutOfStoreSymlink "${ghqRoot}/${path}"; };
-      yamlFormat = pkgs.formats.yaml { };
       # Skill names are discovered from the locked skill-skill-skill input
       # (pure eval cannot readDir the live working tree). The links themselves
       # still point at the working tree, so skill *content* stays live.
@@ -152,16 +151,6 @@ in
     {
       ".claude/rules" = link "rule-rule-rule/rules";
       ".claude/CLAUDE.md" = link "rule-rule-rule/CLAUDE.md";
-
-      # Serena config. A store symlink on purpose: the previous "writable copy"
-      # activation had left this file read-only and byte-identical to the
-      # declared content ever since it was first created, i.e. Serena never
-      # writes to it, so it does not need the settings.json merge treatment.
-      ".serena/serena_config.yml".source = yamlFormat.generate "serena_config.yml" {
-        gui_log_window = false;
-        web_dashboard = false;
-        projects = { };
-      };
     }
     // skillLinks;
 }
