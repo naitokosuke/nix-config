@@ -56,7 +56,7 @@ An interactive, VS Code-flavoured walkthrough of this repository is published at
 │   ├── claude.nix     # Claude Code settings, rules, skills
 │   ├── ghostty.nix    # Terminal
 │   ├── starship.nix   # Prompt
-│   └── …              # atuin, direnv, mcp, octorus, playwright, vscode, zoxide, …
+│   └── …              # atuin, direnv, mcp, octorus, vscode, zoxide, …
 └── docs/              # Interactive walkthrough web app (Vite+ / void)
                        #   deployed to https://naitokosuke-dotfiles.void.app/
 ```
@@ -69,7 +69,8 @@ Managed via nixpkgs. See [`hosts/common/packages.nix`](hosts/common/packages.nix
 
 Tools not available in nixpkgs (e.g. [`ax`](https://github.com/yusukebe/ax),
 [`vize`](https://github.com/ubugeeei-prod/vize), [`octorus`](https://github.com/ushironoko/octorus),
-[`vite-plus`](https://github.com/voidzero-dev/vite-plus) (`vp`))
+[`vite-plus`](https://github.com/voidzero-dev/vite-plus) (`vp`),
+[`playwright-cli`](https://github.com/microsoft/playwright-cli))
 are packaged in [`pkgs/`](pkgs/),
 with versions and hashes tracked by [nvfetcher](https://github.com/berberman/nvfetcher) via
 [`nvfetcher.toml`](nvfetcher.toml). A daily GitHub Actions workflow (08:00 JST) regenerates the pins and opens an update PR.
