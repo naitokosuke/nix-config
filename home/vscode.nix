@@ -4,22 +4,16 @@
   pkgs,
   ...
 }:
+
 let
-  # Convert JSONC → JSON using Nix builtins (no Python dependency)
-  rawContent = builtins.readFile "${inputs.vscode-settings}/keybinding.jsonc";
-
-  # Strip full-line // comments
-  lines = lib.splitString "\n" rawContent;
-  withoutComments = builtins.filter (line: builtins.match "[[:space:]]*//.*" line == null) lines;
-  joined = lib.concatStringsSep "\n" withoutComments;
-
-  # Remove trailing commas before ] or }
-  parts = builtins.split ",([[:space:]]*[]}])" joined;
-  cleaned = lib.concatStrings (
-    map (part: if builtins.isList part then builtins.head part else part) parts
-  );
-
-  keybindings-json = pkgs.writeText "keybindings.json" (builtins.toJSON (builtins.fromJSON cleaned));
+  # keybinding.jsonc → spec-compliant JSON, converted at build time.
+  # JSONC (// and /* */ comments, trailing commas) is valid Jsonnet input
+  # and jsonnet emits plain JSON, so this is a real parse — invalid input
+  # fails the build instead of silently corrupting the output the way the
+  # previous regex-based conversion could (issue #364).
+  keybindings-json = pkgs.runCommand "keybindings.json" { } ''
+    ${lib.getExe pkgs.jsonnet} ${inputs.vscode-settings}/keybinding.jsonc -o $out
+  '';
 in
 {
   # VSCode settings configuration
