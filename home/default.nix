@@ -17,7 +17,6 @@
     ./gwq.nix
     ./mcp.nix
     ./octorus.nix
-    ./playwright.nix
     ./shell
     ./ssh.nix
     ./starship.nix

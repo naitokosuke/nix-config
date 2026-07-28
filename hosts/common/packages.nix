@@ -55,6 +55,7 @@ in
     nodejs_24
     octorus
     oxfmt
+    playwright-cli
     pnpm
     ripgrep
     rustup

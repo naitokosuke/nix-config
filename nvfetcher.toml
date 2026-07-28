@@ -19,3 +19,10 @@ fetch.url = "https://github.com/ushironoko/octorus/releases/download/v$ver/octor
 [vite-plus-darwin-arm64]
 src.github = "voidzero-dev/vite-plus"
 fetch.url = "https://github.com/voidzero-dev/vite-plus/releases/download/$ver/vp-aarch64-apple-darwin.tar.gz"
+
+# npm-only distribution (no release binaries), so this is built from source
+# with buildNpmPackage. When bumping, pkgs/playwright-cli.nix's npmDepsHash
+# must be updated by hand — the build fails loudly until it is.
+[playwright-cli]
+src.github = "microsoft/playwright-cli"
+fetch.github = "microsoft/playwright-cli"

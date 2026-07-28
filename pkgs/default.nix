@@ -7,6 +7,7 @@ in
 {
   ax = pkgs.callPackage ./ax.nix { inherit sources; };
   octorus = pkgs.callPackage ./octorus.nix { inherit sources; };
+  playwright-cli = pkgs.callPackage ./playwright-cli.nix { inherit sources; };
   vite-plus = pkgs.callPackage ./vite-plus.nix { inherit sources; };
   vize = pkgs.callPackage ./vize.nix { inherit sources; };
 }

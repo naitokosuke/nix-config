@@ -22,6 +22,17 @@
       sha256 = "sha256-fsqnB49TnsPG9waafix0ILJHjslGJEmAPc2EiJS0g+Y=";
     };
   };
+  playwright-cli = {
+    pname = "playwright-cli";
+    version = "v0.1.17";
+    src = fetchFromGitHub {
+      owner = "microsoft";
+      repo = "playwright-cli";
+      rev = "v0.1.17";
+      fetchSubmodules = false;
+      sha256 = "sha256-tc/2Qck3mm6BqWTu2lvvfsM0/BHO/Z0ZvCdFZ7QQqKI=";
+    };
+  };
   vite-plus-darwin-arm64 = {
     pname = "vite-plus-darwin-arm64";
     version = "v0.2.6";
