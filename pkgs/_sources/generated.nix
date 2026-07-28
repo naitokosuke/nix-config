@@ -22,6 +22,22 @@
       sha256 = "sha256-HmMsLZcUtPgrTPq077nOV1CFx1/+XpdyODEprwEsnIQ=";
     };
   };
+  gh-sub-issue-darwin-arm64 = {
+    pname = "gh-sub-issue-darwin-arm64";
+    version = "0.5.1";
+    src = fetchurl {
+      url = "https://github.com/yahsan2/gh-sub-issue/releases/download/v0.5.1/gh-sub-issue_0.5.1_darwin-arm64";
+      sha256 = "sha256-UmVEz2zi7kZF0horOEfP4bZUhA/hwAuE5xrKgZHVSAc=";
+    };
+  };
+  gwq-darwin-arm64 = {
+    pname = "gwq-darwin-arm64";
+    version = "v0.1.1";
+    src = fetchurl {
+      url = "https://github.com/d-kuro/gwq/releases/download/v0.1.1/gwq_Darwin_arm64.tar.gz";
+      sha256 = "sha256-G4tYAEvOL/G4WxJG5rOxTsqJoKlYeWlu5sdc9I571/s=";
+    };
+  };
   octorus-darwin-arm64 = {
     pname = "octorus-darwin-arm64";
     version = "0.6.7";

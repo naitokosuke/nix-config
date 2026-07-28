@@ -29,6 +29,36 @@
         },
         "version": "1.6.0"
     },
+    "gh-sub-issue-darwin-arm64": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "gh-sub-issue-darwin-arm64",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-UmVEz2zi7kZF0horOEfP4bZUhA/hwAuE5xrKgZHVSAc=",
+            "type": "url",
+            "url": "https://github.com/yahsan2/gh-sub-issue/releases/download/v0.5.1/gh-sub-issue_0.5.1_darwin-arm64"
+        },
+        "version": "0.5.1"
+    },
+    "gwq-darwin-arm64": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "gwq-darwin-arm64",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-G4tYAEvOL/G4WxJG5rOxTsqJoKlYeWlu5sdc9I571/s=",
+            "type": "url",
+            "url": "https://github.com/d-kuro/gwq/releases/download/v0.1.1/gwq_Darwin_arm64.tar.gz"
+        },
+        "version": "v0.1.1"
+    },
     "octorus-darwin-arm64": {
         "cargoLock": null,
         "date": null,
