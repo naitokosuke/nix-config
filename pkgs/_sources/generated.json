@@ -14,6 +14,21 @@
         },
         "version": "v0.1.22"
     },
+    "chrome-devtools-mcp": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "chrome-devtools-mcp",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-HmMsLZcUtPgrTPq077nOV1CFx1/+XpdyODEprwEsnIQ=",
+            "type": "url",
+            "url": "https://registry.npmjs.org/chrome-devtools-mcp/-/chrome-devtools-mcp-1.6.0.tgz"
+        },
+        "version": "1.6.0"
+    },
     "octorus-darwin-arm64": {
         "cargoLock": null,
         "date": null,
