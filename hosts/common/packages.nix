@@ -5,24 +5,6 @@
 }:
 
 let
-  # Not available in nixpkgs, so we build from source
-  gwq = pkgs.buildGoModule rec {
-    pname = "gwq";
-    version = "0.0.19";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "d-kuro";
-      repo = "gwq";
-      rev = "v${version}";
-      hash = "sha256-2uE04frxfvQBlrOg5d0hPzGE9sbpzxHEiCeJX1ilG2M=";
-    };
-
-    vendorHash = "sha256-4K01Xf1EXl/NVX1loQ76l1bW8QglBAQdvlZSo7J4NPI=";
-
-    # Upstream tests require git in PATH and a writable HOME — skip in the Nix sandbox
-    doCheck = false;
-  };
-
   # darwin-rebuild output piped through nix-output-monitor for richer build progress.
   # darwin-rebuild rejects --log-format and Lix doesn't expose it as a setting,
   # so use nom in its default (non-JSON) mode which parses bare nix output.
