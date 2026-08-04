@@ -8,10 +8,10 @@
 {
   ax-darwin-arm64 = {
     pname = "ax-darwin-arm64";
-    version = "v0.1.22";
+    version = "v0.1.24";
     src = fetchurl {
-      url = "https://github.com/yusukebe/ax/releases/download/v0.1.22/ax-darwin-arm64";
-      sha256 = "sha256-gZXl4wd6/UzlqwWap+WmjhPeuc1g/7Iwq6Z1HDOeIjQ=";
+      url = "https://github.com/yusukebe/ax/releases/download/v0.1.24/ax-darwin-arm64";
+      sha256 = "sha256-WzHUMLw5suKTsZ6eTw8GcUjbzPfoTswunC9RqGMi0/c=";
     };
   };
   chrome-devtools-mcp = {
@@ -40,10 +40,10 @@
   };
   octorus-darwin-arm64 = {
     pname = "octorus-darwin-arm64";
-    version = "0.6.7";
+    version = "0.7.1";
     src = fetchurl {
-      url = "https://github.com/ushironoko/octorus/releases/download/v0.6.7/octorus-0.6.7-aarch64-apple-darwin.tar.gz";
-      sha256 = "sha256-fsqnB49TnsPG9waafix0ILJHjslGJEmAPc2EiJS0g+Y=";
+      url = "https://github.com/ushironoko/octorus/releases/download/v0.7.1/octorus-0.7.1-aarch64-apple-darwin.tar.gz";
+      sha256 = "sha256-mY9LqYkz7YvMSlJM2GzEUQkZWvRVnDfmOGxyAUTHeu8=";
     };
   };
   playwright-cli = {
@@ -59,18 +59,18 @@
   };
   vite-plus-darwin-arm64 = {
     pname = "vite-plus-darwin-arm64";
-    version = "v0.2.6";
+    version = "v0.2.7";
     src = fetchurl {
-      url = "https://github.com/voidzero-dev/vite-plus/releases/download/v0.2.6/vp-aarch64-apple-darwin.tar.gz";
-      sha256 = "sha256-2m07OPIdNyIhrg/jsI4dTRePIkPHlHmim+FzLXZm0eo=";
+      url = "https://github.com/voidzero-dev/vite-plus/releases/download/v0.2.7/vp-aarch64-apple-darwin.tar.gz";
+      sha256 = "sha256-yj5qAEsvWQFhntJYkqq9pKHtYFSecdPBTQCwx7HaBLg=";
     };
   };
   vize-darwin-arm64 = {
     pname = "vize-darwin-arm64";
-    version = "v0.303.0";
+    version = "v0.327.0";
     src = fetchurl {
-      url = "https://github.com/ubugeeei-prod/vize/releases/download/v0.303.0/vize-aarch64-apple-darwin.tar.gz";
-      sha256 = "sha256-E0jn5RBjCRUSB480NCkLQ5N6REtq97qfD/5uqk4gFbA=";
+      url = "https://github.com/ubugeeei-prod/vize/releases/download/v0.327.0/vize-aarch64-apple-darwin.tar.gz";
+      sha256 = "sha256-m1Elf4ugtnpSz4a5lADjq1T/RcaGs72jrvaWHVnciIM=";
     };
   };
 }
