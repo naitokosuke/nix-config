@@ -8,11 +8,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-gZXl4wd6/UzlqwWap+WmjhPeuc1g/7Iwq6Z1HDOeIjQ=",
+            "sha256": "sha256-WzHUMLw5suKTsZ6eTw8GcUjbzPfoTswunC9RqGMi0/c=",
             "type": "url",
-            "url": "https://github.com/yusukebe/ax/releases/download/v0.1.22/ax-darwin-arm64"
+            "url": "https://github.com/yusukebe/ax/releases/download/v0.1.24/ax-darwin-arm64"
         },
-        "version": "v0.1.22"
+        "version": "v0.1.24"
     },
     "chrome-devtools-mcp": {
         "cargoLock": null,
@@ -68,11 +68,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-fsqnB49TnsPG9waafix0ILJHjslGJEmAPc2EiJS0g+Y=",
+            "sha256": "sha256-mY9LqYkz7YvMSlJM2GzEUQkZWvRVnDfmOGxyAUTHeu8=",
             "type": "url",
-            "url": "https://github.com/ushironoko/octorus/releases/download/v0.6.7/octorus-0.6.7-aarch64-apple-darwin.tar.gz"
+            "url": "https://github.com/ushironoko/octorus/releases/download/v0.7.1/octorus-0.7.1-aarch64-apple-darwin.tar.gz"
         },
-        "version": "0.6.7"
+        "version": "0.7.1"
     },
     "playwright-cli": {
         "cargoLock": null,
@@ -104,11 +104,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-2m07OPIdNyIhrg/jsI4dTRePIkPHlHmim+FzLXZm0eo=",
+            "sha256": "sha256-yj5qAEsvWQFhntJYkqq9pKHtYFSecdPBTQCwx7HaBLg=",
             "type": "url",
-            "url": "https://github.com/voidzero-dev/vite-plus/releases/download/v0.2.6/vp-aarch64-apple-darwin.tar.gz"
+            "url": "https://github.com/voidzero-dev/vite-plus/releases/download/v0.2.7/vp-aarch64-apple-darwin.tar.gz"
         },
-        "version": "v0.2.6"
+        "version": "v0.2.7"
     },
     "vize-darwin-arm64": {
         "cargoLock": null,
@@ -119,10 +119,10 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-E0jn5RBjCRUSB480NCkLQ5N6REtq97qfD/5uqk4gFbA=",
+            "sha256": "sha256-m1Elf4ugtnpSz4a5lADjq1T/RcaGs72jrvaWHVnciIM=",
             "type": "url",
-            "url": "https://github.com/ubugeeei-prod/vize/releases/download/v0.303.0/vize-aarch64-apple-darwin.tar.gz"
+            "url": "https://github.com/ubugeeei-prod/vize/releases/download/v0.327.0/vize-aarch64-apple-darwin.tar.gz"
         },
-        "version": "v0.303.0"
+        "version": "v0.327.0"
     }
 }
