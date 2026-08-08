@@ -8,10 +8,10 @@
 {
   ax-darwin-arm64 = {
     pname = "ax-darwin-arm64";
-    version = "v0.1.24";
+    version = "v0.1.25";
     src = fetchurl {
-      url = "https://github.com/yusukebe/ax/releases/download/v0.1.24/ax-darwin-arm64";
-      sha256 = "sha256-WzHUMLw5suKTsZ6eTw8GcUjbzPfoTswunC9RqGMi0/c=";
+      url = "https://github.com/yusukebe/ax/releases/download/v0.1.25/ax-darwin-arm64";
+      sha256 = "sha256-lGM/nWHHQ8/89R5TOCidl0whQo77cL0plebG7BPgYsE=";
     };
   };
   chrome-devtools-mcp = {
@@ -40,37 +40,37 @@
   };
   octorus-darwin-arm64 = {
     pname = "octorus-darwin-arm64";
-    version = "0.7.1";
+    version = "0.7.2";
     src = fetchurl {
-      url = "https://github.com/ushironoko/octorus/releases/download/v0.7.1/octorus-0.7.1-aarch64-apple-darwin.tar.gz";
-      sha256 = "sha256-mY9LqYkz7YvMSlJM2GzEUQkZWvRVnDfmOGxyAUTHeu8=";
+      url = "https://github.com/ushironoko/octorus/releases/download/v0.7.2/octorus-0.7.2-aarch64-apple-darwin.tar.gz";
+      sha256 = "sha256-Uv5MKlwgZqG1XaS75yZ5QkVJ8nqlwjWndN9LAv5ZIAI=";
     };
   };
   playwright-cli = {
     pname = "playwright-cli";
-    version = "v0.1.17";
+    version = "v0.1.18";
     src = fetchFromGitHub {
       owner = "microsoft";
       repo = "playwright-cli";
-      rev = "v0.1.17";
+      rev = "v0.1.18";
       fetchSubmodules = false;
-      sha256 = "sha256-tc/2Qck3mm6BqWTu2lvvfsM0/BHO/Z0ZvCdFZ7QQqKI=";
+      sha256 = "sha256-E/AzDJhD12PWSaA3iRY+hloPsSWnAw18gTa/ItVhr3E=";
     };
   };
   vite-plus-darwin-arm64 = {
     pname = "vite-plus-darwin-arm64";
-    version = "v0.2.7";
+    version = "v0.2.8";
     src = fetchurl {
-      url = "https://github.com/voidzero-dev/vite-plus/releases/download/v0.2.7/vp-aarch64-apple-darwin.tar.gz";
-      sha256 = "sha256-yj5qAEsvWQFhntJYkqq9pKHtYFSecdPBTQCwx7HaBLg=";
+      url = "https://github.com/voidzero-dev/vite-plus/releases/download/v0.2.8/vp-aarch64-apple-darwin.tar.gz";
+      sha256 = "sha256-GjQ2NIq1gnFnMtKT1RGrm3D1xzBpUf5PpvbIrHThHmI=";
     };
   };
   vize-darwin-arm64 = {
     pname = "vize-darwin-arm64";
-    version = "v0.327.0";
+    version = "v0.345.0";
     src = fetchurl {
-      url = "https://github.com/ubugeeei-prod/vize/releases/download/v0.327.0/vize-aarch64-apple-darwin.tar.gz";
-      sha256 = "sha256-m1Elf4ugtnpSz4a5lADjq1T/RcaGs72jrvaWHVnciIM=";
+      url = "https://github.com/ubugeeei-prod/vize/releases/download/v0.345.0/vize-aarch64-apple-darwin.tar.gz";
+      sha256 = "sha256-lbSslNFH4dCS0WgMlYgNjaF1oEMrvOkygyIgb9t3NPk=";
     };
   };
 }
