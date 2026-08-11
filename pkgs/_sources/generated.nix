@@ -16,10 +16,10 @@
   };
   chrome-devtools-mcp = {
     pname = "chrome-devtools-mcp";
-    version = "1.6.0";
+    version = "1.7.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/chrome-devtools-mcp/-/chrome-devtools-mcp-1.6.0.tgz";
-      sha256 = "sha256-HmMsLZcUtPgrTPq077nOV1CFx1/+XpdyODEprwEsnIQ=";
+      url = "https://registry.npmjs.org/chrome-devtools-mcp/-/chrome-devtools-mcp-1.7.0.tgz";
+      sha256 = "sha256-iVczWGoOzhOEk3kMB+iwg7hXGx0gN6cxJDNNlo0QRtA=";
     };
   };
   gh-sub-issue-darwin-arm64 = {
@@ -67,10 +67,10 @@
   };
   vize-darwin-arm64 = {
     pname = "vize-darwin-arm64";
-    version = "v0.345.0";
+    version = "v0.347.7";
     src = fetchurl {
-      url = "https://github.com/ubugeeei-prod/vize/releases/download/v0.345.0/vize-aarch64-apple-darwin.tar.gz";
-      sha256 = "sha256-lbSslNFH4dCS0WgMlYgNjaF1oEMrvOkygyIgb9t3NPk=";
+      url = "https://github.com/ubugeeei-prod/vize/releases/download/v0.347.7/vize-aarch64-apple-darwin.tar.gz";
+      sha256 = "sha256-NU87+Ljrjt6plGoHeiLdCWgXP2FOo2QrBUoHLa/NgXI=";
     };
   };
 }

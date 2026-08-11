@@ -23,11 +23,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-HmMsLZcUtPgrTPq077nOV1CFx1/+XpdyODEprwEsnIQ=",
+            "sha256": "sha256-iVczWGoOzhOEk3kMB+iwg7hXGx0gN6cxJDNNlo0QRtA=",
             "type": "url",
-            "url": "https://registry.npmjs.org/chrome-devtools-mcp/-/chrome-devtools-mcp-1.6.0.tgz"
+            "url": "https://registry.npmjs.org/chrome-devtools-mcp/-/chrome-devtools-mcp-1.7.0.tgz"
         },
-        "version": "1.6.0"
+        "version": "1.7.0"
     },
     "gh-sub-issue-darwin-arm64": {
         "cargoLock": null,
@@ -119,10 +119,10 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-lbSslNFH4dCS0WgMlYgNjaF1oEMrvOkygyIgb9t3NPk=",
+            "sha256": "sha256-NU87+Ljrjt6plGoHeiLdCWgXP2FOo2QrBUoHLa/NgXI=",
             "type": "url",
-            "url": "https://github.com/ubugeeei-prod/vize/releases/download/v0.345.0/vize-aarch64-apple-darwin.tar.gz"
+            "url": "https://github.com/ubugeeei-prod/vize/releases/download/v0.347.7/vize-aarch64-apple-darwin.tar.gz"
         },
-        "version": "v0.345.0"
+        "version": "v0.347.7"
     }
 }
