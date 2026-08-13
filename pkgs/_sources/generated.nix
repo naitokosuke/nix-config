@@ -59,10 +59,10 @@
   };
   vite-plus-darwin-arm64 = {
     pname = "vite-plus-darwin-arm64";
-    version = "v0.2.8";
+    version = "v0.2.9";
     src = fetchurl {
-      url = "https://github.com/voidzero-dev/vite-plus/releases/download/v0.2.8/vp-aarch64-apple-darwin.tar.gz";
-      sha256 = "sha256-GjQ2NIq1gnFnMtKT1RGrm3D1xzBpUf5PpvbIrHThHmI=";
+      url = "https://github.com/voidzero-dev/vite-plus/releases/download/v0.2.9/vp-aarch64-apple-darwin.tar.gz";
+      sha256 = "sha256-Gp/pHxiq7hU2+nal2WlGHGLM81YrOUMYC7LZz13HsI0=";
     };
   };
   vize-darwin-arm64 = {
