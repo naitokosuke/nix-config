@@ -29,6 +29,21 @@
         },
         "version": "1.7.0"
     },
+    "frog-darwin-arm64": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "frog-darwin-arm64",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-9QbnCokyF7VHcRpyy/S9pnZ6FcI2YBzg1gAhlcI3+pM=",
+            "type": "url",
+            "url": "https://github.com/wevm/frog/releases/download/frog@1.1.0/frog-darwin-arm64.gz"
+        },
+        "version": "1.1.0"
+    },
     "gh-sub-issue-darwin-arm64": {
         "cargoLock": null,
         "date": null,

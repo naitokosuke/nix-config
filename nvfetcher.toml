@@ -38,6 +38,13 @@ fetch.url = "https://github.com/voidzero-dev/vite-plus/releases/download/$ver/vp
 src.github = "microsoft/playwright-cli"
 fetch.github = "microsoft/playwright-cli"
 
+# Release tags carry an npm-style "frog@" prefix, stripped here so $ver is
+# the bare version. The release asset is a gzipped single binary.
+[frog-darwin-arm64]
+src.github = "wevm/frog"
+src.prefix = "frog@"
+fetch.url = "https://github.com/wevm/frog/releases/download/frog@$ver/frog-darwin-arm64.gz"
+
 # The published npm tarball bundles all dependencies (rollup) and ships the
 # built JS, so it is consumed directly — no npm install, no TypeScript build.
 # Release tags carry a "chrome-devtools-mcp-v" prefix, stripped here so $ver
