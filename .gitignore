@@ -1,2 +1,9 @@
 result
 .void/
+
+# frog friction-log entries stay local. The global gitignore (home/git.nix)
+# ignores .agents/ wholesale; re-include only the declarative bits here.
+!.agents/
+.agents/friction-log/*
+!.agents/friction-log/config.json
+!.agents/friction-log/README.md
