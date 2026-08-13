@@ -22,6 +22,14 @@
       sha256 = "sha256-iVczWGoOzhOEk3kMB+iwg7hXGx0gN6cxJDNNlo0QRtA=";
     };
   };
+  frog-darwin-arm64 = {
+    pname = "frog-darwin-arm64";
+    version = "1.1.0";
+    src = fetchurl {
+      url = "https://github.com/wevm/frog/releases/download/frog@1.1.0/frog-darwin-arm64.gz";
+      sha256 = "sha256-9QbnCokyF7VHcRpyy/S9pnZ6FcI2YBzg1gAhlcI3+pM=";
+    };
+  };
   gh-sub-issue-darwin-arm64 = {
     pname = "gh-sub-issue-darwin-arm64";
     version = "0.5.1";

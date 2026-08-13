@@ -27,6 +27,7 @@ in
     darwin-rebuild-nom
     devenv
     fd
+    frog
     fzf
     gh
     ghq
