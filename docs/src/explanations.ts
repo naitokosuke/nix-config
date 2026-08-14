@@ -392,25 +392,19 @@ export const explanations: Readonly<Record<string, Explanation>> = {
     tags: ["cli", "packages"],
     walkthrough: {
       intro:
-        "The system CLI toolbelt. Everything here is on `$PATH` for every user and login shell. Locally-built tools live alongside nixpkgs: `gwq` (worktree-aware git helper), `darwin-rebuild-nom` (pipes `darwin-rebuild` through `nix-output-monitor`), and the nvfetcher-tracked overlay packages from `./pkgs` (`ax`, `octorus`, `vite-plus`, `vize`).",
+        "The system CLI toolbelt. Everything here is on `$PATH` for every user and login shell. The only derivation defined inline is `darwin-rebuild-nom` (pipes `darwin-rebuild` through `nix-output-monitor`); the rest come from nixpkgs, from the nvfetcher-tracked overlay in `./pkgs` (`ax`, `frog`, `gwq`, `octorus`, `vite-plus`, `vize`, …), or from a flake input.",
       sections: [
-        {
-          title: "gwq, built from source",
-          prose:
-            "`gwq` isn't in nixpkgs yet, so we build it ourselves with `buildGoModule`. `vendorHash` pins the Go module graph, and `doCheck = false` skips the upstream tests that need a writable HOME and `git` on PATH (both fight the Nix sandbox).",
-          lines: [8, 24],
-        },
         {
           title: "darwin-rebuild-nom wrapper",
           prose:
             "`darwin-rebuild` doesn't accept `--log-format`, so we wrap it in a shell script that pipes stderr through `nix-output-monitor`. The result is the same rebuild command but with the richer progress UI Nix-flavoured CIs use.",
-          lines: [26, 35],
+          lines: [7, 18],
         },
         {
           title: "The CLI toolbelt",
           prose:
-            "Daily drivers: `gh`, `ghq`, `git`, `fd`, `fzf`, `ripgrep`, `sd`, `bun`, `pnpm`, `nodejs_24`. Nix workflow tools: `nixd`, `devenv`, `nix-output-monitor`, plus the locally-built `darwin-rebuild-nom`. `ax`, `octorus`, `vite-plus` (`vp`), and `vize` are the nvfetcher-tracked overlay packages from `./pkgs`; only `herdr` is still wired in via a flake input.",
-          lines: [38, 67],
+            "Daily drivers: `gh`, `ghq`, `git`, `fd`, `fzf`, `ripgrep`, `sd`, `bun`, `pnpm`, `nodejs_24`. Language toolchains that should be available outside any project shell: `rustup`, `uv`, and `idris2`. Nix workflow tools: `nixd`, `devenv`, `nix-output-monitor`, plus the locally-built `darwin-rebuild-nom`. `ax`, `frog`, `gwq`, `octorus`, `playwright-cli`, `vite-plus` (`vp`), and `vize` come from the `./pkgs` overlay; only `herdr` is still wired in via a flake input.",
+          lines: [20, 55],
         },
       ],
     },

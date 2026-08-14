@@ -35,6 +35,7 @@ in
     gomi
     gwq
     inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
+    idris2
     ni
     nixd
     nix-output-monitor
