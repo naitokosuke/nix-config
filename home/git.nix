@@ -28,6 +28,8 @@
       branch.sort = "-committerdate";
       commit.verbose = true;
       core.editor = "vim";
+      # Show non-ASCII (e.g. Japanese) filenames verbatim instead of octal escapes.
+      core.quotepath = false;
       diff.algorithm = "histogram";
       fetch.prune = true;
       init.defaultBranch = "main";
