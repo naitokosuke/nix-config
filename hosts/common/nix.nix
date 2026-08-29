@@ -13,6 +13,26 @@
   programs.zsh.enable = false;
 
   nix.package = pkgs.lix;
+
+  # Weekly GC keeping the last 14 days of generations as a rollback window.
+  nix.gc = {
+    automatic = true;
+    interval = {
+      Weekday = 0;
+      Hour = 3;
+      Minute = 15;
+    };
+    options = "--delete-older-than 14d";
+  };
+  nix.optimise = {
+    automatic = true;
+    interval = {
+      Weekday = 0;
+      Hour = 4;
+      Minute = 15;
+    };
+  };
+
   nix.settings.experimental-features = "nix-command flakes";
   nix.settings.trusted-users = [
     "root"
