@@ -25,10 +25,18 @@
         name = config.naitokosuke.fullName;
         email = config.naitokosuke.email;
       };
+      branch.sort = "-committerdate";
+      commit.verbose = true;
       core.editor = "vim";
+      diff.algorithm = "histogram";
+      fetch.prune = true;
       init.defaultBranch = "main";
       ghq.root = "${config.home.homeDirectory}/src";
+      merge.conflictStyle = "zdiff3";
+      pull.rebase = true;
       push.autoSetupRemote = true;
+      rebase.autoStash = true;
+      rerere.enabled = true;
       url."git@github.com:".insteadOf = "https://github.com/";
     };
   };
