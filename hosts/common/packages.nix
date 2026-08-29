@@ -39,7 +39,7 @@ in
     ni
     nixd
     nix-output-monitor
-    nodejs_24
+    nodejs_26
     octorus
     oxfmt
     playwright-cli
