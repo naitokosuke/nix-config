@@ -320,20 +320,20 @@ export const explanations: Readonly<Record<string, Explanation>> = {
         {
           title: "nix-homebrew setup",
           prose:
-            "`nix-homebrew` installs and pins the Homebrew binary itself via Nix. `taps` pulls the Cask tap from the flake input, so even Homebrew's tap repos are pinned. `mutableTaps = true` allows ad-hoc taps when needed (e.g. testing a fork).",
-          lines: [8, 17],
+            "`nix-homebrew` installs and pins the Homebrew binary itself via Nix. `taps` pulls every tap from a flake input, so even Homebrew's tap repos are pinned. `mutableTaps = false` makes them read-only — `brew tap` is disabled, and a new tap has to arrive as a flake input.",
+          lines: [8, 21],
         },
         {
           title: "Taps and activation policy",
           prose:
-            '`productdevbook/tap` is marked `trusted` — Homebrew 6.0\'s tap-trust mechanism requires third-party taps to be explicitly allowed. `onActivation` runs `brew update` + `brew upgrade` on every `darwin-rebuild`, while `cleanup = "none"` leaves manually-installed formulae alone instead of zapping them.',
-          lines: [22, 33],
+            'The Brewfile mirrors the pinned tap list so `brew bundle` cleanup does not untap them. `HOMEBREW_NO_INSTALL_FROM_API` forces cask definitions to come from those pinned taps rather than Homebrew\'s API, and `cleanup = "uninstall"` converges the machine onto exactly the cask list below — new versions arrive via `nix flake update`.',
+          lines: [23, 42],
         },
         {
           title: "Casks",
           prose:
-            "Everything in `casks` is materialised on `darwin-rebuild`. `productdevbook/tap/portkiller` shows how third-party taps slot in.",
-          lines: [35, 49],
+            "Everything in `casks` is materialised on `darwin-rebuild`. `productdevbook/tap/portkiller` and `stablyai/orca/orca` show how third-party taps slot in.",
+          lines: [44, 63],
         },
       ],
     },

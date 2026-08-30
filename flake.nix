@@ -33,6 +33,11 @@
       flake = false;
     };
 
+    homebrew-orca = {
+      url = "github:stablyai/homebrew-orca";
+      flake = false;
+    };
+
     vscode-settings.url = "github:naitokosuke/vscode-settings";
     vscode-settings.flake = false;
 

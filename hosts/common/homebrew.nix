@@ -14,6 +14,7 @@
       "homebrew/homebrew-core" = inputs.homebrew-core;
       "homebrew/homebrew-cask" = inputs.homebrew-cask;
       "productdevbook/homebrew-tap" = inputs.homebrew-productdevbook;
+      "stablyai/homebrew-orca" = inputs.homebrew-orca;
     };
     # Taps are read-only and pinned by flake.lock; `brew tap` is disabled.
     mutableTaps = false;
@@ -53,6 +54,11 @@
       "productdevbook/tap/portkiller"
       "raycast"
       "scroll-reverser"
+      # Ships the `orca` CLI as a `binary` stanza, so the cask covers both the
+      # app and the shell entrypoint. The cask is `auto_updates true`; Orca
+      # swaps itself in place via electron-updater, so the flake.lock pin is
+      # only the floor version installed on a fresh machine.
+      "stablyai/orca/orca"
       "visual-studio-code"
     ];
   };
