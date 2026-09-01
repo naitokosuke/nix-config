@@ -103,12 +103,12 @@
             "name": null,
             "owner": "microsoft",
             "repo": "playwright-cli",
-            "rev": "v0.1.18",
-            "sha256": "sha256-E/AzDJhD12PWSaA3iRY+hloPsSWnAw18gTa/ItVhr3E=",
+            "rev": "v0.1.19",
+            "sha256": "sha256-pbv51ybubbjoIpKg0k7lfXfZ9Z+qdZI2lRhQeI+/mFA=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "v0.1.18"
+        "version": "v0.1.19"
     },
     "vite-plus-darwin-arm64": {
         "cargoLock": null,
@@ -134,10 +134,10 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-kkftCZH4A8x/SmPwVOfHWJmkrob6u0pGL9VwSffD5yI=",
+            "sha256": "sha256-7oXJlumBF/DJ44rgjggFCT95yCLOLq/ivzxkOGWiGNQ=",
             "type": "url",
-            "url": "https://github.com/ubugeeei-prod/vize/releases/download/v0.387.0/vize-aarch64-apple-darwin.tar.gz"
+            "url": "https://github.com/ubugeeei-prod/vize/releases/download/v0.388.0/vize-aarch64-apple-darwin.tar.gz"
         },
-        "version": "v0.387.0"
+        "version": "v0.388.0"
     }
 }
