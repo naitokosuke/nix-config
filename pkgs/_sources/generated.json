@@ -134,10 +134,10 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-7oXJlumBF/DJ44rgjggFCT95yCLOLq/ivzxkOGWiGNQ=",
+            "sha256": "sha256-YN+Y0gcRK68nHr4e4XES1irvW65OSaDeJAr3w6dJNBU=",
             "type": "url",
-            "url": "https://github.com/ubugeeei-prod/vize/releases/download/v0.388.0/vize-aarch64-apple-darwin.tar.gz"
+            "url": "https://github.com/ubugeeei-prod/vize/releases/download/v0.390.0/vize-aarch64-apple-darwin.tar.gz"
         },
-        "version": "v0.388.0"
+        "version": "v0.390.0"
     }
 }
