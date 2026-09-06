@@ -23,6 +23,22 @@ jobs:
           printf '[keys]\ngithub = "%s"\n' "${{ secrets.GITHUB_TOKEN }}" > "$RUNNER_TEMP/keyfile.toml"
           nix run nixpkgs#nvfetcher -- --keyfile "$RUNNER_TEMP/keyfile.toml" -o pkgs/_sources
 
+      # The vite-plus launcher that nvfetcher pins and the JavaScript toolchain
+      # in pkgs/vite-plus-runtime are two halves of one release, and the
+      # derivation refuses to evaluate if they disagree (issue #413). nvfetcher
+      # only knows about the launcher, so the lockfile is brought along here
+      # rather than left as a manual step after every bump.
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "26"
+
+      - name: Sync the vite-plus runtime lockfile
+        run: |
+          version=$(jq -r '.["vite-plus-darwin-arm64"].version' pkgs/_sources/generated.json)
+          cd pkgs/vite-plus-runtime
+          npm pkg set "dependencies.vite-plus=$version"
+          npm install --package-lock-only --ignore-scripts
+
       - name: Create pull request
         uses: peter-evans/create-pull-request@v8
         with:
@@ -31,5 +47,7 @@ jobs:
           title: "chore: update nvfetcher sources"
           body: |
             Automated update of `pkgs/_sources/generated.nix` by the nvfetcher workflow.
-          add-paths: pkgs/_sources/
+          add-paths: |
+            pkgs/_sources/
+            pkgs/vite-plus-runtime/
           delete-branch: true
