@@ -1,39 +1,145 @@
-# TODO: Once official nixpkgs support (NixOS/nixpkgs#533925) is merged,
-# switch to pkgs.vite-plus and delete this file and the nvfetcher entry.
+# TODO: Once official nixpkgs support (NixOS/nixpkgs#533925) is merged, switch
+# to pkgs.vite-plus and delete this file, pkgs/vite-plus-runtime and the
+# nvfetcher entry.
+#
+# `vp` is only the Rust launcher. Every subcommand that does real work (dev,
+# build, test, check, lint, fmt, create, migrate, ...) is handed to a
+# JavaScript toolchain that vp resolves at <prefix>/node_modules/vite-plus,
+# relative to the resolved path of the executable. Installing the launcher on
+# its own leaves all of them dying with "Cannot find module" (issue #413), so
+# the npm dependency tree is built here and installed next to it.
+#
+# The approach is taken from https://github.com/ryoppippi/nix-vite-plus, which
+# worked this out first and documents the parts that are not obvious until you
+# hit them. Deviations from it are noted where they occur.
 {
   lib,
   stdenvNoCC,
+  importNpmLock,
+  makeWrapper,
+  nodejs_26,
   sources,
 }:
 
-stdenvNoCC.mkDerivation {
-  pname = "vite-plus";
-  version = lib.removePrefix "v" sources.vite-plus-darwin-arm64.version;
-  src = sources.vite-plus-darwin-arm64.src;
+let
+  inherit (sources.vite-plus-darwin-arm64) version;
 
-  # The tarball has no top-level directory — the `vp` binary sits at the root.
-  sourceRoot = ".";
+  # Kept in step with the system Node in hosts/common/packages.nix, so the
+  # toolchain does not drag a second Node into the closure.
+  nodejs = nodejs_26;
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 vp $out/bin/vp
-    # Provide the standalone aliases the official installer creates via
-    # `vp env setup`: vp is a multi-call binary dispatching on argv[0]
-    # (vpr -> `vp run`, vpx -> `vp dlx`). The node/npm/npx/corepack shims
-    # it also creates are deliberately omitted — they belong to the
-    # opt-out-able Node version manager and would conflict with Nix-managed Node.
-    ln -s $out/bin/vp $out/bin/vpr
-    ln -s $out/bin/vp $out/bin/vpx
-    runHook postInstall
-  '';
+  runtime = ./vite-plus-runtime;
 
-  meta = {
-    description = "Unified toolchain for JavaScript";
-    homepage = "https://viteplus.dev";
-    changelog = "https://github.com/voidzero-dev/vite-plus/releases/tag/${sources.vite-plus-darwin-arm64.version}";
-    license = lib.licenses.mit;
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    mainProgram = "vp";
-    platforms = [ "aarch64-darwin" ];
+  lockedVersion =
+    (lib.importJSON (runtime + "/package-lock.json")).packages."node_modules/vite-plus".version;
+
+  nodeModules = importNpmLock.buildNodeModules {
+    npmRoot = runtime;
+    inherit nodejs;
+
+    derivationArgs = {
+      pname = "vite-plus-runtime";
+      inherit version;
+
+      postInstall = ''
+        # `vp create` copies templates straight out of the store, so without
+        # this the scaffolded project inherits store permissions and lands
+        # unwritable.
+        chmod -R u+w $out/node_modules/vite-plus/dist/create
+        substituteInPlace $out/node_modules/vite-plus/dist/create/bin.js \
+          --replace-fail \
+            'else fs.copyFileSync(src, dest);' \
+            'else { fs.copyFileSync(src, dest); fs.chmodSync(dest, 0o644); }'
+
+        # vp reaches the toolchain by path and never through node_modules/.bin,
+        # which would only put a second oxlint/oxfmt on PATH.
+        rm -rf $out/node_modules/.bin
+
+        # npm's own bookkeeping copy of the lockfile still carries the rewritten
+        # `file:` sources importNpmLock pointed at the store, which keeps every
+        # dependency tarball alive in the runtime closure — around 300 MB of
+        # sources for a toolchain that is 144 MB extracted. Nothing reads it at
+        # runtime.
+        rm -f $out/node_modules/.package-lock.json
+      '';
+    };
   };
-}
+in
+# The launcher and the toolchain are two halves of one release and must not
+# drift apart. nvfetcher bumps the launcher on its own and never touches the
+# lockfile, so without this a `chore: update nvfetcher sources` PR would
+# quietly restore the very breakage this package exists to fix — the same class
+# of drift as #411, caught at eval time instead of at runtime. (nix-vite-plus
+# keeps both in step from one update script; here the two update paths are
+# separate, so this fails loudly rather than silently.)
+lib.throwIf (lockedVersion != version)
+  ''
+    vite-plus: the launcher is at ${version}, but pkgs/vite-plus-runtime pins vite-plus ${lockedVersion}.
+    Regenerate the lockfile to match:
+      cd pkgs/vite-plus-runtime
+      npm pkg set dependencies.vite-plus=${version}
+      npm install --package-lock-only --ignore-scripts
+  ''
+  (
+    stdenvNoCC.mkDerivation {
+      pname = "vite-plus";
+      inherit version;
+      src = sources.vite-plus-darwin-arm64.src;
+
+      # The npm tarball keeps everything under a single `package/` directory.
+      sourceRoot = "package";
+
+      nativeBuildInputs = [ makeWrapper ];
+
+      installPhase = ''
+        runHook preInstall
+
+        install -Dm755 vp $out/bin/vp
+
+        # Symlinked rather than copied: node follows it transparently and the
+        # toolchain stays a single copy in the store.
+        ln -s ${nodeModules}/node_modules $out/node_modules
+
+        # The JavaScript half needs a node to run on whatever the caller has on
+        # PATH. vp dispatches on argv[0], which makeWrapper preserves with
+        # `exec -a "$0"`, so the aliases below still work through the wrapper.
+        wrapProgram $out/bin/vp --prefix PATH : ${lib.makeBinPath [ nodejs ]}
+
+        # Provide the standalone aliases the official installer creates via
+        # `vp env setup`: vp is a multi-call binary dispatching on argv[0]
+        # (vpr -> `vp run`, vpx -> `vp dlx`). The node/npm/npx/corepack shims
+        # it also creates are deliberately omitted — they belong to the
+        # opt-out-able Node version manager and would conflict with Nix-managed Node.
+        ln -s vp $out/bin/vpr
+        ln -s vp $out/bin/vpx
+
+        runHook postInstall
+      '';
+
+      doInstallCheck = true;
+
+      # Runs from a directory with no project-local vite-plus, which is exactly
+      # where the launcher-only build used to fail. `--version` alone would not
+      # catch it: it is served by the launcher and passed even while every
+      # JavaScript subcommand was broken.
+      installCheckPhase = ''
+        runHook preInstallCheck
+        checkdir=$(mktemp -d)
+        # Deliberately no .node-version. Pinning one sends vp off to its own
+        # managed Node instead of the one wrapProgram put on PATH, and in the
+        # sandbox that fails outright with "Failed to download Node.js runtime".
+        ( cd "$checkdir" && HOME="$checkdir" $out/bin/vp fmt --help ) > /dev/null
+        runHook postInstallCheck
+      '';
+
+      meta = {
+        description = "Unified toolchain for JavaScript";
+        homepage = "https://viteplus.dev";
+        changelog = "https://github.com/voidzero-dev/vite-plus/releases/tag/v${version}";
+        license = lib.licenses.mit;
+        sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+        mainProgram = "vp";
+        platforms = [ "aarch64-darwin" ];
+      };
+    }
+  )

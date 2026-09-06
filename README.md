@@ -75,6 +75,12 @@ are packaged in [`pkgs/`](pkgs/),
 with versions and hashes tracked by [nvfetcher](https://github.com/berberman/nvfetcher) via
 [`nvfetcher.toml`](nvfetcher.toml). A daily GitHub Actions workflow (08:00 JST) regenerates the pins and opens an update PR.
 
+vite-plus is the one package with a second half: `vp` is only a launcher, and the JavaScript toolchain
+it delegates to is built from [`pkgs/vite-plus-runtime/`](pkgs/vite-plus-runtime/) and installed
+alongside it. The two must stay on the same version, so the derivation refuses to evaluate if the
+lockfile and the nvfetcher pin disagree, and the nvfetcher workflow regenerates the lockfile as part
+of the same PR. The approach follows [nix-vite-plus](https://github.com/ryoppippi/nix-vite-plus).
+
 Once the official nixpkgs packaging of vite-plus ([NixOS/nixpkgs#533925](https://github.com/NixOS/nixpkgs/pull/533925))
 lands, `pkgs/vite-plus.nix` will be replaced by `pkgs.vite-plus` (see the TODO in that file).
 

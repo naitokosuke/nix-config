@@ -20,6 +20,7 @@
     ./shell
     ./ssh.nix
     ./starship.nix
+    ./vite-plus.nix
     ./vscode.nix
     ./zoxide.nix
   ];
