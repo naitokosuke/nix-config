@@ -6,17 +6,24 @@
 {
   lib,
   buildNpmPackage,
+  importNpmLock,
   sources,
 }:
 
+let
+  # Bound here because importNpmLock has to read the lockfile out of the very
+  # same source tree the derivation builds.
+  src = sources.playwright-cli.src;
+in
 buildNpmPackage {
   pname = "playwright-cli";
   version = lib.removePrefix "v" sources.playwright-cli.version;
-  src = sources.playwright-cli.src;
+  inherit src;
 
-  # Not tracked by nvfetcher — update by hand when the version bumps;
-  # the build fails loudly on a stale hash.
-  npmDepsHash = "sha256-3kqiQvGtZfsmLHVWeCSM1yOYb+ws2x1vMPC1OuvrKAI=";
+  # node_modules comes straight from the upstream package-lock.json, so there
+  # is no dependency hash to keep in sync with nvfetcher's version bumps.
+  npmDeps = importNpmLock { npmRoot = src; };
+  npmConfigHook = importNpmLock.npmConfigHook;
 
   dontNpmBuild = true;
 
