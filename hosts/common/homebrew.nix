@@ -1,8 +1,25 @@
 {
   config,
   inputs,
+  pkgs,
   ...
 }:
+
+let
+  # Homebrew calls `sudo --reset-timestamp` on every invocation
+  # (`Library/Homebrew/brew.sh`), and cask uninstall directives such as
+  # `launchctl:` shell out to sudo once per launchd domain, so a cask upgrade
+  # during activation asks for a password repeatedly on the very terminal that
+  # `darwin-rebuild-nom` has `nom` repainting. Homebrew's `sudo_prefix` adds
+  # `-A` when SUDO_ASKPASS is set, and `bin/brew` allowlists that variable
+  # through its environment filter, so the prompt moves to a GUI dialog that
+  # says what it is asking for. See issue #416.
+  sudoAskpass = pkgs.writeShellScript "homebrew-sudo-askpass" ''
+    exec /usr/bin/osascript \
+      -e 'set reply to display dialog "Homebrew needs administrator rights to update casks during nix-darwin activation." with title "darwin-rebuild" default answer "" with icon caution with hidden answer' \
+      -e 'text returned of reply'
+  '';
+in
 
 {
   nix-homebrew = {
@@ -38,6 +55,7 @@
       cleanup = "uninstall";
       extraEnv = {
         HOMEBREW_NO_INSTALL_FROM_API = "1";
+        SUDO_ASKPASS = "${sudoAskpass}";
       };
     };
 
