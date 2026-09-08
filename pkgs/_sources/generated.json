@@ -23,11 +23,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-rAM0QQzqddEaXrtVX7sBOaSjlN412YzCo7wKlZ8ATN0=",
+            "sha256": "sha256-X3U7HL9XdcjkNxE1Is0QwfDO/RZSHgVyVA1XhgVWwTM=",
             "type": "url",
-            "url": "https://registry.npmjs.org/chrome-devtools-mcp/-/chrome-devtools-mcp-1.8.0.tgz"
+            "url": "https://registry.npmjs.org/chrome-devtools-mcp/-/chrome-devtools-mcp-1.9.0.tgz"
         },
-        "version": "1.8.0"
+        "version": "1.9.0"
     },
     "frog-darwin-arm64": {
         "cargoLock": null,
@@ -119,11 +119,11 @@
         "pinned": false,
         "src": {
             "name": null,
-            "sha256": "sha256-y9wxMUkoB3WdB7/euOAz9lqTwvdvI1uqHuVXnAtSX9k=",
+            "sha256": "sha256-erSnHmwDq57N4UP8eop3m6fcsJnZYEESHtZMniZBz44=",
             "type": "url",
-            "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-arm64/-/vite-plus-cli-darwin-arm64-0.3.0.tgz"
+            "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-arm64/-/vite-plus-cli-darwin-arm64-0.3.1.tgz"
         },
-        "version": "0.3.0"
+        "version": "0.3.1"
     },
     "vize-darwin-arm64": {
         "cargoLock": null,
