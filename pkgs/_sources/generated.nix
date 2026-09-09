@@ -16,10 +16,10 @@
   };
   chrome-devtools-mcp = {
     pname = "chrome-devtools-mcp";
-    version = "1.8.0";
+    version = "1.9.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/chrome-devtools-mcp/-/chrome-devtools-mcp-1.8.0.tgz";
-      sha256 = "sha256-rAM0QQzqddEaXrtVX7sBOaSjlN412YzCo7wKlZ8ATN0=";
+      url = "https://registry.npmjs.org/chrome-devtools-mcp/-/chrome-devtools-mcp-1.9.0.tgz";
+      sha256 = "sha256-X3U7HL9XdcjkNxE1Is0QwfDO/RZSHgVyVA1XhgVWwTM=";
     };
   };
   frog-darwin-arm64 = {
@@ -67,10 +67,10 @@
   };
   vite-plus-darwin-arm64 = {
     pname = "vite-plus-darwin-arm64";
-    version = "0.3.0";
+    version = "0.3.1";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-arm64/-/vite-plus-cli-darwin-arm64-0.3.0.tgz";
-      sha256 = "sha256-y9wxMUkoB3WdB7/euOAz9lqTwvdvI1uqHuVXnAtSX9k=";
+      url = "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-arm64/-/vite-plus-cli-darwin-arm64-0.3.1.tgz";
+      sha256 = "sha256-erSnHmwDq57N4UP8eop3m6fcsJnZYEESHtZMniZBz44=";
     };
   };
   vize-darwin-arm64 = {
